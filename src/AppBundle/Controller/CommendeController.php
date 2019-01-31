@@ -33,6 +33,35 @@ class CommendeController extends Controller
         ));
     }
 
+
+    public function performancesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $region=$session->get('region');
+        $startDate=$session->get('startDate',date('Y').'-01-01');
+         $endDate=$session->get('endDate', date('Y').'-12-31');
+         $countAndCashByWeek= $em->getRepository('AppBundle:Ligne')->countAndCashByWeek($startDate,$endDate);
+        $countAndCashByMonth= $em->getRepository('AppBundle:Ligne')->countAndCashByMonth($startDate,$endDate);
+        $countAndCash= $em->getRepository('AppBundle:Ligne')->countAndCash($startDate,$endDate);
+        $fiedSoldiersCount=$em->getRepository('AppBundle:PointVente')->fiedSoldiersCount($startDate,$endDate);
+        $totalWorkedDays=$em->getRepository('AppBundle:Commende')->totalWorkedDays($startDate,$endDate);
+         $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate);
+          $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
+           $colors=array("#FF6384","#36A2EB","#FFCE56","#F7464A","#FF5A5E","#46BFBD", "#5AD3D1","#FDB45C");
+        return $this->render('AppBundle::performances.html.twig', array(
+                        'colors'=>$colors,
+                        'countAndCash'=>$countAndCash[0],
+                         'fiedSoldiersCount'=>$fiedSoldiersCount,
+                         'totalWorkedDays'=>$totalWorkedDays,
+                         'countAndCashByWeek'=>$countAndCashByWeek,
+                         'countAndCashByMonth'=>$countAndCashByMonth,
+                         'workedDays'=>$workedDays,
+                          'produits'=>$produits,
+        ));
+    }
+
     /**
      * @Rest\View(serializerGroups={"commende"})
      * 

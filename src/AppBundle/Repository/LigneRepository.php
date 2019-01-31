@@ -13,47 +13,7 @@ class LigneRepository extends \Doctrine\ORM\EntityRepository
 
 
   
-	 public function souscriptionCount( $startDate=null, $endDate=null,PointVente $pointVente=null){
 
-        $qb = $this->createQueryBuilder('l')->join('l.commende', 'c');
-         if($startDate!=null){
-           $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
-          }
-          if($endDate!=null){
-           $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
-          } 
-
-         if ($pointVente!=null) {
-             $qb->andWhere('c.pointVente=:pointVente')->setParameter('pointVente', $pointVente);
-          }    
-try {
-    $qb->select('sum(l.quantite) as nombre');
-         return $qb->getQuery()->getSingleScalarResult();  
-   } catch (NoResultException $e) {
-        return 0;
-     }
-  }	
-
-  	 public function totalCash( $startDate=null, $endDate=null,PointVente $pointVente=null){
-
-        $qb = $this->createQueryBuilder('l')->join('l.produit', 'p')->join('l.commende', 'c');
-         if($startDate!=null){
-           $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
-          }
-          if($endDate!=null){
-           $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
-          }   
-
-         if ($pointVente!=null) {
-             $qb->andWhere('c.pointVente=:pointVente')->setParameter('pointVente', $pointVente);
-          }    
-   try {
-    $qb->select('sum(l.quantite*p.cout) as total');
-         return $qb->getQuery()->getSingleScalarResult();  
-   } catch (NoResultException $e) {
-        return 0;
-     }
-  }
 
    public function countAndCash( $startDate=null, $endDate=null,PointVente $pointVente=null){
 

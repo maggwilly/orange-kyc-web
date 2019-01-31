@@ -3,6 +3,11 @@ commende_index:
     defaults: { _controller: "AppBundle:Commende:index" ,"pointVente":0,"user":0}
     methods:  GET
 
+commende_performances:
+    path:     /commendes/list
+    defaults: { _controller: "AppBundle:Commende:performances"}
+    methods:  GET
+
 commende_show:
     path:     /{id}/show
     defaults: { _controller: "AppBundle:Commende:show" }

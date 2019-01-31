@@ -3,6 +3,7 @@
      {% block stylesheets %}
      {{parent()}}
     <link rel="stylesheet" type="text/css" media="all" href="{{ asset('assets/vendor/bootstrap.daterangepicker/daterangepicker-bs3.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/css/jquery.dataTables.min.css') }}" type="text/css"/>
     {% endblock %} 
 {% block fos_user_content %}
      {% include 'AppBundle:part:menu.html.twig' %}
@@ -16,7 +17,8 @@
   <script type="text/javascript" src="{{ asset('assets/vendor/chart.js/dist/Chart.extension.js') }}"></script>
   <script type="text/javascript" src="{{ asset('assets/vendor/bootstrap.daterangepicker/moment.js') }}"></script>
   <script type="text/javascript" src="{{ asset('assets/vendor/bootstrap.daterangepicker/daterangepicker.js') }}"></script>
-
+   <script type="text/javascript" src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+  
    <script type="text/javascript">
                $(document).ready(function() {
                   $('#periode').daterangepicker({
@@ -25,6 +27,11 @@
                     console.log(start.toISOString(), end.toISOString(), label);
                   });
                });
-               </script>
+   </script>
+  <script type="text/javascript">
+   $(document).ready( function () {
+    $('#myTable').dataTable();
+    } );
+    </script>            
    <script type="text/javascript" src="{{ asset('assets/js/argon.js?v=1.0.0') }}"></script>              
   {% endblock %}

@@ -6,7 +6,7 @@
       </button>
       <!-- Brand -->
       <a class="navbar-brand pt-0" href="#">
-        <img src="./assets/img/brand/lpm-color.png" class="navbar-brand-img" alt="...">
+        <img src="{{ asset('assets/img/brand/lpm-color.png') }}" class="navbar-brand-img" alt="...">
       </a>
       <!-- User -->
       <ul class="nav align-items-center d-md-none">
@@ -81,7 +81,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ path("commende_performances") }}">
               <i class="ni ni-chart-bar-32 text-info"></i>Performances
             </a>
           </li>             
