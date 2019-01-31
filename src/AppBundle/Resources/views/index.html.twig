@@ -1,3 +1,5 @@
+
+
    {% extends "AppBundle::layout.html.twig" %}
    {% block title %}Overview {% endblock %} 
    {% block main_content %}
@@ -10,14 +12,15 @@
       <div class="container-fluid">
         <div class="header-body">
           <!-- Card stats -->
+
           <div class="row">
             <div class="col-xl-3 col-lg-6">
               <div class="card card-stats mb-4 mb-xl-0">
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Souscriptrions</h5>
-                      <span class="h2 font-weight-bold mb-0">{{nombre}}</span>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Nombre total des souscriptrions</h5>
+                      <span class="h2 font-weight-bold mb-0">{{countAndCash.nombre|number_format(0, ',', '.')}}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -26,8 +29,8 @@
                     </div>
                   </div>
                   <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                    <span class="text-nowrap">Depuis le semaine passé</span>
+                    <span class="text-success mr-2"></span>
+                    <span class="text-nowrap">Nombre total de souscriptions</span>
                   </p>
                 </div>
               </div>
@@ -37,8 +40,8 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Espèces</h5>
-                      <span class="h2 font-weight-bold mb-0">{{cout}} XAF</span>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Total du chiffre d'affaire</h5>
+                      <span class="h2 font-weight-bold mb-0">{{countAndCash.total|number_format(0, ',', '.')}} XAF</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -47,8 +50,8 @@
                     </div>
                   </div>
                   <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
-                    <span class="text-nowrap">Depuis semaine passée</span>
+                    <span class="text-danger mr-2"></span>
+                    <span class="text-nowrap">Espèces collectées</span>
                   </p>
                 </div>
               </div>
@@ -58,8 +61,8 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Catégorie majoritaire</h5>
-                      <span class="h2 font-weight-bold mb-0">Groupe 1</span>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Nombre total de Fiel soldiers</h5>
+                      <span class="h2 font-weight-bold mb-0">{{fiedSoldiersCount}}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -68,8 +71,8 @@
                     </div>
                   </div>
                   <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
-                    <span class="text-nowrap">Since yesterday</span>
+                    <span class="text-warning mr-2"></span>
+                    <span class="text-nowrap">Les field soldiers actifs</span>
                   </p>
                 </div>
               </div>
@@ -79,8 +82,8 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Age majoritaire</h5>
-                      <span class="h2 font-weight-bold mb-0">[18 - 25] ans</span>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Nombre de jour effectués</h5>
+                      <span class="h2 font-weight-bold mb-0">{{totalWorkedDays}} jours</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-info text-white rounded-circle shadow">
@@ -89,8 +92,8 @@
                     </div>
                   </div>
                   <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
-                    <span class="text-nowrap">Since last month</span>
+                    <span class="text-success mr-2"></span>
+                    <span class="text-nowrap">Nombre total de jours de travail</span>
                   </p>
                 </div>
               </div>
@@ -107,18 +110,18 @@
             <div class="card-header bg-transparent">
               <div class="row align-items-center">
                 <div class="col">
-                  <h6 class="text-uppercase text-light ls-1 mb-1">Souscription</h6>
-                  <h2 class="text-white mb-0"> Souscriptions totale</h2>
+                  <h6 class="text-uppercase text-light ls-1 mb-1">Evolution</h6>
+                  <h2 class="text-white mb-0">Souscriptions et du chiffre d'affaire</h2>
                 </div>
                 <div class="col">
                   <ul class="nav nav-pills justify-content-end">
-                    <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-sales" data-update='{"data":{"datasets":[{"data":[0, 20, 10, 30, 15, 40, 20, 60, 60]}],"labels": ["Jan", "Fév", "Mars", "Avril", "Mai", "Juin", "Août", "Sept."]}}' data-prefix="" data-suffix="">
+                    <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-sales" data-update='{"data":{"datasets":[{"data":[{% for item in countAndCashByMonth %} {{item.nombre}}{% if not loop.last %},{% endif %} {% endfor %}]}],"labels": [{% for item in countAndCashByMonth %} "{{item.month}}" {% if not loop.last %},{% endif %}{% endfor %}]}}' data-prefix="" data-suffix="">
                       <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
                         <span class="d-none d-md-block">Mois</span>
                         <span class="d-md-none">M</span>
                       </a>
                     </li>
-                    <li class="nav-item" data-toggle="chart" data-target="#chart-sales" data-update='{"data":{"datasets":[{"data":[0, 20, 5, 25, 10, 30, 15, 40, 40]}],"labels": ["Sem 1", "Sem 2", "Sem 3", "Sem 4", "Sem 5", "Sem 6", "Sem 7", "Sem 8."]}}' data-prefix="" data-suffix="">
+                    <li class="nav-item" data-toggle="chart" data-target="#chart-sales" data-update='{"data":{"datasets":[{"data":[{% for item in countAndCashByWeek %} {{item.nombre}} {% if not loop.last %},{% endif %}{% endfor %}]}],"labels": [{% for item in countAndCashByWeek %} "{{item.weekText}}" {% if not loop.last %},{% endif %}{% endfor %}]}}' data-prefix="" data-suffix="">
                       <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
                         <span class="d-none d-md-block">Semaine</span>
                         <span class="d-md-none">W</span>
@@ -142,16 +145,41 @@
             <div class="card-header bg-transparent">
               <div class="row align-items-center">
                 <div class="col">
-                  <h6 class="text-uppercase text-muted ls-1 mb-1">Espèces</h6>
-                  <h2 class="mb-0">Espèces </h2>
+                  <h2 class="mb-0">Performances des superviseurs</h2>
                 </div>
               </div>
             </div>
-            <div class="card-body">
-              <!-- Chart -->
-              <div class="chart">
-                <canvas id="chart-orders" class="chart-canvas"></canvas>
-              </div>
+            <div class="table-responsive">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Field Soldiers</th>
+                    <th scope="col">Souscriptions</th>
+
+                  </tr>
+                </thead>
+                {% set total=0 %}
+                  {% for item in workedSuperviseur %}
+                     {% set total=total+item.nombre %}
+                  {% endfor %}
+                <tbody>
+                   {% for item in workedSuperviseur %}
+                  <tr>
+                    <th scope="row">
+                       {{ item.username|e }}
+                    </th>
+                    <td>
+                      {{ item.nombrefs }}
+                    </td>
+                    <td>
+                      {{ item.nombre }}
+                    </td>                    
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -162,7 +190,7 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Aperçu des performances</h3>
+                  <h3 class="mb-0">Aperçu des performances des field soldiers</h3>
                 </div>
                 <div class="col text-right">
                   <a href="#!" class="btn btn-sm btn-primary">Afficher tout</a>
@@ -174,27 +202,44 @@
               <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col">Nom du commercial</th>
+                    <th scope="col">Field Soldiers</th>
                     <th scope="col">Nombre de jour</th>
                     <th scope="col">Souscriptions</th>
                     <th scope="col">Progression</th>
+                    <th scope="col">GAP</th>
                   </tr>
                 </thead>
+                {% set dayTarget=6 %}
                 <tbody>
+                  {% for user in workedDays %}
                   <tr>
                     <th scope="row">
-                      Brice Fandjon
+                     {{ user.nom|e }}
                     </th>
                     <td>
-                     12
+                      {{ user.nombrejours }}
                     </td>
                     <td>
-                      79
+                      {{ user.nombre }}
                     </td>
                     <td>
-                      <i class="fas fa-arrow-up text-success mr-3"></i> 46,53%
+                      {% if (user.nombre*100/(user.nombrejours*dayTarget))<100 %}
+                      <i class="fas fa-arrow-down text-danger mr-3"></i>
+                    {% else %}
+                      <i class="fas fa-arrow-up text-success mr-3"></i>
+                    {% endif %}
+                      {{ (user.nombre*100/(user.nombrejours*dayTarget))|number_format(0, ',', '.') }}%
                     </td>
+                    <td>
+                    {% if (user.nombre*100/(user.nombrejours*dayTarget))<100 %}
+                      
+                    {% else %}
+                      +
+                    {% endif %}
+                      {{ (user.nombre-(user.nombrejours*dayTarget))}}
+                    </td>                    
                   </tr
+                   {% endfor %}
                 </tbody>
               </table>
             </div>
@@ -205,120 +250,21 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Type de contrat</h3>
-                </div>
-                <div class="col text-right">
-                  <a href="#!" class="btn btn-sm btn-primary">Afficher tout</a>
+                  <h6 class="text-uppercase text-muted ls-1 mb-1">Repartition</h6>
+                  <h2 class="mb-0">Par type de contrat </h2>
                 </div>
               </div>
             </div>
-            <div class="table-responsive">
-              <!-- Projects table -->
-              <table class="table align-items-center table-flush">
-                <thead class="thead-light">
-                  <tr>
-                    <th scope="col">Nom</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">
-                       Assurance Funeraire
-                    </th>
-                    <td>
-                      305
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="mr-2">10%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      Assurance Maladie+invalidité
-                    </th>
-                    <td>
-                     50
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="mr-2">1%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      Grossesse+ Accouchement
-                    </th>
-                    <td>
-                      14 
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="mr-2">16%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-gradient-primary" role="progressbar" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100" style="width: 16%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      Enfant+Scolaire
-                    </th>
-                    <td>
-                      56
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="mr-2">12%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100" style="width: 12%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                       Assurance Retraite
-                    </th>
-                    <td>
-                      65
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="mr-2">11%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-gradient-warning" role="progressbar" aria-valuenow="11" aria-valuemin="0" aria-valuemax="100" style="width: 11%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <div class="card-body">
+              <!-- Chart -->
+              <div class="chart">
+                <canvas id="chart-orders" class="chart-canvas"></canvas>
+              </div>
+            </div>            
           </div>
         </div>
       </div>
+      <br><br>
       <!-- Footer -->
       <footer class="footer">
         <div class="row align-items-center justify-content-xl-between">

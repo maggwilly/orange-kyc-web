@@ -1,0 +1,10 @@
+AppBundle\Entity\PointVente:
+    exclusion_policy: none
+    properties:
+        id:
+            groups: ['pointvente','commende']
+        nom:
+            groups: ['pointvente','commende']
+        telephone:
+            groups: ['pointvente']
+              

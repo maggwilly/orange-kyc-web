@@ -1,0 +1,39 @@
+commende_index_json:
+    path:     /commende/json
+    defaults: { _controller: "AppBundle:Commende:indexJson"}
+    methods:  GET
+
+commende_show_json:
+    path:     /commende/{id}/show/json
+    defaults: { _controller: "AppBundle:Commende:showJson" }
+    methods:  GET
+
+commende_new_json:
+    path:     /commende/new/json
+    defaults: { _controller: "AppBundle:Commende:newJson" }
+    methods:  [GET, POST]
+
+commende_edit_json:
+    path:      /commende/{id}/edit/json
+    defaults: { _controller: "AppBundle:Commende:editJson" }
+    methods:  [GET, POST,PUT]
+
+commende_delete_json:
+    path:      /commende/{id}/delete/json
+    defaults: { _controller: "AppBundle:Commende:deleteJson" }
+    methods:  DELETE
+
+produit_index_json:
+    path:     /produit/json
+    defaults: { _controller: "AppBundle:Produit:indexJson" }
+    methods:  GET
+
+point_vente_index_json:
+    path:     /pointvente/json
+    defaults: { _controller: "AppBundle:PointVente:indexJson" }
+    methods:  GET
+
+create_token:
+    path:      /token/new/json
+    defaults: { _controller: "AppBundle:App:postAuthTokens" }
+    methods:  POST

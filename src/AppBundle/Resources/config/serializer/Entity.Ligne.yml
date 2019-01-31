@@ -1,0 +1,10 @@
+AppBundle\Entity\Ligne:
+    exclusion_policy: none
+    properties:
+        id:
+            groups: ['commende','ligne']
+        produit:
+            groups: ['commende','ligne']
+        quantite:
+            groups: ['commende','ligne']
+              

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="souscripteur")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SouscripteurRepository")
+  *@ORM\HasLifecycleCallbacks()
  */
 class Souscripteur
 {

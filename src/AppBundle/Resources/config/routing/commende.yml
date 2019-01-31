@@ -1,0 +1,24 @@
+commende_index:
+    path:     /{pointVente}/{user}/list
+    defaults: { _controller: "AppBundle:Commende:index" ,"pointVente":0,"user":0}
+    methods:  GET
+
+commende_show:
+    path:     /{id}/show
+    defaults: { _controller: "AppBundle:Commende:show" }
+    methods:  GET
+
+commende_new:
+    path:     /new
+    defaults: { _controller: "AppBundle:Commende:new" }
+    methods:  [GET, POST]
+
+commende_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AppBundle:Commende:edit" }
+    methods:  [GET, POST]
+
+commende_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AppBundle:Commende:delete" }
+    methods:  DELETE

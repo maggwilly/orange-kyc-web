@@ -30,24 +30,27 @@ class SouscripteurRepository extends \Doctrine\ORM\EntityRepository
    
   }
 
-  	 public function majoritaires($region=null, $startDate=null, $endDate=null){
+  	 public function majoritaireCSP($region=null, $startDate=null, $endDate=null){
+        $RAW_QUERY ='select * from (select csp, count(id) as nombre from souscripteur s  where s.date>=:startDate and s.date<=:endDate group by csp) m order by m.nombre desc limit 1';
+       $statement = $this->_em->getConnection()->prepare($RAW_QUERY);
+       $startDate=new \DateTime($startDate);
+       $endDate=new \DateTime($endDate);
+       $statement->bindValue('startDate', $startDate->format('Y-m-d'));
+       $statement->bindValue('endDate',  $endDate->format('Y-m-d'));
+       $statement->execute();
+      return  $result = $statement->fetchAll();
+   
+  }
 
-        $qb = $this->createQueryBuilder('s')->join('s.produit', 'p');
-        if($region!=null){
-           $qb->where('s.ville=:ville')
-          ->setParameter('ville', $region);
-          }
-        if($startDate!=null){
-            $qb->andWhere('s.date is null or s.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
-          }
-          if($endDate!=null){
-             $qb->andWhere('s.date is null or s.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
-          }
-          $qb ->addSelect('sum(p.cout) as cout');
-           $qb->select('count(s.id) as nombre')
-              ->addGroupBy('sum(p.cout) as cout');
-
-         return $qb->getQuery()->getArrayResult();  
+    	 public function majoritaireAge($region=null, $startDate=null, $endDate=null){
+        $RAW_QUERY ='select * from (select age, count(id) as nombre from souscripteur s  where s.date>=:startDate and s.date<=:endDate group by csp) m order by m.nombre desc limit 1';
+       $statement = $this->_em->getConnection()->prepare($RAW_QUERY);
+       $startDate=new \DateTime($startDate);
+       $endDate=new \DateTime($endDate);
+       $statement->bindValue('startDate', $startDate->format('Y-m-d'));
+       $statement->bindValue('endDate',  $endDate->format('Y-m-d'));
+       $statement->execute();
+      return  $result = $statement->fetchAll();
    
   }
 
@@ -89,6 +92,8 @@ class SouscripteurRepository extends \Doctrine\ORM\EntityRepository
          return $qb->getQuery()->getArrayResult();  
   }
 
+
+
  	 public function evolutionByMonth($region=null, $startDate=null, $endDate=null){
         $qb = $this->createQueryBuilder('s');
         if($region!=null){
@@ -106,6 +111,8 @@ class SouscripteurRepository extends \Doctrine\ORM\EntityRepository
              ->addGroupBy('s.month');
          return $qb->getQuery()->getArrayResult();  
   }
+
+
 
    	 public function especesByMonth($region=null, $startDate=null, $endDate=null){
         $qb = $this->createQueryBuilder('s')->join('s.produit', 'p');

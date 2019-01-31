@@ -177,10 +177,6 @@ class User extends BaseUser
      */
     protected $credentialsExpireAt;
 
-        /**
-   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Commende", mappedBy="user", cascade={"persist","remove"})
-   */
-    private $commendes;
     /**
      * Constructor
      */

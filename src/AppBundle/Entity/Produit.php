@@ -42,7 +42,10 @@ class Produit
      */
     private $cout;
 
-
+    /**
+   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ligne", mappedBy="produit", cascade={"persist","remove"})
+   */
+    private $lignes;
     /**
      * Get id
      *
@@ -124,5 +127,38 @@ class Produit
     {
         return $this->cout;
     }
-}
 
+    /**
+     * Add ligne
+     *
+     * @param \AppBundle\Entity\Ligne $ligne
+     *
+     * @return Commende
+     */
+    public function addLigne(\AppBundle\Entity\Ligne $ligne)
+    {
+        $this->lignes[] = $ligne;
+
+        return $this;
+    }
+
+    /**
+     * Remove ligne
+     *
+     * @param \AppBundle\Entity\Ligne $ligne
+     */
+    public function removeLigne(\AppBundle\Entity\Ligne $ligne)
+    {
+        $this->lignes->removeElement($ligne);
+    }
+
+    /**
+     * Get lignes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLignes()
+    {
+        return $this->lignes;
+    }
+}

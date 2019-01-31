@@ -1,0 +1,11 @@
+AppBundle\Entity\User:
+    exclusion_policy: none
+    properties:
+        id:
+            groups: ['user', 'auth-token']
+        nom:
+            groups: ['user','auth-token']
+        username:
+            groups: ['user','auth-token']
+        ville:
+            groups: ['user','auth-token']

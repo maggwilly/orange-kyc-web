@@ -30,7 +30,11 @@ security:
       # since anonymous is allowed users will not be forced to login
            pattern:   ^/(login|register)$
            anonymous:      true
-         
+           
+        mobile:
+      # since anonymous is allowed users will not be forced to login
+           pattern:   /json$
+           anonymous:      true         
         main:
             pattern:        ^/
             anonymous:      false

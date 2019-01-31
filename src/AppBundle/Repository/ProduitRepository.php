@@ -10,4 +10,21 @@ namespace AppBundle\Repository;
  */
 class ProduitRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	    public  function produits($startDate=null, $endDate=null){
+
+        $qb = $this->createQueryBuilder('p')->join('p.lignes', 'l')->join('l.commende', 'c');
+         if($startDate!=null){
+              $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
+          }
+          if($endDate!=null){
+             $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
+          }     
+         $qb->select('p.id')
+         ->addSelect('p.nom')
+         ->addSelect('count(p.id) as nombre')
+         ->addGroupBy('p.id')
+         ->addGroupBy('p.nom');
+           return $qb->getQuery()->getArrayResult(); 
+  }
 }

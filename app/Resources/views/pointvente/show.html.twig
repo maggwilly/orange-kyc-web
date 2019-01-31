@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pointvente</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ pointVente.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ pointVente.nom }}</td>
+            </tr>
+            <tr>
+                <th>Telephone</th>
+                <td>{{ pointVente.telephone }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pointvente_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('pointvente_edit', { 'id': pointVente.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

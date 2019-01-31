@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Commendes list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Week</th>
+                <th>Weektext</th>
+                <th>Month</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for commende in commendes %}
+            <tr>
+                <td><a href="{{ path('commende_show', { 'id': commende.id }) }}">{{ commende.id }}</a></td>
+                <td>{% if commende.date %}{{ commende.date|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ commende.week }}</td>
+                <td>{{ commende.weekText }}</td>
+                <td>{{ commende.month }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('commende_show', { 'id': commende.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('commende_edit', { 'id': commende.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('commende_new') }}">Create a new commende</a>
+        </li>
+    </ul>
+{% endblock %}

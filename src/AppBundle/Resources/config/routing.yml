@@ -1,9 +1,27 @@
-app_souscripteur:
-    resource: "@AppBundle/Resources/config/routing/souscripteur.yml"
-    prefix:   /souscripteur
+app_commende:
+    resource: "@AppBundle/Resources/config/routing/commende.yml"
+    prefix:   /commende
 
+app_produit:
+    resource: "@AppBundle/Resources/config/routing/produit.yml"
+    prefix:   /produit
+
+app_point_vente:
+    resource: "@AppBundle/Resources/config/routing/pointvente.yml"
+    prefix:   /point/vente
+
+app_formated:
+    resource: "@AppBundle/Resources/config/routing/formated.yml"
+   
 
 homepage:
     path:     /
     defaults: { _controller: "AppBundle:App:index" }
     methods:  GET
+
+
+set_periode:
+    path:     /set/periode
+    defaults: { _controller: "AppBundle:App:setPeriode" }
+    methods:  POST
+

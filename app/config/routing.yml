@@ -3,12 +3,6 @@ app:
     resource: "@AppBundle/Resources/config/routing.yml"
    
 
-set_periode:
-    path:     /set/periode
-    defaults: { _controller: "AppBundle:App:setPeriode" }
-    methods:  POST
-
-  
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 

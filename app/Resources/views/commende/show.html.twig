@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Commende</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ commende.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{% if commende.date %}{{ commende.date|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Week</th>
+                <td>{{ commende.week }}</td>
+            </tr>
+            <tr>
+                <th>Weektext</th>
+                <td>{{ commende.weekText }}</td>
+            </tr>
+            <tr>
+                <th>Month</th>
+                <td>{{ commende.month }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('commende_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('commende_edit', { 'id': commende.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

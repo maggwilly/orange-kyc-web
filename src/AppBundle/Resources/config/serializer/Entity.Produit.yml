@@ -1,0 +1,12 @@
+AppBundle\Entity\Produit:
+    exclusion_policy: none
+    properties:
+        id:
+            groups: ['produit','ligne','commende']
+        nom:
+            groups: ['produit','ligne','commende']
+        duree:
+            groups: ['produit','ligne','commende'] 
+        cout:
+            groups: ['produit','ligne','commende'] 
+              

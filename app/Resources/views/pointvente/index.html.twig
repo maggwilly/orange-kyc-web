@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pointventes list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Telephone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pointVente in pointVentes %}
+            <tr>
+                <td><a href="{{ path('pointvente_show', { 'id': pointVente.id }) }}">{{ pointVente.id }}</a></td>
+                <td>{{ pointVente.nom }}</td>
+                <td>{{ pointVente.telephone }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('pointvente_show', { 'id': pointVente.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('pointvente_edit', { 'id': pointVente.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pointvente_new') }}">Create a new pointVente</a>
+        </li>
+    </ul>
+{% endblock %}

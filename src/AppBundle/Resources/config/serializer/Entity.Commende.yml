@@ -1,0 +1,14 @@
+AppBundle\Entity\Commende:
+    exclusion_policy: none
+    properties:
+        id:
+            groups: ['commende']
+        pointVente:
+            groups: ['commende']
+        lignes:
+            groups: ['commende']
+        date:
+            groups: ['commende']
+            expose: true
+            type: DateTime<'Y-m-d'> 
+              
