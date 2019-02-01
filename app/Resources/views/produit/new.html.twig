@@ -1,6 +1,7 @@
-{% extends 'base.html.twig' %}
+  {% extends "AppBundle::layout.html.twig" %}
 
-{% block body %}
+{% block main_content %}
+    <div class="main-content">
     <h1>Produit creation</h1>
 
     {{ form_start(form) }}
@@ -13,4 +14,5 @@
             <a href="{{ path('produit_index') }}">Back to the list</a>
         </li>
     </ul>
+    </div>
 {% endblock %}

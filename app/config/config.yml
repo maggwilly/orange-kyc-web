@@ -75,6 +75,9 @@ fos_user:
     db_driver:      orm                       # Le type de BDD à utiliser, nous utilisons l'ORM Doctrine depuis le début
     firewall_name:  main_pf                      # Le nom du firewall derrière lequel on utilisera ces utilisateurs
     user_class:     AppBundle\Entity\User # La classe de l'entité User que nous utilisons
+    registration:
+            form:
+                type: app_user_registration
 
 fos_rest:
     disable_csrf_role: ROLE_API

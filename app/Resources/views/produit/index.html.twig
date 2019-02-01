@@ -1,6 +1,7 @@
-{% extends 'base.html.twig' %}
+  {% extends "AppBundle::layout.html.twig" %}
 
-{% block body %}
+{% block main_content %}
+    <div class="main-content">
     <h1>Produits list</h1>
 
     <table>
@@ -40,4 +41,5 @@
             <a href="{{ path('produit_new') }}">Create a new produit</a>
         </li>
     </ul>
+    </div>
 {% endblock %}

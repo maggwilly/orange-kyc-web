@@ -1,6 +1,7 @@
-{% extends 'base.html.twig' %}
+  {% extends "AppBundle::layout.html.twig" %}
 
-{% block body %}
+{% block main_content %}
+    <div class="main-content">
     <h1>Produit</h1>
 
     <table>
@@ -37,4 +38,5 @@
             {{ form_end(delete_form) }}
         </li>
     </ul>
+    </div>
 {% endblock %}

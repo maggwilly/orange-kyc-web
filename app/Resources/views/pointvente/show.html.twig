@@ -1,14 +1,11 @@
-{% extends 'base.html.twig' %}
+  {% extends "AppBundle::layout.html.twig" %}
 
-{% block body %}
-    <h1>Pointvente</h1>
+{% block main_content %}
+    <div class="main-content">
+    <h1>Field soldiers</h1>
 
     <table>
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ pointVente.id }}</td>
-            </tr>
             <tr>
                 <th>Nom</th>
                 <td>{{ pointVente.nom }}</td>
@@ -33,4 +30,5 @@
             {{ form_end(delete_form) }}
         </li>
     </ul>
+    </div>
 {% endblock %}

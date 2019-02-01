@@ -4,3 +4,9 @@ parameters:
 #    parameter_name: value
      my_service_connection: default
      logout.target: /
+
+services:
+      app.form.registration:
+                class: AppBundle\Form\UserType
+                tags:
+                    - { name: form.type, alias: app_user_registration }
