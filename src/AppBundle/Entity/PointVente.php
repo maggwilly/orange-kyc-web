@@ -35,6 +35,12 @@ class PointVente
      */
     private $telephone;
 
+
+   /**
+     * @var string
+     * @ORM\Column(name="secteur", type="string", length=255,nullable=true)
+     */
+    private $secteur;
         /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @var User
@@ -126,5 +132,29 @@ class PointVente
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set secteur
+     *
+     * @param string $secteur
+     *
+     * @return User
+     */
+    public function setSecteur($secteur)
+    {
+        $this->secteur = $secteur;
+
+        return $this;
+    }
+
+    /**
+     * Get secteur
+     *
+     * @return string
+     */
+    public function getSecteur()
+    {
+        return $this->secteur;
     }
 }
