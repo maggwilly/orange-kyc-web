@@ -15,7 +15,10 @@ class CommendeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder ->add('date','datetime', array(
+        $builder
+        ->add('description')
+        ->add('typeInsident')
+        ->add('date','datetime', array(
               'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                 'invalid_message' => 'Validation date',
