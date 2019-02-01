@@ -51,8 +51,19 @@ class PointVenteController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($pointVente);
             $em->flush();
-            return $this->redirectToRoute('pointvente_show', array('id' => $pointVente->getId()));
+            return $this->newForm($pointVente);
         }
+        return $this->render('pointvente/new.html.twig', array(
+            'pointVente' => $pointVente,
+            'form' => $form->createView(),
+        ));
+    }
+
+
+    public function newForm(Pointvente $pointVente)
+    {
+        $pointVente = new Pointvente($pointVente->getUser());
+        $form = $this->createForm('AppBundle\Form\PointVenteType', $pointVente);
         return $this->render('pointvente/new.html.twig', array(
             'pointVente' => $pointVente,
             'form' => $form->createView(),

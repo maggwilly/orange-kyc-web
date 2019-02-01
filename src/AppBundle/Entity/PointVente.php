@@ -52,6 +52,12 @@ class PointVente
    */
     private $commendes;
 
+
+
+    public function __construct(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+    }
     /**
      * Get id
      *
