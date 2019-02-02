@@ -22,10 +22,12 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
            $qb->andWhere('u.type=:type')->setParameter('type','superviseur');
          $qb->select('u.id')
          ->addSelect('u.username')
+        ->addSelect('u.nom')
          ->addSelect('sum(l.quantite) as nombre')
          ->addSelect('count(DISTINCT p.id) as nombrefs')
          ->addGroupBy('u.id')
-         ->addGroupBy('u.username');
+         ->addGroupBy('u.username')
+         ->addGroupBy('u.nom');
         return $qb->getQuery()->getArrayResult(); 
   }
 }
