@@ -168,7 +168,7 @@
                    {% for item in workedSuperviseur %}
                   <tr>
                     <th scope="row">
-                       {{ item.username|e }}
+                       {{ item.nom|e }}
                     </th>
                     <td>
                       {{ item.nombrefs }}
@@ -250,16 +250,35 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h6 class="text-uppercase text-muted ls-1 mb-1">Repartition</h6>
-                  <h2 class="mb-0">Par type de contrat </h2>
+                  <h3 class="mb-0">Déroulement</h3>
+                </div>
+                  <div class="col text-right">
+                  <a href="{{ path("commende_index") }}" class="btn btn-sm btn-primary">Rapports</a>
                 </div>
               </div>
             </div>
-            <div class="card-body">
-              <!-- Chart -->
-              <div class="chart">
-                <canvas id="chart-orders" class="chart-canvas"></canvas>
-              </div>
+            <div class="table-responsive">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Insidents</th>
+                    <th scope="col">Nombre</th>
+                  </tr>
+                </thead>
+                <tbody>
+                   {% for item in rapports %}
+                  <tr>
+                    <th scope="row">
+                       {{ item.typeInsident|e }}
+                    </th>
+                    <td>
+                      {{ item.nombre }}
+                    </td>                    
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
             </div>            
           </div>
         </div>

@@ -1,10 +1,10 @@
 commende_index:
-    path:     /{pointVente}/{user}/list
-    defaults: { _controller: "AppBundle:Commende:index" ,"pointVente":0,"user":0}
+    path:     /commende/list
+    defaults: { _controller: "AppBundle:Commende:index"}
     methods:  GET
 
 commende_performances:
-    path:     /commendes/list
+    path:     /performances/list
     defaults: { _controller: "AppBundle:Commende:performances"}
     methods:  GET
 

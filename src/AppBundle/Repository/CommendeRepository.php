@@ -18,7 +18,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
          return $qb->getQuery()->getResult();  
   }
 
-  	  	public function findList(User $user,$startDate=null, $endDate=null){
+  	  	public function findList(User $user=null,$startDate=null, $endDate=null){
            $qb = $this->createQueryBuilder('c');
            if($user!=null){
            $qb ->andWhere('c.user=:user')->setParameter('user', $user);
@@ -33,7 +33,21 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
   }
 
 
- 
+      public  function rapports($startDate=null, $endDate=null){
+        $qb = $this->createQueryBuilder('c');
+         if($startDate!=null){
+              $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
+          }
+          if($endDate!=null){
+             $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
+          }     
+         $qb->select('c.typeInsident')
+         ->addSelect('count(c.id) as nombre')
+         ->addGroupBy('c.typeInsident');
+           return $qb->getQuery()->getArrayResult(); 
+  } 
+
+
 
     public   function workedDays($startDate=null, $endDate=null,$all=false){
 

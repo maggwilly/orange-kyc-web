@@ -13,7 +13,7 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
 
 	    public  function produits($startDate=null, $endDate=null){
 
-        $qb = $this->createQueryBuilder('p')->join('p.lignes', 'l')->join('l.commende', 'c');
+        $qb = $this->createQueryBuilder('p')->leftJoin('p.lignes', 'l')->leftJoin('l.commende', 'c');
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
           }
@@ -22,7 +22,7 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
           }     
          $qb->select('p.id')
          ->addSelect('p.nom')
-         ->addSelect('count(p.id) as nombre')
+         ->addSelect('sum(l.quantite) as nombre')
          ->addGroupBy('p.id')
          ->addGroupBy('p.nom');
            return $qb->getQuery()->getArrayResult(); 

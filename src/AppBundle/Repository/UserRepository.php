@@ -12,13 +12,14 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 {
     public   function workedSuperviseur($startDate=null, $endDate=null,$all=false){
 
-        $qb = $this->createQueryBuilder('u')->innerJoin('u.commendes','c')->innerJoin('c.pointVente','p')->innerJoin('c.lignes','l');
+        $qb = $this->createQueryBuilder('u')->leftJoin('u.commendes','c')->leftJoin('c.pointVente','p')->innerJoin('c.lignes','l');
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
           }
           if($endDate!=null){
              $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
           }     
+           $qb->andWhere('u.type=:type')->setParameter('type','superviseur');
          $qb->select('u.id')
          ->addSelect('u.username')
          ->addSelect('sum(l.quantite) as nombre')

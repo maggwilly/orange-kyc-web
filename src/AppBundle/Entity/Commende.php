@@ -166,6 +166,24 @@ class Commende
         return $this->week;
     }
 
+
+    public function getnombreSouscriptions()
+    {
+        $total=0;
+        foreach ($this->lignes as $key => $ligne) {
+          $total+=$ligne->getQuantite();
+        }
+        return $total;
+    }
+
+        public function getTotalCash()
+    {
+        $total=0;
+        foreach ($this->lignes as $key => $ligne) {
+          $total+=$ligne->getQuantite()*$ligne->getProduit()->getCout();
+        }
+        return $total;
+    }
     /**
      * Set weekText
      *

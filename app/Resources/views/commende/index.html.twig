@@ -1,45 +1,42 @@
-{% extends 'base.html.twig' %}
+{% extends "AppBundle::index.html.twig" %}
 
-{% block body %}
-    <h1>Commendes list</h1>
-
-    <table>
-        <thead>
+{% block corps %}
+       <div class="row">
+        <div class="col">
+          <div class="card shadow">
+            <div class="card-header border-0">
+              <h3 class="mb-0">Historique des rapports</h3>
+            </div>   
+        <div class="table-responsive">
+    <table class="table align-items-center table-flush" id="myTable">
+        <thead class="thead-light">
             <tr>
-                <th>Id</th>
-                <th>Date</th>
-                <th>Week</th>
-                <th>Weektext</th>
-                <th>Month</th>
-                <th>Actions</th>
+                <th>Rapport</th>
+                <th>Details</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         {% for commende in commendes %}
             <tr>
-                <td><a href="{{ path('commende_show', { 'id': commende.id }) }}">{{ commende.id }}</a></td>
-                <td>{% if commende.date %}{{ commende.date|date('Y-m-d') }}{% endif %}</td>
-                <td>{{ commende.week }}</td>
-                <td>{{ commende.weekText }}</td>
-                <td>{{ commende.month }}</td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('commende_show', { 'id': commende.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('commende_edit', { 'id': commende.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                    <h2>Rapport du {% if commende.date %}{{ commende.date|date('d/m/Y') }}{% endif %}</h2>
+                    <p>envoyé par <b>{{ commende.user.nom }}</b></p>
+                </td>
+                <td><h2> {{ commende.pointVente.nom }}</h2>
+                    <p>  <b>{{ commende.nombreSouscriptions }} souscriptions</b></p>
+                    <b>{{ commende.totalCash }} XAF</b>
+                </td>
+                <td><h2>{{ commende.typeInsident }}</h2>
+                    <p>{{ commende.description }}</p>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('commende_new') }}">Create a new commende</a>
-        </li>
-    </ul>
 {% endblock %}

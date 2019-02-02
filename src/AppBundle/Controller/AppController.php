@@ -39,7 +39,7 @@ class AppController extends Controller
         $totalWorkedDays=$em->getRepository('AppBundle:Commende')->totalWorkedDays($startDate,$endDate);
         $workedSuperviseur=$em->getRepository('AppBundle:User')->workedSuperviseur($startDate,$endDate);
         $colors=array("#FF6384","#36A2EB","#FFCE56","#F7464A","#FF5A5E","#46BFBD", "#5AD3D1","#FDB45C");
-
+        $rapports=$em->getRepository('AppBundle:Commende')->rapports($startDate,$endDate);
         return $this->render('AppBundle::index.html.twig', 
           array(
             'colors'=>$colors,
@@ -49,6 +49,7 @@ class AppController extends Controller
             'workedDays'=>$workedDays,
             'fiedSoldiersCount'=>$fiedSoldiersCount,
             'produits'=>$produits,
+            'rapports'=>$rapports,
             'totalWorkedDays'=>$totalWorkedDays,
             'workedSuperviseur'=>$workedSuperviseur,
 
