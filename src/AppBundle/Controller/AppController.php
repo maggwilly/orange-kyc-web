@@ -11,6 +11,7 @@ use AppBundle\Entity\AuthToken;
 use AppBundle\Entity\Credentials;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
 use FOS\RestBundle\View\View; 
+use AppBundle\Entity\PointVente;
 /**
  * Etape controller.
  *
@@ -129,5 +130,35 @@ public function getWorkingDays($startDate, $endDate)
         return $authToken->getUser();
     }
 
+
+   /*load secteurs from excel*/
+  public function loadrhAction()
+    {
+     $manager = $this->getDoctrine()->getManager();
+    $path = $this->get('kernel')->getRootDir(). "/../web/import/rhs.xlsx";
+     $objPHPExcel = $this->get('phpexcel')->createPHPExcelObject($path);
+    $rhs= $objPHPExcel->getSheet(1);
+    $highestRow  = $rhs->getHighestRow(); // e.g. 10
+    for ($row = 5; $row <= $highestRow; ++ $row) {
+            $secteur = $rhs->getCellByColumnAndRow(0, $row)->getValue();
+            $nomsecteur = $rhs->getCellByColumnAndRow(1, $row)->getValue();
+             $nom = $rhs->getCellByColumnAndRow(2, $row)->getValue();
+            $telephone = $rhs->getCellByColumnAndRow(4, $row)->getValue();
+            $username= $rhs->getCellByColumnAndRow(5, $row)->getValue();
+             $user = $manager->getRepository('AppBundle:User')->findOneByUsername($username);
+             if ($nom==null || $nom=='') 
+                     continue;
+            $pointVente=new PointVente();
+            $pointVente
+            ->setSecteur( $secteur)
+            ->setNomSecteur( $nomsecteur)
+            ->setNom($nom)
+            ->setTelephone($telephone)
+            ->setUser($user);
+            $manager->persist($pointVente);
+    }
+     $manager->flush();
+    return $this->redirectToRoute('homepage');      
+    }
 
 }

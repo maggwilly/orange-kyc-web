@@ -19,7 +19,8 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\RestBundle\FOSRestBundle(),
-            new Nelmio\CorsBundle\NelmioCorsBundle()
+            new Nelmio\CorsBundle\NelmioCorsBundle(),
+             new Liuggio\ExcelBundle\LiuggioExcelBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

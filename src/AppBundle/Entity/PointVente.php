@@ -41,6 +41,12 @@ class PointVente
      * @ORM\Column(name="secteur", type="string", length=255,nullable=true)
      */
     private $secteur;
+
+       /**
+     * @var string
+     * @ORM\Column(name="nom_secteur", type="string", length=255,nullable=true)
+     */
+    private $nomSecteur;
         /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @var User
@@ -162,5 +168,63 @@ class PointVente
     public function getSecteur()
     {
         return $this->secteur;
+    }
+
+    /**
+     * Set nomSecteur
+     *
+     * @param string $nomSecteur
+     *
+     * @return PointVente
+     */
+    public function setNomSecteur($nomSecteur)
+    {
+        $this->nomSecteur = $nomSecteur;
+
+        return $this;
+    }
+
+    /**
+     * Get nomSecteur
+     *
+     * @return string
+     */
+    public function getNomSecteur()
+    {
+        return $this->nomSecteur;
+    }
+
+    /**
+     * Add commende
+     *
+     * @param \AppBundle\Entity\Commende $commende
+     *
+     * @return PointVente
+     */
+    public function addCommende(\AppBundle\Entity\Commende $commende)
+    {
+        $this->commendes[] = $commende;
+
+        return $this;
+    }
+
+    /**
+     * Remove commende
+     *
+     * @param \AppBundle\Entity\Commende $commende
+     */
+    public function removeCommende(\AppBundle\Entity\Commende $commende)
+    {
+        $this->commendes->removeElement($commende);
+    }
+
+    /**
+     * Get commendes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCommendes()
+    {
+        return $this->commendes;
     }
 }

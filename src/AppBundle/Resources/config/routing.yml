@@ -19,6 +19,11 @@ homepage:
     defaults: { _controller: "AppBundle:App:index" }
     methods:  GET
 
+loadrh:
+    path:     /loadrh
+    defaults: { _controller: "AppBundle:App:loadrh" }
+    methods:  GET
+
 
 set_periode:
     path:     /set/periode
