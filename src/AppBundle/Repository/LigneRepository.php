@@ -64,6 +64,7 @@ class LigneRepository extends \Doctrine\ORM\EntityRepository
        ->select('c.month')
        ->addSelect('sum(l.quantite) as nombre')
        ->addSelect('sum(l.quantite*p.cout) as total')
+        ->addGroupBy('c.monthNumber')
        ->addGroupBy('c.month');
          return $qb->getQuery()->getArrayResult();  
   }
