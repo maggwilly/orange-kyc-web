@@ -60,7 +60,7 @@ class LigneRepository extends \Doctrine\ORM\EntityRepository
            $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
           } 
    
-       $qb->addOrderBy('c.month','asc')
+       $qb->addOrderBy('c.monthNumber','asc')
        ->select('c.month')
        ->addSelect('sum(l.quantite) as nombre')
        ->addSelect('sum(l.quantite*p.cout) as total')
