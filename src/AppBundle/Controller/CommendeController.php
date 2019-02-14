@@ -95,12 +95,10 @@ class CommendeController extends Controller
         $commende = new Commende();
         $form = $this->createForm('AppBundle\Form\CommendeType', $commende);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($commende);
             $em->flush();
-
             return $this->redirectToRoute('commende_show', array('id' => $commende->getId()));
         }
 

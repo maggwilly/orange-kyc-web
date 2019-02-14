@@ -42,7 +42,8 @@ class LigneRepository extends \Doctrine\ORM\EntityRepository
            $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
           } 
    
-       $qb->select('c.weekText')
+       $qb->addOrderBy('c.date','asc')
+       ->select('c.weekText')
        ->addSelect('sum(l.quantite) as nombre')
        ->addSelect('sum(l.quantite*p.cout) as total')
        ->addGroupBy('c.weekText');
@@ -58,7 +59,8 @@ class LigneRepository extends \Doctrine\ORM\EntityRepository
            $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
           } 
    
-       $qb->select('c.month')
+       $qb->addOrderBy('c.date','asc')
+       ->select('c.month')
        ->addSelect('sum(l.quantite) as nombre')
        ->addSelect('sum(l.quantite*p.cout) as total')
        ->addGroupBy('c.month');
