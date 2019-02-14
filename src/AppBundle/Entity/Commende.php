@@ -39,6 +39,13 @@ class Commende
         /**
      * @var int
      *
+     * @ORM\Column(name="month_number", type="integer", nullable=true)
+     */
+    private $monthNumber;
+
+        /**
+     * @var int
+     *
      * @ORM\Column(name="week_text", type="string", length=255, nullable=true)
      */
     private $weekText;
@@ -129,6 +136,7 @@ class Commende
  public function prePersist(){
     $this->week =$this->date->format("W");
     $this->month =$this->date->format("M");
+    $this->monthNumber =$this->date->format("m");
      $year=$this->date->format("Y");
     $date = new \DateTime();
     $date->setISODate($year, $this->week);
@@ -361,5 +369,29 @@ class Commende
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set monthNumber
+     *
+     * @param integer $monthNumber
+     *
+     * @return Commende
+     */
+    public function setMonthNumber($monthNumber)
+    {
+        $this->monthNumber = $monthNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get monthNumber
+     *
+     * @return integer
+     */
+    public function getMonthNumber()
+    {
+        return $this->monthNumber;
     }
 }

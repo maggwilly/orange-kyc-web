@@ -39,6 +39,13 @@ class Commende
         /**
      * @var int
      *
+     * @ORM\Column(name="month_number", type="integer", nullable=true)
+     */
+    private $monthNumber;
+
+        /**
+     * @var int
+     *
      * @ORM\Column(name="week_text", type="string", length=255, nullable=true)
      */
     private $weekText;
@@ -129,6 +136,7 @@ class Commende
  public function prePersist(){
     $this->week =$this->date->format("W");
     $this->month =$this->date->format("M");
+    $this->monthNumber =$this->date->format("m");
      $year=$this->date->format("Y");
     $date = new \DateTime();
     $date->setISODate($year, $this->week);
@@ -166,6 +174,24 @@ class Commende
         return $this->week;
     }
 
+
+    public function getnombreSouscriptions()
+    {
+        $total=0;
+        foreach ($this->lignes as $key => $ligne) {
+          $total+=$ligne->getQuantite();
+        }
+        return $total;
+    }
+
+        public function getTotalCash()
+    {
+        $total=0;
+        foreach ($this->lignes as $key => $ligne) {
+          $total+=$ligne->getQuantite()*$ligne->getProduit()->getCout();
+        }
+        return $total;
+    }
     /**
      * Set weekText
      *
@@ -295,5 +321,53 @@ class Commende
     public function getLignes()
     {
         return $this->lignes;
+    }
+
+    /**
+     * Set typeInsident
+     *
+     * @param string $typeInsident
+     *
+     * @return Commende
+     */
+    public function setTypeInsident($typeInsident)
+    {
+        $this->typeInsident = $typeInsident;
+
+        return $this;
+    }
+
+    /**
+     * Get typeInsident
+     *
+     * @return string
+     */
+    public function getTypeInsident()
+    {
+        return $this->typeInsident;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Commende
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }
