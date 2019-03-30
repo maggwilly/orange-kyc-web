@@ -11,24 +11,33 @@
     <table class="table align-items-center table-flush" id="myTable">
         <thead class="thead-light">
             <tr>
-                <th>Rapport</th>
-                <th>Details</th>
-                <th></th>
+                <th>Date</th>
+                <th>Superviseur</th>
+                <th>Field Soldier</th>
+                <th>Nombre Souscription</th>
+                <th>ID Tablette</th>
+                <th>Insident</th>
+                <th>C. Rendu</th>
             </tr>
         </thead>
         <tbody>
         {% for commende in commendes %}
             <tr>
                 <td>
-                    <h2>Rapport du {% if commende.date %}{{ commende.date|date('d/m/Y') }}{% endif %}</h2>
+                    {% if commende.date %}{{ commende.date|date('d/m/Y') }}{% endif %}
                     <p>envoyé par <b>{{ commende.user.nom }}</b></p>
                 </td>
-                <td><h2> {{ commende.pointVente.nom }}</h2>
-                    <p>  <b>{{ commende.nombreSouscriptions }} souscriptions</b></p>
-                    <b>{{ commende.totalCash }} XAF</b>
+                <td>
+                    {{ commende.user.nom }}
                 </td>
-                <td><h2>{{ commende.typeInsident }}</h2>
-                    <p>{{ commende.description }}</p>
+                 <td>{{ commende.pointVente.nom }}</td>
+                 <td>{{ commende.nombreSouscriptions }} ({{ commende.totalCash }} XAF)</td>
+                 <td>{{ commende.pointVente.secteur }}</td>
+                <td>
+                    {{ commende.typeInsident }}
+                </td>
+                <td>
+                    {{ commende.description }}
                 </td>
             </tr>
         {% endfor %}
