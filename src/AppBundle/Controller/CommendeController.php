@@ -34,7 +34,7 @@ class CommendeController extends Controller
         return $this->render('commende/index.html.twig', array(
             'colors'=>$colors,
             'commendes' => $commendes ,
-            
+
             'countAndCashByMonth'=>$countAndCashByMonth,
             'countAndCashByWeek'=>$countAndCashByWeek,
             'produits'=>$produits ));
@@ -71,8 +71,12 @@ class CommendeController extends Controller
         $region=$session->get('region');
         $startDate=$session->get('startDate',date('Y').'-01-01');
         $endDate=$session->get('endDate', date('Y').'-12-31');
+         $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
+
         $commendes=$em->getRepository('AppBundle:Commende')->findByInsidentList($insident,$startDate,$endDate);
-        return $this->render('commende/index.html.twig', array('commendes' => $commendes  ));
+        return $this->render('commende/index.html.twig',
+         array('commendes' => $commendes ,
+              'produits'=>$produits, ));
     }
     /**
      * @Rest\View(serializerGroups={"commende"})
