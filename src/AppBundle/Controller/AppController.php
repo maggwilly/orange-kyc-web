@@ -29,33 +29,43 @@ class AppController extends Controller
         $region=$session->get('region');
         $startDate=$session->get('startDate',date('Y').'-01-01');
         $endDate=$session->get('endDate', date('Y').'-12-31');
-
+       // $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
         $countAndCashByWeek= $em->getRepository('AppBundle:Ligne')->countAndCashByWeek($startDate,$endDate);
         $countAndCashByMonth= $em->getRepository('AppBundle:Ligne')->countAndCashByMonth($startDate,$endDate);
-        $countAndCash= $em->getRepository('AppBundle:Ligne')->countAndCash($startDate,$endDate);
-        $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
-        $fiedSoldiersCount=$em->getRepository('AppBundle:PointVente')->fiedSoldiersCount($startDate,$endDate);
-        $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
-        $totalWorkedDays=$em->getRepository('AppBundle:Commende')->totalWorkedDays($startDate,$endDate);
+         $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
         $workedSuperviseur=$em->getRepository('AppBundle:User')->workedSuperviseur($startDate,$endDate);
         $colors=array("#FF6384","#36A2EB","#FFCE56","#F7464A","#FF5A5E","#46BFBD", "#5AD3D1","#FDB45C");
         $rapports=$em->getRepository('AppBundle:Commende')->rapports($startDate,$endDate);
         return $this->render('AppBundle::index.html.twig', 
           array(
             'colors'=>$colors,
-            'countAndCash'=>$countAndCash[0],
-            'countAndCashByWeek'=>$countAndCashByWeek,
-            'countAndCashByMonth'=>$countAndCashByMonth,
             'workedDays'=>$workedDays,
-            'fiedSoldiersCount'=>$fiedSoldiersCount,
-            'produits'=>$produits,
             'rapports'=>$rapports,
-            'totalWorkedDays'=>$totalWorkedDays,
             'workedSuperviseur'=>$workedSuperviseur,
+            'countAndCashByMonth'=>$countAndCashByMonth,
+            'countAndCashByWeek'=>$countAndCashByWeek,
 
           ));
     }
 
+    public function kpiAction()
+    {   
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $region=$session->get('region');
+        $startDate=$session->get('startDate',date('Y').'-01-01');
+        $endDate=$session->get('endDate', date('Y').'-12-31');
+        $countAndCash= $em->getRepository('AppBundle:Ligne')->countAndCash($startDate,$endDate);
+        $fiedSoldiersCount=$em->getRepository('AppBundle:PointVente')->fiedSoldiersCount($startDate,$endDate);
+         $totalWorkedDays=$em->getRepository('AppBundle:Commende')->totalWorkedDays($startDate,$endDate);
+        return $this->render('AppBundle::part/kpi.html.twig', 
+          array(
+            'colors'=>$colors,
+            'countAndCash'=>$countAndCash[0],
+            'fiedSoldiersCount'=>$fiedSoldiersCount,
+            'totalWorkedDays'=>$totalWorkedDays,
+          ));
+    }
 public function getWorkingDays($startDate, $endDate)
 {
     $begin = strtotime($startDate);

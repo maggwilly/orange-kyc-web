@@ -13,6 +13,10 @@ app_point_vente:
 app_formated:
     resource: "@AppBundle/Resources/config/routing/formated.yml"
    
+kpi:
+    path:     /kpi
+    defaults: { _controller: "AppBundle:App:kpi" }
+    methods:  GET
 
 homepage:
     path:     /
