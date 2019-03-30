@@ -78,8 +78,7 @@ class CommendeController extends Controller
         $countAndCashByMonth= $em->getRepository('AppBundle:Ligne')->countAndCashByMonth($startDate,$endDate);
         return $this->render('commende/index.html.twig',
          array('commendes' => $commendes ,
-              'colors'=>$colors,
-              ,          
+              'colors'=>$colors,        
                          'countAndCashByMonth'=>$countAndCashByMonth,
                          'countAndCashByWeek'=>$countAndCashByWeek,
               'produits'=>$produits, ));
