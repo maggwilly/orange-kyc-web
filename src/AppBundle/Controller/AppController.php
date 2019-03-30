@@ -29,7 +29,7 @@ class AppController extends Controller
         $region=$session->get('region');
         $startDate=$session->get('startDate',date('Y').'-01-01');
         $endDate=$session->get('endDate', date('Y').'-12-31');
-       // $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
+        $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
         $countAndCashByWeek= $em->getRepository('AppBundle:Ligne')->countAndCashByWeek($startDate,$endDate);
         $countAndCashByMonth= $em->getRepository('AppBundle:Ligne')->countAndCashByMonth($startDate,$endDate);
          $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
@@ -40,6 +40,7 @@ class AppController extends Controller
           array(
             'colors'=>$colors,
             'workedDays'=>$workedDays,
+            'produits'=>$produits,
             'rapports'=>$rapports,
             'workedSuperviseur'=>$workedSuperviseur,
             'countAndCashByMonth'=>$countAndCashByMonth,
