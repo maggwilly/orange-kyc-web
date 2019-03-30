@@ -27,7 +27,10 @@ class CommendeController extends Controller
         $startDate=$session->get('startDate',date('Y').'-01-01');
         $endDate=$session->get('endDate', date('Y').'-12-31');
         $commendes = $em->getRepository('AppBundle:Commende')->findList(null,$startDate,$endDate);
-        return $this->render('commende/index.html.twig', array('commendes' => $commendes     ));
+         $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
+        return $this->render('commende/index.html.twig', array(
+            'commendes' => $commendes ,
+            'produits'=>$produits ));
     }
 
 
@@ -40,8 +43,10 @@ class CommendeController extends Controller
         $startDate=$session->get('startDate',date('Y').'-01-01');
         $endDate=$session->get('endDate', date('Y').'-12-31');
         $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate);
+        $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
         return $this->render('AppBundle::performances.html.twig', array(
                          'workedDays'=>$workedDays,
+                         'produits'=>$produits,
  
         ));
     }
