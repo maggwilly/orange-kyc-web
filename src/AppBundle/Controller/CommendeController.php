@@ -74,9 +74,14 @@ class CommendeController extends Controller
          $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
         $colors=array("#FF6384","#36A2EB","#FFCE56","#F7464A","#FF5A5E","#46BFBD", "#5AD3D1","#FDB45C");
         $commendes=$em->getRepository('AppBundle:Commende')->findByInsidentList($insident,$startDate,$endDate);
+        $countAndCashByWeek= $em->getRepository('AppBundle:Ligne')->countAndCashByWeek($startDate,$endDate);
+        $countAndCashByMonth= $em->getRepository('AppBundle:Ligne')->countAndCashByMonth($startDate,$endDate);
         return $this->render('commende/index.html.twig',
          array('commendes' => $commendes ,
               'colors'=>$colors,
+              ,          
+                         'countAndCashByMonth'=>$countAndCashByMonth,
+                         'countAndCashByWeek'=>$countAndCashByWeek,
               'produits'=>$produits, ));
     }
     /**
