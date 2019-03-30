@@ -32,6 +32,20 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
          return $qb->getQuery()->getResult();  
   }
 
+    public function findByInsidentList($insident,$startDate=null, $endDate=null){
+           $qb = $this->createQueryBuilder('c');
+           if($insident!=null){
+           $qb ->andWhere('c.typeInsident=:typeInsident')->setParameter('typeInsident', $insident);
+            }
+             if($startDate!=null){
+           $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
+          }
+          if($endDate!=null){
+           $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
+          }
+         return $qb->getQuery()->getResult();  
+  }
+
 
       public  function rapports($startDate=null, $endDate=null){
         $qb = $this->createQueryBuilder('c');

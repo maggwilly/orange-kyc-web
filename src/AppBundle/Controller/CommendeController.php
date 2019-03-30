@@ -74,6 +74,16 @@ class CommendeController extends Controller
         ));
     }
 
+    public function listByInsidentAction(Request $request,$insident)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $region=$session->get('region');
+        $startDate=$session->get('startDate',date('Y').'-01-01');
+        $endDate=$session->get('endDate', date('Y').'-12-31');
+        $commendes=$em->getRepository('AppBundle:Commende')->findByInsidentList($insident,$startDate,$endDate);
+        return $this->render('commende/index.html.twig', array('commendes' => $commendes  ));
+    }
     /**
      * @Rest\View(serializerGroups={"commende"})
      * 

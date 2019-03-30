@@ -270,7 +270,7 @@
                    {% for item in rapports %}
                   <tr>
                     <th scope="row">
-                       {{ item.typeInsident|e }}
+                   <a href="{{ path('commendes_list_insident',{'insident':item.typeInsident}) }}"> {{ item.typeInsident|e }}</a>
                     </th>
                     <td>
                       {{ item.nombre }}

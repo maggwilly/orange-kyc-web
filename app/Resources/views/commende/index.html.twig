@@ -25,7 +25,6 @@
             <tr>
                 <td>
                     {% if commende.date %}{{ commende.date|date('d/m/Y') }}{% endif %}
-                    <p>envoyé par <b>{{ commende.user.nom }}</b></p>
                 </td>
                 <td>
                     {{ commende.user.nom }}
