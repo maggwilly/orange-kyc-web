@@ -7,7 +7,7 @@ AppBundle\Entity\PointVente:
             groups: ['pointvente','commende']
         telephone:
             groups: ['pointvente']
-        description:
+        secteur:
             groups: ['pointvente']
 
               
