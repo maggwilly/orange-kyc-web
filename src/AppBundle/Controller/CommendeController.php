@@ -28,7 +28,10 @@ class CommendeController extends Controller
         $endDate=$session->get('endDate', date('Y').'-12-31');
         $commendes = $em->getRepository('AppBundle:Commende')->findList(null,$startDate,$endDate);
          $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
+         $colors=array("#FF6384","#36A2EB","#FFCE56","#F7464A","#FF5A5E","#46BFBD", "#5AD3D1","#FDB45C");
+
         return $this->render('commende/index.html.twig', array(
+            'colors'=>$colors,
             'commendes' => $commendes ,
             'produits'=>$produits ));
     }
@@ -44,7 +47,9 @@ class CommendeController extends Controller
         $endDate=$session->get('endDate', date('Y').'-12-31');
         $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate);
         $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
-        return $this->render('AppBundle::performances.html.twig', array(
+        $colors=array("#FF6384","#36A2EB","#FFCE56","#F7464A","#FF5A5E","#46BFBD", "#5AD3D1","#FDB45C");
+        return $this->render('AppBundle::performances.html.twig', array('colors'=>$colors,
+                         'colors'=>$colors,
                          'workedDays'=>$workedDays,
                          'produits'=>$produits,
  
