@@ -13,6 +13,11 @@ commende_new_json:
     defaults: { _controller: "AppBundle:Commende:newJson" }
     methods:  [GET, POST]
 
+point_vente_new_json:
+    path:     /pointvente/new/json
+    defaults: { _controller: "AppBundle:PointVente:newJson" }
+    methods:  [GET, POST]
+
 commende_edit_json:
     path:      /commende/{id}/edit/json
     defaults: { _controller: "AppBundle:Commende:editJson" }
