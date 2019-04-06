@@ -181,6 +181,11 @@ class User extends BaseUser
    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Commende", mappedBy="user", cascade={"persist","remove"})
    */
     private $commendes;
+
+            /**
+   * @ORM\OneToMany(targetEntity="AppBundle\Entity\PointVente", mappedBy="user", cascade={"persist","remove"})
+   */
+    private $PointVentes;
     /**
      * Constructor
      */
@@ -419,7 +424,17 @@ class User extends BaseUser
         return $this->phone;
     }
 
-    
+
+
+    /**
+     * Get pointVente
+     *
+     * @return \AppBundle\Entity\PointVente
+     */
+    public function getPointVentes()
+    {
+        return $this->pointVentes;
+    }   
 
     /**
      * Set secteur

@@ -48,7 +48,7 @@ class PointVente
      */
     private $nomSecteur;
         /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",inversedBy="pointVentes")
      * @var User
      */
     private $user;
