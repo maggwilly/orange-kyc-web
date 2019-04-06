@@ -26,7 +26,7 @@ class PointVenteRepository extends \Doctrine\ORM\EntityRepository
            $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
           }     
 try {
-    $qb->select('count(p.id) as nombre');
+    $qb->select('count(DISTINCT p.id) as nombre');
          return $qb->getQuery()->getSingleScalarResult();  
    } catch (NoResultException $e) {
         return 0;
