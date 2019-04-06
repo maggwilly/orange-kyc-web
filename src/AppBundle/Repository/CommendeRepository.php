@@ -65,7 +65,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
 
     public   function workedDays($startDate=null, $endDate=null,$all=false){
 
-        $qb = $this->createQueryBuilder('c')->innerJoin('c.pointVente','p')->innerJoin('c.lignes','l');
+        $qb = $this->createQueryBuilder('c')->join('c.pointVente','p')->leftJoin('c.lignes','l');
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
           }
