@@ -185,7 +185,7 @@ class User extends BaseUser
             /**
    * @ORM\OneToMany(targetEntity="AppBundle\Entity\PointVente", mappedBy="user", cascade={"persist","remove"})
    */
-    private $PointVentes;
+    private $pointVentes;
     /**
      * Constructor
      */
