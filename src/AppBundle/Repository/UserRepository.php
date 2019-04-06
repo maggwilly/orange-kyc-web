@@ -12,7 +12,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 {
     public   function workedSuperviseur($startDate=null, $endDate=null,$all=false){
 
-        $qb = $this->createQueryBuilder('u')->join('u.commendes','c')->leftJoin('c.pointVente','p')->leftJoin('c.lignes','l');
+        $qb = $this->createQueryBuilder('u')->leftJoin('u.commendes','c')->leftJoin('c.pointVente','p')->leftJoin('c.lignes','l');
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
           }
