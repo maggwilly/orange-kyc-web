@@ -79,7 +79,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
          ->addGroupBy('p.id')
          ->addGroupBy('p.nom');
           if (!$all) 
-           return $qb->getQuery()->setMaxResults(10)->getArrayResult();
+           return $qb->getQuery()->setMaxResults(11)->getArrayResult();
         return $qb->getQuery()->getArrayResult(); 
   } 
 
