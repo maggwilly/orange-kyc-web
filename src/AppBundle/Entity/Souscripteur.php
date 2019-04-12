@@ -131,15 +131,7 @@ class Souscripteur
 * @ORM\PrePersist
 */
  public function prePersist(){
-    $this->week =$this->date->format("W");
-    $this->month =$this->date->format("M");
-     $year=$this->date->format("Y");
-    $date = new \DateTime();
-    $date->setISODate($year, $this->week);
-    $startDate=$date->format('d/m');
-    $date->modify('+6 days');
-    $endDate=$date->format('d/m');
-    $this->weekText=$startDate.' - '.$endDate;
+   
   }
     /**
      * Get id
