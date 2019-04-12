@@ -146,7 +146,8 @@ class AppController extends Controller
            ->setCategory("Rapports DBS");
         foreach ($days as $shiet => $day) {
                 $ventes = $em->getRepository('AppBundle:PointVente')->ventePeriode($day,$day);  
-               $phpExcelObject->getActiveSheet()//->setActiveSheetIndex(0)
+                $phpExcelObject->createSheet();
+                $phpExcelObject->setActiveSheetIndex($shiet)
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
                ->setCellValue('C1', 'LABEL')
@@ -177,12 +178,12 @@ class AppController extends Controller
                ->setCellValue('L'.($key+2), $value['montant'])
                ->setCellValue('M'.($key+2), $value['mode']);              
            };
+ //$phpExcelObject->setActiveSheetIndex(count($days)-1);
         $phpExcelObject->getActiveSheet()->setTitle('perf '.$day);
        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-        $phpExcelObject->createSheet();
-        $phpExcelObject->setActiveSheetIndex($shiet);
+    
         // create the writer
-             }
+        }
         $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
         // create the response
         $response = $this->get('phpexcel')->createStreamedResponse($writer);
@@ -202,17 +203,17 @@ class AppController extends Controller
 
 public function getWorkingDays($startDate, $endDate)
 {
-    $begin = strtotime($startDate);
-    $end   = strtotime($endDate);
-    if ($begin > $end) {
-        return 0;
+    $date1 = new \DateTime($startDate);
+    $date2 = new \DateTime($endDate);
+    if ($date1 >= $date2) {
+        return [];
     } else {
         $no_days  = [];
-        while ($begin <= $end) {
+        while ($date1 <= $date2) {
            // $what_day = date("N", $begin);
            // if (!in_array($what_day, [6,7]) ) // 6 and 7 are weekend
-                $no_days[]=date('Y-m-d',$begin);
-            $begin += 86400; // +1 day
+             $no_days[]=$date1->format('Y-m-d');
+             $date1->modify('+1 day');
         };
 
         return $no_days;
