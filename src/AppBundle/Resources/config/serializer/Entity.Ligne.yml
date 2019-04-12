@@ -7,4 +7,6 @@ AppBundle\Entity\Ligne:
             groups: ['commende','ligne']
         quantite:
             groups: ['commende','ligne']
+        souscripteur:
+            groups: ['ligne']    
               

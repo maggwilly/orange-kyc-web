@@ -472,4 +472,52 @@ class Souscripteur
     {
         return $this->ligne;
     }
+
+    /**
+     * Set contrat
+     *
+     * @param string $contrat
+     *
+     * @return Souscripteur
+     */
+    public function setContrat($contrat)
+    {
+        $this->contrat = $contrat;
+
+        return $this;
+    }
+
+    /**
+     * Get contrat
+     *
+     * @return string
+     */
+    public function getContrat()
+    {
+        return $this->contrat;
+    }
+
+    /**
+     * Set mode
+     *
+     * @param string $mode
+     *
+     * @return Souscripteur
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+
+        return $this;
+    }
+
+    /**
+     * Get mode
+     *
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
 }
