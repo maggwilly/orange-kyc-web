@@ -178,10 +178,8 @@ class AppController extends Controller
                ->setCellValue('L'.($key+2), $value['montant'])
                ->setCellValue('M'.($key+2), $value['mode']);              
            };
- //$phpExcelObject->setActiveSheetIndex(count($days)-1);
         $phpExcelObject->getActiveSheet()->setTitle('perf '.$day);
        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-    
         // create the writer
         }
         $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
