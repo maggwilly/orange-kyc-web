@@ -56,7 +56,7 @@ try {
          join user_account u  on u.id=fs.user_id
          join ligne l on l.commende_id=c.id
          join produit p on l.produit_id=p.id 
-         join souscripteur s on l.souscripteur_id=s.id
+         left join souscripteur s on l.souscripteur_id=s.id
          where c.date>=:startDate and c.date<=:endDate';
           $statement = $this->_em->getConnection()->prepare($RAW_QUERY);
          $startDate=new \DateTime($startDate);
