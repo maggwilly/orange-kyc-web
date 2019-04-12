@@ -30,4 +30,6 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
          ->addGroupBy('u.nom');
         return $qb->getQuery()->getArrayResult(); 
   }
+
+
 }

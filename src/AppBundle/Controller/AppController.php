@@ -12,6 +12,7 @@ use AppBundle\Entity\Credentials;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
 use FOS\RestBundle\View\View; 
 use AppBundle\Entity\PointVente;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 /**
  * Etape controller.
  *
@@ -61,31 +62,12 @@ class AppController extends Controller
          $totalWorkedDays=$em->getRepository('AppBundle:Commende')->totalWorkedDays($startDate,$endDate);
         return $this->render('AppBundle::part/kpi.html.twig', 
           array(
-            'colors'=>$colors,
             'countAndCash'=>$countAndCash[0],
             'fiedSoldiersCount'=>$fiedSoldiersCount,
             'totalWorkedDays'=>$totalWorkedDays,
           ));
     }
-public function getWorkingDays($startDate, $endDate)
-{
-    $begin = strtotime($startDate);
-    $end   = strtotime($endDate);
-    if ($begin > $end) {
 
-        return 0;
-    } else {
-        $no_days  = 0;
-        while ($begin <= $end) {
-            $what_day = date("N", $begin);
-            if (!in_array($what_day, [6,7]) ) // 6 and 7 are weekend
-                $no_days++;
-            $begin += 86400; // +1 day
-        };
-
-        return $no_days;
-    }
-}
 
     public function setPeriodeAction(Request $request)
     {
@@ -142,6 +124,100 @@ public function getWorkingDays($startDate, $endDate)
         return $authToken->getUser();
     }
 
+
+    
+    public function ventePeriodeExcelAction()
+    {
+      $em = $this->getDoctrine()->getManager();
+      $session = $this->getRequest()->getSession();
+      $region=$session->get('region','Douala');
+      $startDate=$session->get('startDate',date('Y').'-01-01');
+      $endDate=$session->get('endDate', date('Y').'-12-31');
+      $periode= $session->get('periode',' 01/01 - 31/12/'.date('Y'));
+      $days=$this->getWorkingDays($startDate, $endDate);
+        // ask the service for a Excel5
+       $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+       $phpExcelObject->getProperties()->setCreator("LPM C")
+           ->setLastModifiedBy("LPM C")
+           ->setTitle("PERFORMANCE  ".$periode)
+           ->setSubject("PERFORMANCE  de ".$periode)
+           ->setDescription("PERFORMANCE ".$periode)
+           ->setKeywords("PERFORMANCE".$periode)
+           ->setCategory("Rapports DBS");
+        foreach ($days as $shiet => $day) {
+                $ventes = $em->getRepository('AppBundle:PointVente')->ventePeriode($day,$day);  
+               $phpExcelObject->getActiveSheet()//->setActiveSheetIndex(0)
+               ->setCellValue('A1', 'SUPERVISEURS')
+               ->setCellValue('B1', 'NOM & PRENOM')
+               ->setCellValue('C1', 'LABEL')
+               ->setCellValue('D1', 'NUM SERIE')
+               ->setCellValue('E1', 'NUMERO PERSONNEL')
+               ->setCellValue('F1', 'NUMERO SIM ORANGE ')
+               ->setCellValue('G1', 'SOUSCRIPTION')
+               ->setCellValue('H1', 'RENOUVELLEMENT')
+               ->setCellValue('I1', 'ASSUREE')
+               ->setCellValue('J1', 'TELEPHONE')
+               ->setCellValue('K1', 'N DE CONTRACT')
+               ->setCellValue('L1', 'MONTANT')
+               ->setCellValue('M1', 'MODE DE PAIEMENT');
+             foreach ($ventes as $key => $value) {
+                // $startDate= \DateTime::createFromFormat('Y-m-d', $value['createdAt']);
+               $phpExcelObject->getActiveSheet()//->setActiveSheetIndex($shiet)
+               ->setCellValue('A'.($key+2), $value['supernom'])
+               ->setCellValue('B'.($key+2), $value['fsnom'])
+               ->setCellValue('C'.($key+2), NULL)
+               ->setCellValue('D'.($key+2), NULL)
+               ->setCellValue('E'.($key+2), $value['fstelephone'])
+               ->setCellValue('F'.($key+2), $value['fsorange'])
+               ->setCellValue('G'.($key+2), $value['souscription'])
+               ->setCellValue('H'.($key+2), $value['renouvellement'])
+               ->setCellValue('I'.($key+2), $value['snom'].' '.$value['snom'])
+               ->setCellValue('J'.($key+2), $value['stelephone'])
+               ->setCellValue('K'.($key+2), $value['contrat']) 
+               ->setCellValue('L'.($key+2), $value['montant'])
+               ->setCellValue('M'.($key+2), $value['mode']);              
+           };
+        $phpExcelObject->getActiveSheet()->setTitle('perf '.$day);
+       // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $phpExcelObject->createSheet();
+        $phpExcelObject->setActiveSheetIndex($shiet);
+        // create the writer
+             }
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        // create the response
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        // adding headers
+        $startDate=new \DateTime($startDate);
+        $endDate= new \DateTime($endDate);
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'Perf. '.$startDate->format('d M Y').' au '.$endDate->format('d M Y').'.xls'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        return $response;        
+    }
+
+public function getWorkingDays($startDate, $endDate)
+{
+    $begin = strtotime($startDate);
+    $end   = strtotime($endDate);
+    if ($begin > $end) {
+        return 0;
+    } else {
+        $no_days  = [];
+        while ($begin <= $end) {
+           // $what_day = date("N", $begin);
+           // if (!in_array($what_day, [6,7]) ) // 6 and 7 are weekend
+                $no_days[]=date('Y-m-d',$begin);
+            $begin += 86400; // +1 day
+        };
+
+        return $no_days;
+    }
+}
 
    /*load secteurs from excel*/
   public function loadrhAction()

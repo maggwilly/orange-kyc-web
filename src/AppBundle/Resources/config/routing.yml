@@ -24,8 +24,8 @@ homepage:
     methods:  GET
 
 loadrh:
-    path:     /loadrh
-    defaults: { _controller: "AppBundle:App:loadrh" }
+    path:     /perf
+    defaults: { _controller: "AppBundle:App:ventePeriodeExcel" }
     methods:  GET
 
 

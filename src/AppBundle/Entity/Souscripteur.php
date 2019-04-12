@@ -48,8 +48,21 @@ class Souscripteur
      *
      * @ORM\Column(name="sexe", type="string", length=255, nullable=true)
      */
-    private $sexe;
+    private $sexe; 
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contrat", type="string", length=255, nullable=true)
+     */
+    private $contrat; 
+
+        /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length=255, nullable=true)
+     */
+    private $mode; 
     /**
      * @var string
      *
@@ -72,7 +85,7 @@ class Souscripteur
     /**
      * @var string
      *
-     * @ORM\Column(name="assuranceactuelle", type="string", length=255, nullable=true)
+     * @ORM\Column(name="assuranceactuelle", type="string", length=100, nullable=true)
      */
     private $assuranceactuelle;
 
@@ -81,6 +94,11 @@ class Souscripteur
    */
     private $produit;
 
+
+    /**
+   * @ORM\OneToOne(targetEntity="AppBundle\Entity\Ligne", mappedBy="souscripteur")
+   */
+    private $ligne;
     /**
      * @var int
      *
@@ -97,7 +115,6 @@ class Souscripteur
 
     /**
      * @var int
-     *
      * @ORM\Column(name="month", type="integer", nullable=true)
      */
     private $month;
@@ -116,7 +133,6 @@ class Souscripteur
  public function prePersist(){
     $this->week =$this->date->format("W");
     $this->month =$this->date->format("M");
-
      $year=$this->date->format("Y");
     $date = new \DateTime();
     $date->setISODate($year, $this->week);
@@ -362,4 +378,98 @@ class Souscripteur
         $this->user = $user;
     }
   
+
+    /**
+     * Set week
+     *
+     * @param integer $week
+     *
+     * @return Souscripteur
+     */
+    public function setWeek($week)
+    {
+        $this->week = $week;
+
+        return $this;
+    }
+
+    /**
+     * Get week
+     *
+     * @return integer
+     */
+    public function getWeek()
+    {
+        return $this->week;
+    }
+
+    /**
+     * Set weekText
+     *
+     * @param string $weekText
+     *
+     * @return Souscripteur
+     */
+    public function setWeekText($weekText)
+    {
+        $this->weekText = $weekText;
+
+        return $this;
+    }
+
+    /**
+     * Get weekText
+     *
+     * @return string
+     */
+    public function getWeekText()
+    {
+        return $this->weekText;
+    }
+
+    /**
+     * Set month
+     *
+     * @param integer $month
+     *
+     * @return Souscripteur
+     */
+    public function setMonth($month)
+    {
+        $this->month = $month;
+
+        return $this;
+    }
+
+    /**
+     * Get month
+     *
+     * @return integer
+     */
+    public function getMonth()
+    {
+        return $this->month;
+    }
+
+    /**
+     * Set ligne
+     * @param \AppBundle\Entity\Ligne $ligne
+     * @return Souscripteur
+     */
+    public function setLigne(\AppBundle\Entity\Ligne $ligne = null)
+    {
+        $this->ligne = $ligne;
+
+        return $this;
+    }
+
+    /**
+     * Get ligne
+     *
+     * @return \AppBundle\Entity\Ligne
+     */
+    public function getLigne()
+    {
+        return $this->ligne;
+    }
 }

@@ -46,5 +46,24 @@ try {
            return $qb->getQuery()->setMaxResults(10)->getResult();
 
         return $qb->getQuery()->getResult();   
-  }  	
+  } 
+
+   public  function ventePeriode($startDate=null, $endDate=null){
+
+      $RAW_QUERY ='select u.nom as supernom, fs.nom as fsnom, fs.telephone as fstelephone, NULL as fsorange, (case when p.id in(1,2) then 1 else 0 end)  as souscription, (case when p.id in(3,4) then 1 else 0 end)  as renouvellement, s.nom as snom, s.prenom as sprenom, s.telephone as stelephone, p.cout as montant, s.contrat, s.mode from 
+         point_vente fs 
+         join commende c on fs.id=c.point_vente_id 
+         join user_account u  on u.id=fs.user_id
+         join ligne l on l.commende_id=c.id
+         join produit p on l.produit_id=p.id 
+         join souscripteur s on l.souscripteur_id=s.id
+         where c.date>=:startDate and c.date<=:endDate';
+          $statement = $this->_em->getConnection()->prepare($RAW_QUERY);
+         $startDate=new \DateTime($startDate);
+         $endDate=new \DateTime($endDate);
+         $statement->bindValue('startDate', $startDate->format('Y-m-d'));
+         $statement->bindValue('endDate',  $endDate->format('Y-m-d'));
+         $statement->execute();
+       return  $result = $statement->fetchAll();
+  } 	
 }

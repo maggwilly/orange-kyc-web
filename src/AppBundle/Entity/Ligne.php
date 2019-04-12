@@ -23,7 +23,6 @@ class Ligne
 
     /**
      * @var int
-     *
      * @ORM\Column(name="quantite", type="integer")
      */
     private $quantite;
@@ -37,7 +36,12 @@ class Ligne
    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Commende",inversedBy="lignes")
    */
     private $commende;
-    
+
+        /**
+   * @ORM\OneToOne(targetEntity="AppBundle\Entity\Souscripteur",inversedBy="ligne")
+   */
+    private $souscripteur;
+
     /**
      * Get id
      *
@@ -118,5 +122,29 @@ class Ligne
     public function getCommende()
     {
         return $this->commende;
+    }
+
+    /**
+     * Set souscripteur
+     *
+     * @param \AppBundle\Entity\Souscripteur $souscripteur
+     *
+     * @return Ligne
+     */
+    public function setSouscripteur(\AppBundle\Entity\Souscripteur $souscripteur = null)
+    {
+        $this->souscripteur = $souscripteur;
+
+        return $this;
+    }
+
+    /**
+     * Get souscripteur
+     *
+     * @return \AppBundle\Entity\Souscripteur
+     */
+    public function getSouscripteur()
+    {
+        return $this->souscripteur;
     }
 }

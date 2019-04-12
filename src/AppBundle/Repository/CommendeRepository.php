@@ -61,6 +61,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
            return $qb->getQuery()->getArrayResult(); 
   } 
 
+ 
 
 
     public   function workedDays($startDate=null, $endDate=null,$all=false){
