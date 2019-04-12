@@ -66,7 +66,10 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
 
     public   function workedDays($startDate=null, $endDate=null,$all=false){
 
-        $qb = $this->createQueryBuilder('c')->join('c.pointVente','p')->leftJoin('c.lignes','l');
+        $qb = $this->createQueryBuilder('c')
+        ->join('c.pointVente','p')
+        ->join('p.user','u')
+        ->leftJoin('c.lignes','l');
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
           }
@@ -75,10 +78,12 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
           }     
          $qb->select('p.id')
          ->addSelect('p.nom')
+         ->addSelect('u.nom as superviseur')
          ->addSelect('sum(l.quantite) as nombre')
          ->addSelect('count(DISTINCT c.date) as nombrejours')
          ->addGroupBy('p.id')
-         ->addGroupBy('p.nom');
+         ->addGroupBy('p.nom')
+         ->addGroupBy('u.nom');
           if (!$all) 
            return $qb->getQuery()->setMaxResults(11)->getArrayResult();
         return $qb->getQuery()->getArrayResult(); 

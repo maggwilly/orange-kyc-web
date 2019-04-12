@@ -144,9 +144,10 @@ class AppController extends Controller
            ->setDescription("PERFORMANCE ".$periode)
            ->setKeywords("PERFORMANCE".$periode)
            ->setCategory("Rapports DBS");
+          
         foreach ($days as $shiet => $day) {
                 $ventes = $em->getRepository('AppBundle:PointVente')->ventePeriode($day,$day);  
-                $phpExcelObject->createSheet();
+                $phpExcelObject->createSheet($shiet);
                 $phpExcelObject->setActiveSheetIndex($shiet)
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
@@ -182,6 +183,27 @@ class AppController extends Controller
        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         // create the writer
         }
+         
+        {     $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
+               $phpExcelObject->createSheet(count($days));
+                $phpExcelObject->setActiveSheetIndex(count($days))
+               ->setCellValue('A1', 'SUPERVISEURS')
+               ->setCellValue('B1', 'NOM & PRENOM')
+               ->setCellValue('C1', 'NOMBRE DE JOURS')
+               ->setCellValue('D1', 'TOTAL');
+             foreach ($workedDays as $key => $value) {
+                // $startDate= \DateTime::createFromFormat('Y-m-d', $value['createdAt']);
+               $phpExcelObject->getActiveSheet()//->setActiveSheetIndex($shiet)
+               ->setCellValue('A'.($key+2), $value['superviseur'])
+               ->setCellValue('B'.($key+2), $value['nom'])
+               ->setCellValue('C'.($key+2), $value['nombrejours'])
+               ->setCellValue('D'.($key+2), $value['nombre'])
+             ;              
+           };
+        $phpExcelObject->getActiveSheet()->setTitle('RECAP');   
+        }
+
+
         $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
         // create the response
         $response = $this->get('phpexcel')->createStreamedResponse($writer);
