@@ -13,14 +13,21 @@ class SouscripteurType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nom')->add('prenom')->add('telephone')->add('sexe')->add('age')->add('csp')->add('assuranceactuelle');
+        $builder
+        ->add('nom')
+        ->add('prenom')
+        ->add('telephone')
+        ->add('contrat')
+        ->add('mode');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Souscripteur'
+            'data_class' => 'AppBundle\Entity\Souscripteur',
+           'csrf_protection' => false,
+            'allow_extra_fields' => true
         ));
     }
 

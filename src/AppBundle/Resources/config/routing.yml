@@ -23,7 +23,7 @@ homepage:
     defaults: { _controller: "AppBundle:App:index" }
     methods:  GET
 
-loadrh:
+export_excel:
     path:     /perf
     defaults: { _controller: "AppBundle:App:ventePeriodeExcel" }
     methods:  GET

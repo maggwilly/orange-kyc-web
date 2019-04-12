@@ -15,6 +15,7 @@ class LigneType extends AbstractType
     {
         $builder->add('quantite')
         ->add('commende', EntityType::class, array('class' => 'AppBundle:Commende'))
+         ->add('souscripteur', SouscripteurType::class)
         ->add('produit', EntityType::class, array('class' => 'AppBundle:Produit'));
     }/**
      * {@inheritdoc}

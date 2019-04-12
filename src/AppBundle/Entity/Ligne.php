@@ -38,7 +38,7 @@ class Ligne
     private $commende;
 
         /**
-   * @ORM\OneToOne(targetEntity="AppBundle\Entity\Souscripteur",inversedBy="ligne")
+   * @ORM\OneToOne(targetEntity="AppBundle\Entity\Souscripteur",inversedBy="ligne", cascade={"persist","remove"})
    */
     private $souscripteur;
 
