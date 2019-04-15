@@ -12,8 +12,8 @@ commendes_list_insident:
     path:     /{insident}/list/insident
     defaults: { _controller: "AppBundle:Commende:listByInsident" }
     methods:  [GET, POST]
-    
-commende_list:
+
+commendes_list:
     path:     /{user}/{pointVente}/list
     defaults: { _controller: "AppBundle:Commende:list", "user":0, "pointVente":0 }
     methods:  [GET, POST]
