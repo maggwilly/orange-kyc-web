@@ -50,7 +50,7 @@ try {
 
    public  function ventePeriode($startDate=null, $endDate=null){
 
-      $RAW_QUERY ='select u.nom as supernom, fs.nom as fsnom,fs.secteur as fsserietablette, fs.telephone as fstelephone, NULL as fsorange, (case when p.id in(1,2) then l.quantite else 0 end)  as souscription, (case when p.id in(3,4) then l.quantite else 0 end)  as renouvellement, s.nom as snom, s.prenom as sprenom, s.telephone as stelephone, p.cout as montant, s.contrat, s.mode from 
+      $RAW_QUERY ='select u.nom as supernom, fs.nom as fsnom,fs.secteur as fsserietablette, fs.telephone as fstelephone, NULL as fsorange, (case when p.id in(1,2) then l.quantite else 0 end)  as souscription, (case when p.id in(3,4) then l.quantite else 0 end)  as renouvellement, s.nom as snom, s.prenom as sprenom, s.telephone as stelephone, (p.cout*l.quantite) as montant, s.contrat, s.mode from 
          point_vente fs 
          join commende c on fs.id=c.point_vente_id 
          join user_account u  on u.id=fs.user_id
