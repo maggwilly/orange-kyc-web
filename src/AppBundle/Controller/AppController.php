@@ -146,7 +146,9 @@ class AppController extends Controller
            ->setCategory("Rapports DBS");
           
         foreach ($days as $shiet => $day) {
-                $ventes = $em->getRepository('AppBundle:PointVente')->ventePeriode($day,$day);  
+                $ventes = $em->getRepository('AppBundle:PointVente')->ventePeriode($day,$day);
+                if(empty($ventes))  
+                    continue;
                 $phpExcelObject->createSheet($shiet);
                 $phpExcelObject->setActiveSheetIndex($shiet)
                ->setCellValue('A1', 'SUPERVISEURS')
