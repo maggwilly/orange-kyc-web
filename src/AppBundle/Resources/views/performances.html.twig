@@ -11,6 +11,7 @@
               <table class="table align-items-center table-flush" id="myTable">
                 <thead class="thead-light">
                   <tr>
+                     <th scope="col">Superviseur</th>
                     <th scope="col">Field Soldiers</th>
                     <th scope="col">Nombre de jour</th>
                     <th scope="col">Souscriptions</th>
@@ -23,7 +24,14 @@
                   {% for user in workedDays %}
                   <tr>
                     <th scope="row">
+                      <a href="{{ path('commendes_list',{'user':user.idsup}) }}">
+                     {{ user.superviseur|e }}
+                   </a>
+                    </th>
+                    <th scope="row">
+                    <a href="{{ path('commendes_list',{'pointVente':user.id}) }}">
                      {{ user.nom|e }}
+                     </a>
                     </th>
                     <td>
                       {{ user.nombrejours }}
