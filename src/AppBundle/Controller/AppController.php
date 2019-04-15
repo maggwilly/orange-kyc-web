@@ -171,7 +171,7 @@ class AppController extends Controller
                ->setCellValue('A'.($key+2), $value['supernom'])
                ->setCellValue('B'.($key+2), $value['fsnom'])
                ->setCellValue('C'.($key+2), NULL)
-               ->setCellValue('D'.($key+2), NULL)
+               ->setCellValue('D'.($key+2),  $value['fsserietablette'])
                ->setCellValue('E'.($key+2), $value['fstelephone'])
                ->setCellValue('F'.($key+2), $value['fsorange'])
                ->setCellValue('G'.($key+2), $value['souscription'])
