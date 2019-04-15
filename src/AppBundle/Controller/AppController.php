@@ -144,13 +144,14 @@ class AppController extends Controller
            ->setDescription("PERFORMANCE ".$periode)
            ->setKeywords("PERFORMANCE".$periode)
            ->setCategory("Rapports DBS");
-          
+           $ativeshiet=0;
         foreach ($days as $shiet => $day) {
                 $ventes = $em->getRepository('AppBundle:PointVente')->ventePeriode($day,$day);
                 if(empty($ventes))  
                     continue;
-                $phpExcelObject->createSheet($shiet);
-                $phpExcelObject->setActiveSheetIndex($shiet)
+                $ativeshiet++;
+                $phpExcelObject->createSheet($ativeshiet);
+                $phpExcelObject->setActiveSheetIndex($ativeshiet)
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
                ->setCellValue('C1', 'LABEL')
@@ -187,8 +188,8 @@ class AppController extends Controller
         }
          
         {     $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
-               $phpExcelObject->createSheet(count($days));
-                $phpExcelObject->setActiveSheetIndex(count($days))
+               $phpExcelObject->createSheet($ativeshiet);
+                $phpExcelObject->setActiveSheetIndex($ativeshiet)
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
                ->setCellValue('C1', 'NOMBRE DE JOURS')
