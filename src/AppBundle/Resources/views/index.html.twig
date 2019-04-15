@@ -272,5 +272,7 @@
   {% endblock %}
   {% block javascripts %}
  {{parent()}}
-   {% include 'AppBundle::charts.js.twig' %}             
+  {% block chart %}
+   {% include 'AppBundle::charts.js.twig' %}  
+   {% endblock %}           
   {% endblock %}
