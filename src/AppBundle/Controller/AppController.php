@@ -149,9 +149,10 @@ class AppController extends Controller
                 $ventes = $em->getRepository('AppBundle:PointVente')->ventePeriode($day,$day);
                 if(empty($ventes))  
                     continue;
+                
                 $phpExcelObject->createSheet($ativeshiet);
+
                 $phpExcelObject->setActiveSheetIndex($ativeshiet)
-                $ativeshiet++;
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
                ->setCellValue('C1', 'LABEL')
@@ -185,6 +186,7 @@ class AppController extends Controller
         $phpExcelObject->getActiveSheet()->setTitle('perf '.$day);
        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         // create the writer
+         $ativeshiet++;
         }
          
         {     $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
