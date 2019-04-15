@@ -58,7 +58,7 @@ try {
          join produit p on l.produit_id=p.id 
          left join souscripteur s on l.souscripteur_id=s.id
          where c.date>=:startDate and c.date<=:endDate';
-          $statement = $this->_em->getConnection()->prepare($RAW_QUERY);
+         $statement = $this->_em->getConnection()->prepare($RAW_QUERY);
          $startDate=new \DateTime($startDate);
          $endDate=new \DateTime($endDate);
          $statement->bindValue('startDate', $startDate->format('Y-m-d'));

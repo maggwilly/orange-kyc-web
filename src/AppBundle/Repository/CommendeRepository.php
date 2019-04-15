@@ -18,11 +18,14 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
          return $qb->getQuery()->getResult();  
   }
 
-  	  	public function findList(User $user=null,$startDate=null, $endDate=null){
-           $qb = $this->createQueryBuilder('c');
-           if($user!=null){
-           $qb ->andWhere('c.user=:user')->setParameter('user', $user);
+  	  	public function findList(User $user=null, PointVente $pointVente=null,$startDate=null, $endDate=null){
+           $qb = $this->createQueryBuilder('c')->join('c.pointVente','p');
+           if($pointVente!=null){
+           $qb ->andWhere('c.pointVente=:pointVente')->setParameter('pointVente', $pointVente);
             }
+           if($user!=null){
+           $qb ->andWhere('p.user=:user')->setParameter('user', $user);
+            }            
              if($startDate!=null){
            $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
           }
@@ -31,6 +34,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
           }
          return $qb->getQuery()->getResult();  
   }
+
 
     public function findByInsidentList($insident,$startDate=null, $endDate=null){
            $qb = $this->createQueryBuilder('c');
@@ -78,12 +82,14 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
           }     
          $qb->select('p.id')
          ->addSelect('p.nom')
+         ->addSelect('u.id as idsup')
          ->addSelect('u.nom as superviseur')
          ->addSelect('sum(l.quantite) as nombre')
          ->addSelect('count(DISTINCT c.date) as nombrejours')
          ->addGroupBy('p.id')
          ->addGroupBy('p.nom')
-         ->addGroupBy('u.nom');
+         ->addGroupBy('u.nom')
+         ->addGroupBy('u.id');
           if (!$all) 
            return $qb->getQuery()->setMaxResults(11)->getArrayResult();
         return $qb->getQuery()->getArrayResult(); 

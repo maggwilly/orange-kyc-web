@@ -83,6 +83,18 @@ class CommendeController extends Controller
                          'countAndCashByWeek'=>$countAndCashByWeek,
               'produits'=>$produits, ));
     }
+
+    public function listAction(Request $request,User $user=null, Pointvente $pointVente=null)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $region=$session->get('region');
+        $startDate=$session->get('startDate',date('Y').'-01-01');
+        $endDate=$session->get('endDate', date('Y').'-12-31');
+        $commendes = $em->getRepository('AppBundle:Commende')->findList($user,$pointVente,$startDate,$endDate);
+        return $this->render('commende/index.html.twig', array('commendes' => $commendes  ));
+    }
+
     /**
      * @Rest\View(serializerGroups={"commende"})
      * 
