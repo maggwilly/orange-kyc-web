@@ -149,9 +149,9 @@ class AppController extends Controller
                 $ventes = $em->getRepository('AppBundle:PointVente')->ventePeriode($day,$day);
                 if(empty($ventes))  
                     continue;
-                $ativeshiet++;
                 $phpExcelObject->createSheet($ativeshiet);
                 $phpExcelObject->setActiveSheetIndex($ativeshiet)
+                $ativeshiet++;
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
                ->setCellValue('C1', 'LABEL')
