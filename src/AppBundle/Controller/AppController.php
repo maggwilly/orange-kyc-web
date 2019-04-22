@@ -201,10 +201,10 @@ class AppController extends Controller
                ->setCellValue('A'.($key+2), $value['superviseur'])
                ->setCellValue('B'.($key+2), $value['nom']) ;
                 if (false === $this->get('security.authorization_checker')->isGranted('ROLE_SUPERVISEUR'))             
-                    $phpExcelObject->setCellValue('C'.($key+2), $value['nombrejours']);
+                    $phpExcelObject->getActiveSheet()->setCellValue('C'.($key+2), $value['nombrejours']);
                 else
-                   $phpExcelObject->setCellValue('C'.($key+2), 'info restreinte');
-                $phpExcelObject->setCellValue('D'.($key+2), $value['nombre']);              
+                   $phpExcelObject->getActiveSheet()->setCellValue('C'.($key+2), 'info restreinte');
+                $phpExcelObject->getActiveSheet()->setCellValue('D'.($key+2), $value['nombre']);              
            };
         $phpExcelObject->getActiveSheet()->setTitle('RECAP');   
         }
