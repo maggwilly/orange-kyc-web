@@ -197,18 +197,17 @@ class AppController extends Controller
                ->setCellValue('C1', 'NOMBRE DE JOURS')
                ->setCellValue('D1', 'TOTAL');
              foreach ($workedDays as $key => $value) {
-                // $startDate= \DateTime::createFromFormat('Y-m-d', $value['createdAt']);
-               $phpExcelObject->getActiveSheet()//->setActiveSheetIndex($shiet)
+               $phpExcelObject->getActiveSheet()
                ->setCellValue('A'.($key+2), $value['superviseur'])
-               ->setCellValue('B'.($key+2), $value['nom'])
-               ->setCellValue('C'.($key+2), $value['nombrejours'])
-               ->setCellValue('D'.($key+2), $value['nombre'])
-             ;              
+               ->setCellValue('B'.($key+2), $value['nom']) ;
+                if (false === $this->get('security.authorization_checker')->isGranted('ROLE_SUPERVISEUR'))             
+                    $phpExcelObject->setCellValue('C'.($key+2), $value['nombrejours']);
+                else
+                   $phpExcelObject->setCellValue('C'.($key+2), 'info restreinte');
+                $phpExcelObject->setCellValue('D'.($key+2), $value['nombre']);              
            };
         $phpExcelObject->getActiveSheet()->setTitle('RECAP');   
         }
-
-
         $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
         // create the response
         $response = $this->get('phpexcel')->createStreamedResponse($writer);

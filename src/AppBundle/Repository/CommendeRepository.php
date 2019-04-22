@@ -14,7 +14,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
 {
 	  	 public function findByPointVente(PointVente $pointVente){
            $qb = $this->createQueryBuilder('c')
-           ->where('c.pointVente=:pointVente')->setParameter('pointVente', $pointVente);
+           ->where('c.pointVente=:pointVente')->setParameter('pointVente', $pointVente)->orderby('c.date','asc');
          return $qb->getQuery()->getResult();  
   }
 

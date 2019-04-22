@@ -3,14 +3,11 @@
 security:
     role_hierarchy:
         # Un admin hérite des droits d'auteur et de modérateur
-         ROLE_SAISIE:   [ROLE_USER, ROLE_SAISIE]
-         ROLE_SUPERVISEUR:   [ ROLE_SAISIE]
+         ROLE_SUPERVISEUR:   [ROLE_USER]
          ROLE_CONTROLEUR:   [ROLE_SUPERVISEUR]
-         ROLE_ADMIN:   [ROLE_CONTROLEUR,ROLE_MESSAGER]
-         ROLE_DELEGUE:   [ROLE_ADMIN, ROLE_PRICER]
         
     access_control:
-        - { path: ^/v1/admin, roles: ROLE_ADMIN }   
+        - { path: ^/v1/admin, roles: ROLE_SUPERVISEUR }   
         - { path: ^/v1/ambassador, roles: IS_AUTHENTICATED_ANONYMOUSLY }   
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
 

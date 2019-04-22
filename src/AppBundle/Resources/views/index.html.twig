@@ -60,7 +60,11 @@
                      </a>
                     </th>
                     <td>
+                      {% if is_granted('ROLE_SUPERVISEUR') %}
                       {{ user.nombrejours }}
+                      {% else %}
+                        info restreinte
+                      {% endif %}
                     </td>
                     <td>
                       {{ user.nombre }}
@@ -120,7 +124,11 @@
                        {{ item.nom|e }}</a>
                     </th>
                     <td>
-                      {{ item.nombrefs }}
+                      {% if is_granted('ROLE_SUPERVISEUR') %}
+                         {{ item.nombrefs }}
+                      {% else %}
+                        info restreinte
+                      {% endif %}
                     </td>
                     <td>
                       {{ item.nombre }}
