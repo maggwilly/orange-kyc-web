@@ -200,7 +200,7 @@ class AppController extends Controller
                $phpExcelObject->getActiveSheet()
                ->setCellValue('A'.($key+2), $value['superviseur'])
                ->setCellValue('B'.($key+2), $value['nom']) ;
-                if (false === $this->get('security.authorization_checker')->isGranted('ROLE_SUPERVISEUR'))             
+                if (true === $this->get('security.authorization_checker')->isGranted('ROLE_SUPERVISEUR'))             
                     $phpExcelObject->getActiveSheet()->setCellValue('C'.($key+2), $value['nombrejours']);
                 else
                    $phpExcelObject->getActiveSheet()->setCellValue('C'.($key+2), 'info restreinte');
