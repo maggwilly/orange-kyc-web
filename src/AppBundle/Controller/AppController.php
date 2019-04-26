@@ -274,7 +274,7 @@ class AppController extends Controller
                   foreach ($days as $shiet => $day) {
                     $isThere=$em->getRepository('AppBundle:Commende')->isThere($value['id'],$day);
                   $cell= $phpExcelObject->getActiveSheet()
-                     ->getCellByColumnAndRow($shiet+4,($key+2))->setValue($isThere);
+                     ->getCellByColumnAndRow($shiet+4,($key+2))->setValue($isThere)->getStyle();
                      if($isThere>0)
                         $cell->applyFromArray($styleGreen);
                       else
