@@ -253,7 +253,7 @@ class AppController extends Controller
                      ->getCellByColumnAndRow($key+4,1)
                      ->setValue($date->format('d M'))
                      ->getColumn();
-                  $phpExcelObject->getActiveSheet()->getColumnDimensionByColumn($column)->setWidth('10');   
+                  $phpExcelObject->getActiveSheet()->getColumnDimensionByColumn($column)->setWidth(10);   
                  $phpExcelObject->getActiveSheet()->getStyle($column.'1')->getAlignment()->setTextRotation(90);
                   }
              foreach ($workedDays as $key => $value){
