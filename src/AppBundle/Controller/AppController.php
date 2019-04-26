@@ -256,25 +256,27 @@ class AppController extends Controller
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
                ->setCellValue('C1', 'NUMERO PERSONNEL')
-               ->setCellValue('D1', 'TOTAL VENTE');
+               ->setCellValue('D1', 'TOTAL VENTE')
+               ->setCellValue('E1', 'TOTAL JOURS');
                 foreach ($days as $key => $day) {
                    $date=new \DateTime($day);
                    $column= $phpExcelObject->getActiveSheet()
-                     ->getCellByColumnAndRow($key+4,1)
+                     ->getCellByColumnAndRow($key+5,1)
                      ->setValue($date->format('d M'))
                      ->getColumn();  
                  $phpExcelObject->getActiveSheet()->getStyle($column.'1')->getAlignment()->setTextRotation(90);
-                  }
+                }
              foreach ($workedDays as $key => $value){
                $phpExcelObject->getActiveSheet()
                ->setCellValue('A'.($key+2), $value['superviseur'])
                ->setCellValue('B'.($key+2), $value['nom']) 
                ->setCellValue('C'.($key+2), $value['telephone']) 
-               ->setCellValue('D'.($key+2), $value['nombre']);
+               ->setCellValue('D'.($key+2), $value['nombre'])
+               ->setCellValue('E'.($key+2), $value['nombrejours']);
                   foreach ($days as $shiet => $day) {
                     $isThere=$em->getRepository('AppBundle:Commende')->isThere($value['id'],$day);
                   $cell= $phpExcelObject->getActiveSheet()
-                     ->getCellByColumnAndRow($shiet+4,($key+2))->setValue($isThere)->getStyle();
+                     ->getCellByColumnAndRow($shiet+5,($key+2))->setValue($isThere)->getStyle();
                      if($isThere>0)
                         $cell->applyFromArray($styleGreen);
                       else
