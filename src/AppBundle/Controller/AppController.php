@@ -233,7 +233,7 @@ class AppController extends Controller
       $styleRed = array(
        'fill'  => array(
          'type'  => 'solid',
-         'color' => array('rgb' => '8E6208'),
+         'color' => array('rgb' => 'F53B12'),
        ));
       $em = $this->getDoctrine()->getManager();
       $session = $this->getRequest()->getSession();
@@ -256,7 +256,7 @@ class AppController extends Controller
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
                ->setCellValue('C1', 'NUMERO PERSONNEL')
-               ->setCellValue('D1', 'TOTAL');
+               ->setCellValue('D1', 'TOTAL VENTE');
                 foreach ($days as $key => $day) {
                    $date=new \DateTime($day);
                    $column= $phpExcelObject->getActiveSheet()
