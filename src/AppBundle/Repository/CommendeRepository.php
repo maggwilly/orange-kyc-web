@@ -119,7 +119,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
         ->andWhere('p.id=:id')->setParameter('id', $id)
         ->andWhere('c.date=:startDate')->setParameter('startDate', new \DateTime($startDate));     
    try {
-    $qb->select('count(DISTINCT c.id) as nombre');
+    $qb->select('count(DISTINCT c.date) as nombre');
          return $qb->getQuery()->getSingleScalarResult();  
    } catch (NoResultException $e) {
         return 0;
