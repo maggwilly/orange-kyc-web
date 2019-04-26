@@ -241,16 +241,20 @@ class AppController extends Controller
            ->setKeywords("POINTAGEs".$periode)
            ->setCategory("POINTAGEs DBS");
             $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
-            $phpExcelObject->createSheet(0);
+           // $phpExcelObject->createSheet(0);
             $phpExcelObject->setActiveSheetIndex(0)
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
                ->setCellValue('C1', 'NUMERO PERSONNEL')
                ->setCellValue('D1', 'TOTAL');
                 foreach ($days as $key => $day) {
-                     $phpExcelObject->getActiveSheet()
-                     ->getCellByColumnAndRow($key+3,1)
-                     ->setValue($day);
+                   $date=new \DateTime($day);
+                   $column= $phpExcelObject->getActiveSheet()
+                     ->getCellByColumnAndRow($key+4,1)
+                     ->setValue($date->format('d M'))
+                     ->getColumn();
+                  $phpExcelObject->getActiveSheet()->getColumnDimensionByColumn($column)->setWidth('10');   
+                 $phpExcelObject->getActiveSheet()->getStyle($column.'1')->getAlignment()->setTextRotation(90);
                   }
              foreach ($workedDays as $key => $value){
                $phpExcelObject->getActiveSheet()
@@ -261,7 +265,7 @@ class AppController extends Controller
                   foreach ($days as $shiet => $day) {
                     $isThere=$em->getRepository('AppBundle:Commende')->isThere($value['id'],$day);
                    $phpExcelObject->getActiveSheet()
-                     ->getCellByColumnAndRow($shiet+3,($key+2))->setValue($isThere);
+                     ->getCellByColumnAndRow($shiet+4,($key+2))->setValue($isThere);
                  }            
            };
         $phpExcelObject->getActiveSheet()->setTitle('POINTAGES FS');   
