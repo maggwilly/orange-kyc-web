@@ -82,12 +82,14 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
           }     
          $qb->select('p.id')
          ->addSelect('p.nom')
+         ->addSelect('p.telephone')
          ->addSelect('u.id as idsup')
          ->addSelect('u.nom as superviseur')
          ->addSelect('sum(l.quantite) as nombre')
          ->addSelect('count(DISTINCT c.date) as nombrejours')
          ->addGroupBy('p.id')
          ->addGroupBy('p.nom')
+         ->addGroupBy('p.telephone')
          ->addGroupBy('u.nom')
          ->addGroupBy('u.id');
           if (!$all) 
@@ -111,4 +113,17 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
         return 0;
      }
   } 
+  
+  public   function isThere($id, $startDate){
+        $qb = $this->createQueryBuilder('c')->join('c.pointVente','p')
+        ->andWhere('p.id=:id')->setParameter('id', $id)
+        ->andWhere('c.date=:startDate')->setParameter('startDate', new \DateTime($startDate));     
+   try {
+    $qb->select('count(DISTINCT c.id) as nombre');
+         return $qb->getQuery()->getSingleScalarResult();  
+   } catch (NoResultException $e) {
+        return 0;
+     }
+  } 
+
 }

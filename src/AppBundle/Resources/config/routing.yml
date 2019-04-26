@@ -24,8 +24,13 @@ homepage:
     methods:  GET
 
 export_excel:
-    path:     /perf
+    path:     /performances
     defaults: { _controller: "AppBundle:App:ventePeriodeExcel" }
+    methods:  GET
+
+export_excel_pointages:
+    path:     /pointages
+    defaults: { _controller: "AppBundle:App:pointagesPeriodeExcel" }
     methods:  GET
 
 

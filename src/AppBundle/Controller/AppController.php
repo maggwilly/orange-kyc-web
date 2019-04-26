@@ -149,9 +149,7 @@ class AppController extends Controller
                 $ventes = $em->getRepository('AppBundle:PointVente')->ventePeriode($day,$day);
                 if(empty($ventes))  
                     continue;
-                
                 $phpExcelObject->createSheet($ativeshiet);
-
                 $phpExcelObject->setActiveSheetIndex($ativeshiet)
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
@@ -224,6 +222,67 @@ class AppController extends Controller
         $response->headers->set('Content-Disposition', $dispositionHeader);
         return $response;        
     }
+
+    public function pointagesPeriodeExcelAction()
+    {
+      $em = $this->getDoctrine()->getManager();
+      $session = $this->getRequest()->getSession();
+      $region=$session->get('region','Douala');
+      $startDate=$session->get('startDate',date('Y').'-01-01');
+      $endDate=$session->get('endDate', date('Y').'-12-31');
+      $periode= $session->get('periode',' 01/01 - 31/12/'.date('Y'));
+      $days=$this->getWorkingDays($startDate, $endDate);
+      $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+      $phpExcelObject->getProperties()->setCreator("LPM C")
+           ->setLastModifiedBy("LPM C")
+           ->setTitle("POINTAGEs  ".$periode)
+           ->setSubject("POINTAGEs  de ".$periode)
+           ->setDescription("POINTAGEs ".$periode)
+           ->setKeywords("POINTAGEs".$periode)
+           ->setCategory("POINTAGEs DBS");
+            $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
+            $phpExcelObject->createSheet($ativeshiet);
+            $phpExcelObject->setActiveSheetIndex($ativeshiet)
+               ->setCellValue('A1', 'SUPERVISEURS')
+               ->setCellValue('B1', 'NOM & PRENOM')
+               ->setCellValue('C1', 'NUMERO PERSONNEL')
+               ->setCellValue('D1', 'TOTAL');
+                foreach ($days as $key => $day) {
+                     $phpExcelObject->getActiveSheet()
+                     ->getCellByColumnAndRow($key+3,1)
+                     ->setValue($day);
+                  }
+             foreach ($workedDays as $key => $value){
+               $phpExcelObject->getActiveSheet()
+               ->setCellValue('A'.($key+2), $value['superviseur'])
+               ->setCellValue('B'.($key+2), $value['nom']) 
+               ->setCellValue('C'.($key+2), $value['telephone']) 
+               ->setCellValue('D'.($key+2), $value['nombre']);
+                  foreach ($days as $shiet => $day) {
+                    $isThere=$em->getRepository('AppBundle:Commende')->isThere($value['id'],$day);
+                   $phpExcelObject->getActiveSheet()
+                     ->getCellByColumnAndRow($shiet+3,($key+2))->setValue($isThere);
+                 }            
+           };
+        $phpExcelObject->getActiveSheet()->setTitle('POINTAGES FS');   
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        // create the response
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        // adding headers
+        $startDate=new \DateTime($startDate);
+        $endDate= new \DateTime($endDate);
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'Pointages. '.$startDate->format('d M Y').' au '.$endDate->format('d M Y').'.xls'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        return $response;        
+    }
+
+
 
 public function getWorkingDays($startDate, $endDate)
 {
