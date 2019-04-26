@@ -225,6 +225,16 @@ class AppController extends Controller
 
     public function pointagesPeriodeExcelAction()
     {
+      $styleGreen = array(
+       'fill'  => array(
+         'type'  => 'solid',
+         'color' => array('rgb' => '088E1C'),
+       ));
+      $styleRed = array(
+       'fill'  => array(
+         'type'  => 'solid',
+         'color' => array('rgb' => '8E6208'),
+       ));
       $em = $this->getDoctrine()->getManager();
       $session = $this->getRequest()->getSession();
       $region=$session->get('region','Douala');
@@ -263,8 +273,12 @@ class AppController extends Controller
                ->setCellValue('D'.($key+2), $value['nombre']);
                   foreach ($days as $shiet => $day) {
                     $isThere=$em->getRepository('AppBundle:Commende')->isThere($value['id'],$day);
-                   $phpExcelObject->getActiveSheet()
+                  $cell= $phpExcelObject->getActiveSheet()
                      ->getCellByColumnAndRow($shiet+4,($key+2))->setValue($isThere);
+                     if($isThere>0)
+                        $cell->applyFromArray($styleGreen);
+                      else
+                         $cell->applyFromArray($styleRed);
                  }            
            };
         $phpExcelObject->getActiveSheet()->setTitle('POINTAGES FS');   
