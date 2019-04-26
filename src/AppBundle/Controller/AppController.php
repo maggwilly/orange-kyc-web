@@ -241,8 +241,8 @@ class AppController extends Controller
            ->setKeywords("POINTAGEs".$periode)
            ->setCategory("POINTAGEs DBS");
             $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
-            $phpExcelObject->createSheet($ativeshiet);
-            $phpExcelObject->setActiveSheetIndex($ativeshiet)
+            $phpExcelObject->createSheet(0);
+            $phpExcelObject->setActiveSheetIndex(0)
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
                ->setCellValue('C1', 'NUMERO PERSONNEL')
