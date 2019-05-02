@@ -197,7 +197,7 @@ class AppController extends Controller
                ->setCellValue('C1', 'N° TABLETTE')
                ->setCellValue('E1', 'SOUSCRIPTION')
                ->setCellValue('F1', 'RENOUVELLEMENT')
-               ->setCellValue('G1', 'TOTAL VENTE'
+               ->setCellValue('G1', 'TOTAL VENTE')
                ->setCellValue('H1', 'NOMBRE DE JOURS');
              foreach ($workedDays as $key => $value) {
                $phpExcelObject->getActiveSheet()
