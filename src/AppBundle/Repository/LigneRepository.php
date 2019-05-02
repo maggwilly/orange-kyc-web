@@ -14,7 +14,7 @@ class LigneRepository extends \Doctrine\ORM\EntityRepository
 
        public  function counts($startDate=null, $endDate=null){
 
-      $RAW_QUERY ='select  sum((case when l.produit_id in(1,2) then l.quantite else NULL end)) as souscription, sum((case when l.produit_id in(3,4) then l.quantite else NULL end))  as renouvellement, sum(l.quantite) as total, count(DISTINCT c.date) as nbjours, count(fs.id) as nbfs from 
+      $RAW_QUERY ='select  sum((case when l.produit_id in(1,2) then l.quantite else NULL end)) as souscription, sum((case when l.produit_id in(3,4) then l.quantite else NULL end))  as renouvellement, sum(l.quantite) as total, count(DISTINCT c.date) as nbjours, count(DISTINCT fs.id) as nbfs from 
          point_vente fs 
           join commende c on fs.id=c.point_vente_id 
           left join ligne l on l.commende_id=c.id
