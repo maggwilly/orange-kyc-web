@@ -11,12 +11,13 @@
               <table class="table align-items-center table-flush" id="myTable">
                 <thead class="thead-light">
                   <tr>
-                     <th scope="col">Superviseur</th>
-                    <th scope="col">Field Soldiers</th>
-                    <th scope="col">Nombre de jour</th>
-                    <th scope="col">Souscriptions</th>
-                    <th scope="col">Progression</th>
-                    <th scope="col">GAP</th>
+                    <th scope="col">SUP.</th>
+                    <th scope="col">NOM</th>
+                    <th scope="col">NB jours</th>
+                    <th scope="col">Stions</th>
+                    <th scope="col">Rments</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">%</th>
                   </tr>
                 </thead>
                 {% set dayTarget=6 %}
@@ -25,35 +26,37 @@
                   <tr>
                     <th scope="row">
                       <a href="{{ path('commendes_list',{'user':user.idsup}) }}">
-                     {{ user.superviseur|e }}
+                     {{ user.supernom|e }}
                    </a>
                     </th>
                     <th scope="row">
-                    <a href="{{ path('commendes_list',{'pointVente':user.id}) }}">
-                     {{ user.nom|e }}
+                      <a href="{{ path('commendes_list',{'pointVente':user.id}) }}">
+                     {{ user.fsnom|e }}
                      </a>
                     </th>
                     <td>
-                      {{ user.nombrejours }}
+                      {% if is_granted('ROLE_SUPERVISEUR') %}
+                      {{ user.nbjours }}
+                      {% else %}
+                        info restreinte
+                      {% endif %}
                     </td>
                     <td>
-                      {{ user.nombre }}
+                      {{ user.souscription }}
                     </td>
                     <td>
-                      {% if (user.nombre*100/(user.nombrejours*dayTarget))<100 %}
+                      {{ user.renouvellement }}
+                    </td>                                        
+                    <td>
+                      {{ user.total }}
+                    </td>
+                    <td>
+                      {% if (user.total*100/(user.nbjours*dayTarget))<100 %}
                       <i class="fas fa-arrow-down text-danger mr-3"></i>
                     {% else %}
                       <i class="fas fa-arrow-up text-success mr-3"></i>
                     {% endif %}
-                      {{ (user.nombre*100/(user.nombrejours*dayTarget))|number_format(0, ',', '.') }}%
-                    </td>
-                    <td>
-                    {% if (user.nombre*100/(user.nombrejours*dayTarget))<100 %}
-                      
-                    {% else %}
-                      +
-                    {% endif %}
-                      {{ (user.nombre-(user.nombrejours*dayTarget))}}
+                      {{ (user.total*100/(user.nbjours*dayTarget))|number_format(0, ',', '.') }}%
                     </td>                    
                   </tr
                    {% endfor %}

@@ -67,15 +67,18 @@ try {
        return  $result = $statement->fetchAll();
   }
 
-     public  function recapPeriode($startDate=null, $endDate=null){
+     public  function recapPeriode($startDate=null, $endDate=null, $limit=false){
 
-      $RAW_QUERY ='select u.nom as supernom, fs.nom as fsnom,fs.secteur as fsserietablette, fs.telephone as fstelephone, sum((case when l.produit_id in(1,2) then l.quantite else NULL end)) as souscription, sum((case when l.produit_id in(3,4) then l.quantite else NULL end))  as renouvellement, sum(l.quantite) as total, count(DISTINCT c.date) as nbjours from 
+      $RAW_QUERY ='select u.id as idsup, u.nom as supernom,fs.id, fs.nom as fsnom,fs.secteur as fsserietablette, fs.telephone as fstelephone, sum((case when l.produit_id in(1,2) then l.quantite else NULL end)) as souscription, sum((case when l.produit_id in(3,4) then l.quantite else NULL end))  as renouvellement, sum(l.quantite) as total, count(DISTINCT c.date) as nbjours from 
          point_vente fs 
-         left join commende c on fs.id=c.point_vente_id 
+         join commende c on fs.id=c.point_vente_id 
          join user_account u  on u.id=fs.user_id
          left join ligne l on l.commende_id=c.id
          where c.date>=:startDate and c.date<=:endDate
-          group by u.nom,fs.nom, fs.telephone,fs.secteur';
+          group by fs.id, u.nom,fs.nom, fs.telephone,fs.secteur';
+          if($limit)
+            $RAW_QUERY=$RAW_QUERY.' limit 11';
+          
          $statement = $this->_em->getConnection()->prepare($RAW_QUERY);
          $startDate=new \DateTime($startDate);
          $endDate=new \DateTime($endDate);

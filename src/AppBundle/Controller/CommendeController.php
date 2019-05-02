@@ -49,7 +49,7 @@ class CommendeController extends Controller
         $region=$session->get('region');
         $startDate=$session->get('startDate',date('Y').'-01-01');
         $endDate=$session->get('endDate', date('Y').'-12-31');
-        $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
+        $workedDays=$em->getRepository('AppBundle:PointVente')->recapPeriode($startDate,$endDate);
         $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
         $colors=array("#FF6384","#36A2EB","#FFCE56","#F7464A","#FF5A5E","#46BFBD", "#5AD3D1","#FDB45C");
         $countAndCashByWeek= $em->getRepository('AppBundle:Ligne')->countAndCashByWeek($startDate,$endDate);
