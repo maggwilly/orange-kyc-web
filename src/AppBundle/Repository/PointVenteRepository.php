@@ -75,10 +75,10 @@ try {
          join user_account u  on u.id=fs.user_id
          left join ligne l on l.commende_id=c.id
          where c.date>=:startDate and c.date<=:endDate
-          group by fs.id, u.nom,fs.nom, fs.telephone,fs.secteur';
+          group by u.id, fs.id, u.nom,fs.nom, fs.telephone,fs.secteur';
           if($limit)
             $RAW_QUERY=$RAW_QUERY.' limit 11';
-          
+
          $statement = $this->_em->getConnection()->prepare($RAW_QUERY);
          $startDate=new \DateTime($startDate);
          $endDate=new \DateTime($endDate);
