@@ -29,12 +29,16 @@ class AppController extends Controller
         $em = $this->getDoctrine()->getManager();
         $startDate= \DateTime('first day of this month');
         $endDate= \DateTime('last day of this month');
-
+       
         $session->set('startDate',$startDate->format('Y-m-d'));
         $session->set('endDate',$endDate->format('Y-m-d'));
         $session->set('end_date_formated',$endDate->format('d/m/Y'));
         $session->set('start_date_formated',$startDate->format('d/m/Y'));
+
         $region=$session->get('region');
+        $startDate=$session->get('startDate','first day of this month');
+        $endDate=$session->get('endDate', 'last day of this month');
+        
         $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
         $countAndCashByWeek= $em->getRepository('AppBundle:Ligne')->countAndCashByWeek($startDate,$endDate);
         $countAndCashByMonth= $em->getRepository('AppBundle:Ligne')->countAndCashByMonth($startDate,$endDate);
