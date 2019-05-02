@@ -187,22 +187,28 @@ class AppController extends Controller
          $ativeshiet++;
         }
          
-        {     $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
+        {    // $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
+               $workedDays = $em->getRepository('AppBundle:PointVente')->recapPeriode($startDate,$endDate);
                $phpExcelObject->createSheet($ativeshiet);
                 $phpExcelObject->setActiveSheetIndex($ativeshiet)
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
-               ->setCellValue('C1', 'NOMBRE DE JOURS')
-               ->setCellValue('D1', 'TOTAL');
+               ->setCellValue('C1', 'TELE PERSONNEL')
+               ->setCellValue('C1', 'N° TABLETTE')
+               ->setCellValue('E1', 'SOUSCRIPTION')
+               ->setCellValue('F1', 'RENOUVELLEMENT')
+               ->setCellValue('G1', 'TOTAL VENTE'
+               ->setCellValue('H1', 'NOMBRE DE JOURS');
              foreach ($workedDays as $key => $value) {
                $phpExcelObject->getActiveSheet()
-               ->setCellValue('A'.($key+2), $value['superviseur'])
-               ->setCellValue('B'.($key+2), $value['nom']) ;
-                if (true === $this->get('security.authorization_checker')->isGranted('ROLE_SUPERVISEUR'))             
-                    $phpExcelObject->getActiveSheet()->setCellValue('C'.($key+2), $value['nombrejours']);
-                else
-                   $phpExcelObject->getActiveSheet()->setCellValue('C'.($key+2), 'info restreinte');
-                $phpExcelObject->getActiveSheet()->setCellValue('D'.($key+2), $value['nombre']);              
+               ->setCellValue('A'.($key+2), $value['supernom'])
+               ->setCellValue('B'.($key+2), $value['fsnom'])
+               ->setCellValue('C'.($key+2), $value['fstelephone'])
+               ->setCellValue('D'.($key+2), $value['fsserietablette'])
+               ->setCellValue('E'.($key+2), $value['souscription'])
+               ->setCellValue('F'.($key+2), $value['renouvellement'])
+               ->setCellValue('G'.($key+2), $value['total'])
+               ->setCellValue('H'.($key+2), $value['nbjours']);              
            };
         $phpExcelObject->getActiveSheet()->setTitle('RECAP');   
         }
