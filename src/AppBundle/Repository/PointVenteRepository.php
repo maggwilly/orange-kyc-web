@@ -73,9 +73,9 @@ try {
          point_vente fs 
          join commende c on fs.id=c.point_vente_id 
          join user_account u  on u.id=fs.user_id
-         left join ligne l on l.commende_id=c.id
-         left join produit p on l.produit_id=p.id 
-         left join souscripteur s on l.souscripteur_id=s.id
+         join ligne l on l.commende_id=c.id
+         join produit p on l.produit_id=p.id 
+         join souscripteur s on l.souscripteur_id=s.id
          where c.date>=:startDate and c.date<=:endDate
           group by u.nom,fs.nom, fs.telephone,fs.secteur';
          $statement = $this->_em->getConnection()->prepare($RAW_QUERY);
