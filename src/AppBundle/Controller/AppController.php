@@ -27,8 +27,8 @@ class AppController extends Controller
     {   
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $startDate= \DateTime('first day of this month');
-        $endDate= \DateTime('last day of this month');
+        $startDate= new \DateTime('first day of this month');
+        $endDate= new  \DateTime('last day of this month');
        
         $session->set('startDate',$startDate->format('Y-m-d'));
         $session->set('endDate',$endDate->format('Y-m-d'));
