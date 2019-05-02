@@ -194,7 +194,7 @@ class AppController extends Controller
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
                ->setCellValue('C1', 'TELE PERSONNEL')
-               ->setCellValue('C1', 'N° TABLETTE')
+               ->setCellValue('D1', 'N° TABLETTE')
                ->setCellValue('E1', 'SOUSCRIPTION')
                ->setCellValue('F1', 'RENOUVELLEMENT')
                ->setCellValue('G1', 'TOTAL VENTE')
