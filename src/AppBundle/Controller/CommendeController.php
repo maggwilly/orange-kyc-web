@@ -24,8 +24,8 @@ class CommendeController extends Controller
  $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $region=$session->get('region');
-        $startDate=$session->get('startDate',date('Y').'-01-01');
-        $endDate=$session->get('endDate', date('Y').'-12-31');
+        $startDate=$session->get('startDate','first day of this month');
+        $endDate=$session->get('endDate', 'last day of this month');
         $commendes = $em->getRepository('AppBundle:Commende')->findList(null,null,$startDate,$endDate);
          $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
          $colors=array("#FF6384","#36A2EB","#FFCE56","#F7464A","#FF5A5E","#46BFBD", "#5AD3D1","#FDB45C");
@@ -47,8 +47,8 @@ class CommendeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $region=$session->get('region');
-        $startDate=$session->get('startDate',date('Y').'-01-01');
-        $endDate=$session->get('endDate', date('Y').'-12-31');
+        $startDate=$session->get('startDate','first day of this month');
+        $endDate=$session->get('endDate', 'last day of this month');
         $workedDays=$em->getRepository('AppBundle:PointVente')->recapPeriode($startDate,$endDate);
         $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
         $colors=array("#FF6384","#36A2EB","#FFCE56","#F7464A","#FF5A5E","#46BFBD", "#5AD3D1","#FDB45C");
@@ -69,8 +69,8 @@ class CommendeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $region=$session->get('region');
-        $startDate=$session->get('startDate',date('Y').'-01-01');
-        $endDate=$session->get('endDate', date('Y').'-12-31');
+        $startDate=$session->get('startDate','first day of this month');
+        $endDate=$session->get('endDate', 'last day of this month');
          $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
         $colors=array("#FF6384","#36A2EB","#FFCE56","#F7464A","#FF5A5E","#46BFBD", "#5AD3D1","#FDB45C");
         $commendes=$em->getRepository('AppBundle:Commende')->findByInsidentList($insident,$startDate,$endDate);
@@ -89,8 +89,8 @@ class CommendeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $region=$session->get('region');
-        $startDate=$session->get('startDate',date('Y').'-01-01');
-        $endDate=$session->get('endDate', date('Y').'-12-31');
+        $startDate=$session->get('startDate','first day of this month');
+        $endDate=$session->get('endDate', 'last day of this month');
         $commendes = $em->getRepository('AppBundle:Commende')->findList($user,$pointVente,$startDate,$endDate);
         return $this->render('commende/index.html.twig', array('commendes' => $commendes  ));
     }

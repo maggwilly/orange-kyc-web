@@ -7,8 +7,8 @@
         <form method="post" action="{{ path('set_periode') }}" class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
           <div class="form-group mb-0">
             <div class="input-group input-group-alternative">
-                {% set start_date_formated=app.session.get('start_date_formated')?app.session.get('start_date_formated'):app.session.get('start_date_formated')|date('01/01/Y') %}
-    {% set end_date_formated=app.session.get('end_date_formated')? app.session.get('end_date_formated'):app.session.get('end_date_formated')|date('31/12/Y')  %}
+                {% set start_date_formated=app.session.get('start_date_formated')?app.session.get('start_date_formated'):app.session.get('start_date_formated') %}
+    {% set end_date_formated=app.session.get('end_date_formated')? app.session.get('end_date_formated'):app.session.get('end_date_formated')%}
     {% set periode=app.session.get('periode')%}
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>

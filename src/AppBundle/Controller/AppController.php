@@ -28,8 +28,8 @@ class AppController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $region=$session->get('region');
-        $startDate=$session->get('startDate',date('Y').'-01-01');
-        $endDate=$session->get('endDate', date('Y').'-12-31');
+        $startDate=$session->get('startDate','first day of this month');
+        $endDate=$session->get('endDate', 'last day of this month');
         $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
         $countAndCashByWeek= $em->getRepository('AppBundle:Ligne')->countAndCashByWeek($startDate,$endDate);
         $countAndCashByMonth= $em->getRepository('AppBundle:Ligne')->countAndCashByMonth($startDate,$endDate);
@@ -55,8 +55,8 @@ class AppController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $region=$session->get('region');
-        $startDate=$session->get('startDate',date('Y').'-01-01');
-        $endDate=$session->get('endDate', date('Y').'-12-31');
+        $startDate=$session->get('startDate','first day of this month');
+        $endDate=$session->get('endDate', 'last day of this month');
         $counts= $em->getRepository('AppBundle:Ligne')->counts($startDate,$endDate);
         return $this->render('AppBundle::part/kpi.html.twig', 
           array(
@@ -127,8 +127,8 @@ class AppController extends Controller
       $em = $this->getDoctrine()->getManager();
       $session = $this->getRequest()->getSession();
       $region=$session->get('region','Douala');
-      $startDate=$session->get('startDate',date('Y').'-01-01');
-      $endDate=$session->get('endDate', date('Y').'-12-31');
+      $startDate=$session->get('startDate','first day of this month');
+      $endDate=$session->get('endDate', 'last day of this month');
       $periode= $session->get('periode',' 01/01 - 31/12/'.date('Y'));
       $days=$this->getWorkingDays($startDate, $endDate);
         // ask the service for a Excel5
@@ -240,8 +240,8 @@ class AppController extends Controller
       $em = $this->getDoctrine()->getManager();
       $session = $this->getRequest()->getSession();
       $region=$session->get('region','Douala');
-      $startDate=$session->get('startDate',date('Y').'-01-01');
-      $endDate=$session->get('endDate', date('Y').'-12-31');
+        $startDate=$session->get('startDate','first day of this month');
+        $endDate=$session->get('endDate', 'last day of this month');
       $periode= $session->get('periode',' 01/01 - 31/12/'.date('Y'));
       $days=$this->getWorkingDays($startDate, $endDate);
       $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
