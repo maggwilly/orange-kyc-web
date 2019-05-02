@@ -69,7 +69,7 @@ try {
 
      public  function recapPeriode($startDate=null, $endDate=null){
 
-      $RAW_QUERY ='select u.nom as supernom, fs.nom as fsnom,fs.secteur as fsserietablette, fs.telephone as fstelephone, NULL as fsorange, count((case when p.id in(1,2) then 1 else 0 end)) as souscription, count((case when p.id in(3,4) then 1 else 0 end))  as renouvellement, count(l.quantite) as total, count(DISTINCT c.date) as nbjours from 
+      $RAW_QUERY ='select u.nom as supernom, fs.nom as fsnom,fs.secteur as fsserietablette, fs.telephone as fstelephone, sum((case when p.id in(1,2) then 1 else 0 end)) as souscription, sum((case when p.id in(3,4) then 1 else 0 end))  as renouvellement, sum(l.quantite) as total, count(DISTINCT c.date) as nbjours from 
          point_vente fs 
          join commende c on fs.id=c.point_vente_id 
          join user_account u  on u.id=fs.user_id
