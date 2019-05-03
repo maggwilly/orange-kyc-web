@@ -15,8 +15,8 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
 	  	 public function findByPointVente(PointVente $pointVente){
            $qb = $this->createQueryBuilder('c')
            ->where('c.pointVente=:pointVente')
-           ->andWhere('c.date is null or c.date>=:startDate')
-           ->setParameter('startDate', new \DateTime('first day of this month'))
+           /*->andWhere('c.date is null or c.date>=:startDate')
+           ->setParameter('startDate', new \DateTime('first day of this month'))*/
            ->setParameter('pointVente', $pointVente)
            ->orderby('c.date','asc');
          return $qb->getQuery()->getResult();  
