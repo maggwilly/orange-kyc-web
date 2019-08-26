@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Souscripteur edit</h1>
+    <h1>Affectation edit</h1>
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
@@ -10,7 +10,7 @@
 
     <ul>
         <li>
-            <a href="{{ path('souscripteur_index') }}">Back to the list</a>
+            <a href="{{ path('affectation_index') }}">Back to the list</a>
         </li>
         <li>
             {{ form_start(delete_form) }}

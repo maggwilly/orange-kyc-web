@@ -1,0 +1,24 @@
+affectation_index:
+    path:     /
+    defaults: { _controller: "AppBundle:Affectation:index" }
+    methods:  GET
+
+affectation_show:
+    path:     /{id}/show
+    defaults: { _controller: "AppBundle:Affectation:show" }
+    methods:  GET
+
+affectation_new:
+    path:     /new
+    defaults: { _controller: "AppBundle:Affectation:new" }
+    methods:  [GET, POST]
+
+affectation_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AppBundle:Affectation:edit" }
+    methods:  [GET, POST]
+
+affectation_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AppBundle:Affectation:delete" }
+    methods:  DELETE

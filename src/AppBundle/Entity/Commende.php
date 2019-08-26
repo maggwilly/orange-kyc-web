@@ -73,15 +73,15 @@ class Commende
     private $month;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",inversedBy="commendes")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @var User
      */
     protected $user;
 
         /**
-   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PointVente",inversedBy="commendes")
+   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Affectation",inversedBy="commendes")
    */
-    private $pointVente;
+    private $affectation;
 
     /**
    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ligne", mappedBy="commende", cascade={"persist","remove"})
@@ -175,23 +175,6 @@ class Commende
     }
 
 
-    public function getnombreSouscriptions()
-    {
-        $total=0;
-        foreach ($this->lignes as $key => $ligne) {
-          $total+=$ligne->getQuantite();
-        }
-        return $total;
-    }
-
-        public function getTotalCash()
-    {
-        $total=0;
-        foreach ($this->lignes as $key => $ligne) {
-          $total+=$ligne->getQuantite()*$ligne->getProduit()->getCout();
-        }
-        return $total;
-    }
     /**
      * Set weekText
      *
@@ -264,29 +247,7 @@ class Commende
         return $this->user;
     }
 
-    /**
-     * Set pointVente
-     *
-     * @param \AppBundle\Entity\PointVente $pointVente
-     *
-     * @return Commende
-     */
-    public function setPointVente(\AppBundle\Entity\PointVente $pointVente = null)
-    {
-        $this->pointVente = $pointVente;
 
-        return $this;
-    }
-
-    /**
-     * Get pointVente
-     *
-     * @return \AppBundle\Entity\PointVente
-     */
-    public function getPointVente()
-    {
-        return $this->pointVente;
-    }
 
     /**
      * Add ligne
@@ -393,5 +354,29 @@ class Commende
     public function getMonthNumber()
     {
         return $this->monthNumber;
+    }
+
+    /**
+     * Set affectation
+     *
+     * @param \AppBundle\Entity\Affectation $affectation
+     *
+     * @return Commende
+     */
+    public function setAffectation(\AppBundle\Entity\Affectation $affectation = null)
+    {
+        $this->affectation = $affectation;
+
+        return $this;
+    }
+
+    /**
+     * Get affectation
+     *
+     * @return \AppBundle\Entity\Affectation
+     */
+    public function getAffectation()
+    {
+        return $this->affectation;
     }
 }

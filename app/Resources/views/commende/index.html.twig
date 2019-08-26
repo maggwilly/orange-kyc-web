@@ -1,5 +1,5 @@
 {% extends "AppBundle::index.html.twig" %}
-
+  {% block title %}Historique des rapports {% endblock %} 
 {% block corps %}
        <div class="row">
         <div class="col">
@@ -13,30 +13,28 @@
             <tr>
                 <th>Date</th>
                 <th>Superviseur</th>
-                <th>Field Soldier</th>
-                <th>Nombre Souscription</th>
-                <th>ID Tablette</th>
-                <th>Insident</th>
+                <th>BA</th>
+                <th>PDV</th>
                 <th>C. Rendu</th>
+                <th>Insident</th>
             </tr>
         </thead>
         <tbody>
         {% for commende in commendes %}
             <tr>
                 <td>
-                    {% if commende.date %}{{ commende.date|date('d/m/Y') }}{% endif %}
+                   <a href="{{ path('commende_show',{'id':commende.id}) }}">
+                     {% if commende.date %}{{ commende.date|date('d/m/Y') }}{% endif %}
+                    </a>
                 </td>
                 <td>
                     {{ commende.user.nom }}
                 </td>
-                 <td>{{ commende.pointVente.nom }}</td>
-                 <td>{{ commende.nombreSouscriptions }} ({{ commende.totalCash }} XAF)</td>
-                 <td>{{ commende.pointVente.secteur }}</td>
+                 <td>{{ commende.affectation.ressource.nom }}</td>
+                 <td>{{ commende.affectation.pointVente.nom }}</td>
+                 <td>{{ commende.description }}</td>
                 <td>
                     {{ commende.typeInsident }}
-                </td>
-                <td>
-                    {{ commende.description }}
                 </td>
             </tr>
         {% endfor %}

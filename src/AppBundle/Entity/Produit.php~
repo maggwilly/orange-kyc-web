@@ -45,7 +45,7 @@ class Produit
         /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text", nullable=true)
+     * @ORM\Column(name="description", type="string", length=255,nullable=true)
      */
     private $description;
     /**
@@ -197,36 +197,5 @@ class Produit
     public function getLignes()
     {
         return $this->lignes;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->lignes = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return Produit
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 }

@@ -1,63 +1,50 @@
 {% extends "AppBundle::index.html.twig" %}
-
+{% block title %}Performances {% endblock %} 
 {% block corps %}
        <div class="row">
         <div class="col">
           <div class="card shadow">
             <div class="card-header border-0">
-              <h3 class="mb-0">Aperçu des performances des field soldiers</h3>
+              <h3 class="mb-0">Aperçu des performances</h3>
             </div>   
         <div class="table-responsive">
               <table class="table align-items-center table-flush" id="myTable">
                 <thead class="thead-light">
-                  <tr>
+                 <tr>
                     <th scope="col">SUP.</th>
-                    <th scope="col">NOM</th>
-                    <th scope="col">NB jours</th>
-                    <th scope="col">Stions</th>
-                    <th scope="col">Rments</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">%</th>
+                    <th scope="col">BA</th>
+                    <th scope="col">PDV</th>
+                    <th scope="col">JOURS</th>
+                    {% for produit in produits|slice(0,5) %}
+                    <th scope="col">{{produit.nom}}</th>
+                    {% endfor %}
                   </tr>
                 </thead>
-                {% set dayTarget=6 %}
                 <tbody>
-                  {% for user in workedDays %}
+                  {% for performance in performances %}
                   <tr>
                     <th scope="row">
-                      <a href="{{ path('commendes_list',{'user':user.idsup}) }}">
-                     {{ user.supernom|e }}
+                      <a href="{{ path('commendes_list',{'user':performance.supid}) }}">
+                     {{ performance.supnom|e }}
                    </a>
                     </th>
                     <th scope="row">
-                      <a href="{{ path('commendes_list',{'pointVente':user.id}) }}">
-                     {{ user.fsnom|e }}
+                      <a href="{{ path('commendes_list',{'ressource':performance.baid}) }}">
+                     {{ performance.banom|e }}
                      </a>
                     </th>
-                    <td>
-                      {% if is_granted('ROLE_SUPERVISEUR') %}
-                      {{ user.nbjours }}
-                      {% else %}
-                        info restreinte
-                      {% endif %}
-                    </td>
-                    <td>
-                      {{ user.souscription }}
-                    </td>
-                    <td>
-                      {{ user.renouvellement }}
-                    </td>                                        
-                    <td>
-                      {{ user.total }}
-                    </td>
-                    <td>
-                      {% if (user.total*100/(user.nbjours*dayTarget))<100 %}
-                      <i class="fas fa-arrow-down text-danger mr-3"></i>
-                    {% else %}
-                      <i class="fas fa-arrow-up text-success mr-3"></i>
-                    {% endif %}
-                      {{ (user.total*100/(user.nbjours*dayTarget))|number_format(0, ',', '.') }}%
-                    </td>                    
+                    <th scope="row">
+                      <a href="{{ path('commendes_list',{'pointVente':performance.pdvid}) }}">
+                     {{ performance.pdvnom|e }}
+                     </a>
+                    </th> 
+                    <th scope="row">
+                       {{ performance.nombrejours }}
+                    </th> 
+                    {% for vente in performance.ventes|slice(0,5) %}
+
+                    <th scope="col">{% if vente.nombre is defined %}{{vente.nombre}}{% else %}0{% endif %}</th>
+                    {% endfor %}
                   </tr
                    {% endfor %}
                 </tbody>

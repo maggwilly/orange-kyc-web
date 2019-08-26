@@ -1,44 +1,58 @@
-{% extends 'base.html.twig' %}
-
-{% block body %}
-    <h1>Commende</h1>
-
-    <table>
+{% extends "AppBundle::index.html.twig" %}
+  {% block title %}¨{{commende.affectation.pointVente.nom}} {% if commende.date %}{{ commende.date|date('D d  M Y') }}{% endif %}{% endblock %} 
+{% block corps %}
+       <div class="row">
+        <div class="col">
+          <div class="card shadow">
+            <div class="card-header border-0">
+              <h3 class="mb-0">{{commende.affectation.pointVente.nom}} - {{commende.affectation.ressource.nom}} </h3>
+            </div>   
+        <div class="table-responsive">
+    <table class="table align-items-center table-flush">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ commende.id }}</td>
+                <th>Date du rapport</th>
+                <td>{% if commende.date %}{{ commende.date|date('D d  M Y') }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Date</th>
-                <td>{% if commende.date %}{{ commende.date|date('Y-m-d') }}{% endif %}</td>
+                <th>Ressource </th>
+                <td>{{commende.affectation.ressource.nom}} {{commende.affectation.ressource.telephone}}</td>
             </tr>
             <tr>
-                <th>Week</th>
-                <td>{{ commende.week }}</td>
-            </tr>
-            <tr>
-                <th>Weektext</th>
-                <td>{{ commende.weekText }}</td>
-            </tr>
-            <tr>
-                <th>Month</th>
-                <td>{{ commende.month }}</td>
+                <th>Point de vente </th>
+                <td>{{commende.affectation.pointVente.nom}}</td>
             </tr>
         </tbody>
     </table>
-
+ <h2> Détails du rapport</h2>
+    <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+                  <tr>
+                    <th scope="col">operation</th>
+                    <th scope="col">Nombre</th>
+                  </tr>
+          </thead>
+        <tbody>
+                 {% for item in commende.lignes %}
+                  <tr>
+                    <th scope="row">
+                   <a href="#"> {{ item.produit.nom|e }}</a>
+                    </th>
+                    <td>
+                      {{ item.quantite }}
+                    </td>                    
+                  </tr>
+                {% endfor %}
+        </tbody>
+    </table>
     <ul>
         <li>
-            <a href="{{ path('commende_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('commende_edit', { 'id': commende.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
+            <a href="{{ path('commende_index') }}" class=" btn btn-info btn-md">Retour à la liste</a>
         </li>
     </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
 {% endblock %}

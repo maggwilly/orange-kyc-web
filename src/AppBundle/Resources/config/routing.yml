@@ -6,12 +6,25 @@ app_produit:
     resource: "@AppBundle/Resources/config/routing/produit.yml"
     prefix:   /produit
 
+app_affectation:
+    resource: "@AppBundle/Resources/config/routing/affectation.yml"
+    prefix:   /affectation
+
+app_ressource:
+    resource: "@AppBundle/Resources/config/routing/ressource.yml"
+    prefix:   /ressource
+
 app_point_vente:
     resource: "@AppBundle/Resources/config/routing/pointvente.yml"
-    prefix:   /point/vente
+    prefix:   /pointvente
 
 app_formated:
     resource: "@AppBundle/Resources/config/routing/formated.yml"
+
+test_json:
+    path:     /test/json
+    defaults: { _controller: "AppBundle:App:testJson" }
+    methods:  GET
    
 kpi:
     path:     /kpi
@@ -38,4 +51,8 @@ set_periode:
     path:     /set/periode
     defaults: { _controller: "AppBundle:App:setPeriode" }
     methods:  POST
-
+    
+set_region:
+    path:     /set/region
+    defaults: { _controller: "AppBundle:App:setRegion" }
+    methods:  GET
