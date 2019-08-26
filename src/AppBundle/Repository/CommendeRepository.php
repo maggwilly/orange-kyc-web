@@ -2,7 +2,9 @@
 
 namespace AppBundle\Repository;
 use AppBundle\Entity\PointVente; 
+use AppBundle\Entity\Affectation;
 use AppBundle\Entity\User; 
+use AppBundle\Entity\Ressource;
 use Doctrine\ORM\NoResultException;
 /**
  * CommendeRepository
@@ -12,20 +14,37 @@ use Doctrine\ORM\NoResultException;
  */
 class CommendeRepository extends \Doctrine\ORM\EntityRepository
 {
-	  	 public function findByPointVente(PointVente $pointVente){
+	  	 public function findByAffectaion(Affectation $affectation=null){
            $qb = $this->createQueryBuilder('c')
-           ->where('c.pointVente=:pointVente')
+           ->where('c.affectation=:affectation')
            ->andWhere('c.date is null or c.date>=:startDate')
            ->setParameter('startDate', new \DateTime('first day of last month'))
-           ->setParameter('pointVente', $pointVente)
+           ->setParameter('affectation', $affectation)
            ->orderby('c.date','asc');
          return $qb->getQuery()->getResult();  
   }
 
-  	  	public function findList(User $user=null, PointVente $pointVente=null,$startDate=null, $endDate=null){
-           $qb = $this->createQueryBuilder('c')->join('c.pointVente','p');
+  	  	public function findList(
+          User $user=null, 
+          PointVente $pointVente=null,
+          Ressource $ressource=null,
+           $insident=null,
+           $startDate=null,
+           $endDate=null,
+           $region=null
+         ){
+           $qb = $this->createQueryBuilder('c')->join('c.affectation','p')->leftJoin('c.user', 'u');
+          if($region!=null){
+              $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
+          }           
            if($pointVente!=null){
-           $qb ->andWhere('c.pointVente=:pointVente')->setParameter('pointVente', $pointVente);
+           $qb ->andWhere('p.pointVente=:pointVente')->setParameter('pointVente', $pointVente);
+            }
+           if($ressource!=null){
+           $qb ->andWhere('p.ressource=:ressource')->setParameter('ressource', $ressource);
+            }
+           if($insident!=null){
+            $qb ->andWhere('c.typeInsident=:typeInsident')->setParameter('typeInsident', $insident);
             }
            if($user!=null){
            $qb ->andWhere('p.user=:user')->setParameter('user', $user);
@@ -40,23 +59,14 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
   }
 
 
-    public function findByInsidentList($insident,$startDate=null, $endDate=null){
-           $qb = $this->createQueryBuilder('c');
-           if($insident!=null){
-           $qb ->andWhere('c.typeInsident=:typeInsident')->setParameter('typeInsident', $insident);
-            }
-             if($startDate!=null){
-           $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
-          }
-          if($endDate!=null){
-           $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
-          }
-         return $qb->getQuery()->getResult();  
-  }
+ 
 
+      public  function rapports($startDate=null, $endDate=null,$region=null){
+        $qb = $this->createQueryBuilder('c')->leftJoin('c.user', 'u');
+          if($region!=null){
+              $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
+          }
 
-      public  function rapports($startDate=null, $endDate=null){
-        $qb = $this->createQueryBuilder('c');
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
           }
@@ -72,12 +82,15 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
  
 
 
-    public   function workedDays($startDate=null, $endDate=null,$all=false){
+    public   function workedDays($startDate=null, $endDate=null,$region=null){
 
         $qb = $this->createQueryBuilder('c')
-        ->join('c.pointVente','p')
-        ->join('p.user','u')
-        ->leftJoin('c.lignes','l');
+        ->join('c.user', 'u')
+        ->join('c.affectation','a')
+        ->join('c.lignes','l');
+        if($region!=null){
+              $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
+          }
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
           }
@@ -96,14 +109,17 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
          ->addGroupBy('p.telephone')
          ->addGroupBy('u.nom')
          ->addGroupBy('u.id');
-          if (!$all) 
-           return $qb->getQuery()->setMaxResults(11)->getArrayResult();
         return $qb->getQuery()->getArrayResult(); 
   } 
 
-    public   function totalWorkedDays($startDate=null, $endDate=null){
 
-        $qb = $this->createQueryBuilder('c');
+
+    public   function totalWorkedDays($startDate=null, $endDate=null,$region=null){
+
+        $qb = $this->createQueryBuilder('c')->leftJoin('c.user', 'u');
+         if($region!=null){
+              $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
+          }       
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
           }

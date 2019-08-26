@@ -12,19 +12,15 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 {
     public   function workedSuperviseur($startDate=null, $endDate=null,$all=false){
 
-        $qb = $this->createQueryBuilder('u')->leftJoin('u.pointVentes','p')->leftJoin('p.commendes','c')->leftJoin('c.lignes','l');
-         if($startDate!=null){
-              $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
-          }
-          if($endDate!=null){
-             $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
-          }     
-           $qb->andWhere('u.type=:type')->setParameter('type','superviseur');
-         $qb->select('u.id')
+        $qb = $this->createQueryBuilder('u')
+        ->leftJoin('u.pointVentes','p')
+        ->leftJoin('u.ressources','ba')
+        //->andWhere('u.type=:type')->setParameter('type','superviseur')
+         ->select('u.id')
          ->addSelect('u.username')
-        ->addSelect('u.nom')
-         ->addSelect('sum(l.quantite) as nombre')
-         ->addSelect('count(DISTINCT p.id) as nombrefs')
+         ->addSelect('u.nom')
+         ->addSelect('count(p.id) as pdvnumber')
+         ->addSelect('count(ba.id) as banumber')
          ->addGroupBy('u.id')
          ->addGroupBy('u.username')
          ->addGroupBy('u.nom');

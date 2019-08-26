@@ -6,28 +6,29 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-class PointVenteType extends AbstractType
+class AffectationType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-        ->add('nom', 'text', array('required' => true,'label'=>'Nom'))
-        ->add('telephone', 'text', array('required' => true,'label'=>'Numero de telephone FS'))       
-        ->add('user', EntityType::class, array(
-            'choice_label' => 'username',
-            'class' => 'AppBundle:User'
-            ,'label'=>'Sperviseur'));
+        $builder->add('user')
+        ->add('pointVente', EntityType::class, array(
+            'choice_label' => 'nom',
+            'class' => 'AppBundle:PointVente',
+            ,'label'=>'PDV'))
+        ->add('ressource', EntityType::class, array(
+            'choice_label' => 'nom',
+            'class' => 'AppBundle:Ressource',
+            ,'label'=>'BA'));
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\PointVente',
+            'data_class' => 'AppBundle\Entity\Affectation',
            'csrf_protection' => false,
             'allow_extra_fields' => true
         ));
@@ -38,7 +39,7 @@ class PointVenteType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_pointvente';
+        return 'appbundle_affectation';
     }
 
 

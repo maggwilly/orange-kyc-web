@@ -14,8 +14,8 @@ commendes_list_insident:
     methods:  [GET, POST]
 
 commendes_list:
-    path:     /{user}/{pointVente}/list
-    defaults: { _controller: "AppBundle:Commende:list", "user":0, "pointVente":0 }
+    path:     /{user}/{pointVente}/{ressource}/list
+    defaults: { _controller: "AppBundle:Commende:list", "user":0, "pointVente":0,"ressource":0 }
     methods:  [GET, POST]
 
 commende_show:

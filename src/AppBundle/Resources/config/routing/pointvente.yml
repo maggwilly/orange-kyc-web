@@ -1,6 +1,6 @@
 pointvente_index:
-    path:     /{id}/list
-    defaults: { _controller: "AppBundle:PointVente:index" ,"id":0}
+    path:     /
+    defaults: { _controller: "AppBundle:PointVente:index" }
     methods:  GET
 
 pointvente_show:

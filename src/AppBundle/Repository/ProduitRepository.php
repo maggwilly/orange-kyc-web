@@ -10,21 +10,33 @@ namespace AppBundle\Repository;
  */
 class ProduitRepository extends \Doctrine\ORM\EntityRepository
 {
-
-	    public  function produits($startDate=null, $endDate=null){
-
-        $qb = $this->createQueryBuilder('p')->leftJoin('p.lignes', 'l')->leftJoin('l.commende', 'c');
+	    public  function countByProduit($affectation=null,$startDate=null, $endDate=null,$region=null){
+        $qb = $this->createQueryBuilder('p')->leftJoin('p.lignes', 'l')->leftJoin('l.commende', 'c')->leftJoin('c.user', 'u');
+          if($region!=null){
+              $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
+          }
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
           }
           if($endDate!=null){
              $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
-          }     
-         $qb->select('p.id')
+          } 
+          if($affectation!=null){
+             $qb->andWhere('c.affectation=:affectation')->setParameter('affectation',$affectation);
+          }      
+          $qb->addOrderBy('p.priority','asc')
+          ->select('p.id')
          ->addSelect('p.nom')
+         ->addSelect('p.description')
          ->addSelect('sum(l.quantite) as nombre')
          ->addGroupBy('p.id')
-         ->addGroupBy('p.nom');
+         ->addGroupBy('p.nom')
+         ->addGroupBy('p.description');
            return $qb->getQuery()->getArrayResult(); 
   }
+
+      public function findOrderedList(){
+           $qb = $this->createQueryBuilder('p')->orderBy('p.priority','asc');
+         return $qb->getQuery()->getArrayResult();  
+       } 
 }

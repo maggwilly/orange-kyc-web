@@ -1,36 +1,35 @@
   {% extends "AppBundle::layout.html.twig" %}
 
 {% block main_content %}
-    <div class="main-content">
-    <h1>Produit</h1>
+      <div class="main-content">
+    <h1>Ressource</h1>
 
     <table>
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ produit.id }}</td>
+                <td>{{ ressource.id }}</td>
             </tr>
             <tr>
                 <th>Nom</th>
-                <td>{{ produit.nom }}</td>
+                <td>{{ ressource.nom }}</td>
             </tr>
             <tr>
-                <th>Duree</th>
-                <td>{{ produit.priority }}</td>
+                <th>Telephone</th>
+                <td>{{ ressource.telephone }}</td>
             </tr>
             <tr>
-                <th>Cout</th>
-                <td>{{ produit.cout }}</td>
+                <th>Sexe</th>
+                <td>{{ ressource.sexe }}</td>
             </tr>
         </tbody>
     </table>
-
     <ul>
         <li>
-            <a href="{{ path('produit_index') }}">Back to the list</a>
+            <a href="{{ path('ressource_index') }}">Back to the list</a>
         </li>
         <li>
-            <a href="{{ path('produit_edit', { 'id': produit.id }) }}">Edit</a>
+            <a href="{{ path('ressource_edit', { 'id': ressource.id }) }}">Edit</a>
         </li>
         <li>
             {{ form_start(delete_form) }}
@@ -38,5 +37,5 @@
             {{ form_end(delete_form) }}
         </li>
     </ul>
-    </div>
+</div>
 {% endblock %}

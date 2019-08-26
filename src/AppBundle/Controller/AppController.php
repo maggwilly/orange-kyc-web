@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use \Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -13,6 +14,7 @@ use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les anno
 use FOS\RestBundle\View\View; 
 use AppBundle\Entity\PointVente;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
 /**
  * Etape controller.
  *
@@ -27,37 +29,51 @@ class AppController extends Controller
     {   
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $startDate= new \DateTime('first day of this month');
-        $endDate= new  \DateTime('last day of this month');
-        if(is_null($session->get('startDate'))){
-        $session->set('startDate',$startDate->format('Y-m-d'));
-        $session->set('endDate',$endDate->format('Y-m-d'));
-        $session->set('end_date_formated',$endDate->format('d/m/Y'));
-        $session->set('start_date_formated',$startDate->format('d/m/Y'));
-         }
         $region=$session->get('region');
-        $startDate=$session->get('startDate');
-        $endDate=$session->get('endDate');
-        
-        $produits=$em->getRepository('AppBundle:Produit')->produits($startDate,$endDate);
-        $countAndCashByWeek= $em->getRepository('AppBundle:Ligne')->countAndCashByWeek($startDate,$endDate);
-        $countAndCashByMonth= $em->getRepository('AppBundle:Ligne')->countAndCashByMonth($startDate,$endDate);
-         $workedDays=$em->getRepository('AppBundle:PointVente')->recapPeriode($startDate,$endDate,true);
-        $workedSuperviseur=$em->getRepository('AppBundle:User')->workedSuperviseur($startDate,$endDate);
+        $startDate=$session->get('startDate','first day of this month');
+        $endDate=$session->get('endDate', 'last day of this month');
+        $produits=$em->getRepository('AppBundle:Produit')->countByProduit(null, $startDate,$endDate,$region);
+
+        $performances=(new ArrayCollection($em->getRepository('AppBundle:Affectation')->findPerformances($startDate,$endDate,$region)))->map(function ($affectation) use ($em,$region,$startDate,$endDate){
+                 $affectation['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($affectation['id'], $startDate,$endDate,$region);
+                 if(empty($affectation['ventes']))   
+                 $affectation['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
+
+             return $affectation;
+        });
+        $workedSuperviseur=$em->getRepository('AppBundle:User')->workedSuperviseur($startDate,$endDate,$region);
         $colors=array("#FF6384","#36A2EB","#FFCE56","#F7464A","#FF5A5E","#46BFBD", "#5AD3D1","#FDB45C");
-        $rapports=$em->getRepository('AppBundle:Commende')->rapports($startDate,$endDate);
+        $rapports=$em->getRepository('AppBundle:Commende')->rapports($startDate,$endDate,$region);
         return $this->render('AppBundle::index.html.twig', 
           array(
             'colors'=>$colors,
-            'workedDays'=>$workedDays,
+            'performances'=>$performances,
             'produits'=>$produits,
             'rapports'=>$rapports,
-            'workedSuperviseur'=>$workedSuperviseur,
-            'countAndCashByMonth'=>$countAndCashByMonth,
-            'countAndCashByWeek'=>$countAndCashByWeek,
-
+            'workedSuperviseur'=>$workedSuperviseur
           ));
     }
+    
+    /**
+     * @Rest\View()
+     */
+    public function testJsonAction()
+    {   
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $region=$session->get('region');
+        $startDate=$session->get('startDate','first day of this month');
+        $endDate=$session->get('endDate', 'last day of this month');
+        $performances=(new ArrayCollection($em->getRepository('AppBundle:Affectation')->findPerformances($startDate,$endDate,$region)))->map(function ($affectation) use ($em,$region,$startDate,$endDate){
+                 $affectation['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($affectation['id'], $startDate,$endDate,$region);
+                 if(empty($affectation['ventes']))   
+                 $affectation['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
+
+             return $affectation;
+        });
+        return  $performances;
+    }
+
 
     public function kpiAction()
     {   
@@ -66,17 +82,24 @@ class AppController extends Controller
         $region=$session->get('region');
         $startDate=$session->get('startDate','first day of this month');
         $endDate=$session->get('endDate', 'last day of this month');
-        $counts= $em->getRepository('AppBundle:Ligne')->counts($startDate,$endDate);
+        $countByProduit= $em->getRepository('AppBundle:Produit')->countByProduit(null,$startDate,$endDate,$region);
         return $this->render('AppBundle::part/kpi.html.twig', 
           array(
-            'counts'=>$counts[0],
+            'produits'=>$countByProduit,
           ));
     }
 
-
+    public function setRegionAction(Request $request)
+    {
+        $region=$request->query->get('region');
+         $session = $this->getRequest()->getSession();
+        $session->set('region',$region);
+       $referer = $this->getRequest()->headers->get('referer');   
+         return new RedirectResponse($referer);
+    }
+    
     public function setPeriodeAction(Request $request)
     {
-  
         $region=$request->request->get('region');
         $periode= $request->request->get('periode');
         $dates = explode(" - ", $periode);
@@ -92,12 +115,9 @@ class AppController extends Controller
         $session->set('periode',$periode);
         $session->set('end_date_formated',$endDate->format('d/m/Y'));
         $session->set('start_date_formated',$startDate->format('d/m/Y'));
-       $referer = $this->getRequest()->headers->get('referer');   
+        $referer = $this->getRequest()->headers->get('referer');   
          return new RedirectResponse($referer);
     }
-
-
-
 
 
     /**
@@ -117,12 +137,6 @@ class AppController extends Controller
         if (!$user) { // L'utilisateur n'existe pas
             return $this->invalidCredentials();
         }
-       /** $encoder = $this->get('security.password_encoder');
-        $isPasswordValid = $encoder->isPasswordValid($user, $credentials->getPassword());
-
-        if (!$isPasswordValid) { // Le mot de passe n'est pas correct
-            return $this->invalidCredentials();
-        }*/
         $authToken=AuthToken::create($user);
         $em->persist($authToken);
         $em->flush();
@@ -337,10 +351,10 @@ public function getWorkingDays($startDate, $endDate)
   public function loadrhAction()
     {
      $manager = $this->getDoctrine()->getManager();
-    $path = $this->get('kernel')->getRootDir(). "/../web/import/rhs.xlsx";
+     $path = $this->get('kernel')->getRootDir(). "/../web/import/rhs.xlsx";
      $objPHPExcel = $this->get('phpexcel')->createPHPExcelObject($path);
-    $rhs= $objPHPExcel->getSheet(1);
-    $highestRow  = $rhs->getHighestRow(); // e.g. 10
+     $rhs= $objPHPExcel->getSheet(1);
+     $highestRow  = $rhs->getHighestRow(); // e.g. 10
     for ($row = 5; $row <= $highestRow; ++ $row) {
             $secteur = $rhs->getCellByColumnAndRow(0, $row)->getValue();
             $nomsecteur = $rhs->getCellByColumnAndRow(1, $row)->getValue();

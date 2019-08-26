@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Affectations list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for affectation in affectations %}
+            <tr>
+                <td><a href="{{ path('affectation_show', { 'id': affectation.id }) }}">{{ affectation.id }}</a></td>
+                <td>{{ affectation.date|date('Y-m-d')  }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('affectation_show', { 'id': affectation.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('affectation_edit', { 'id': affectation.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('affectation_new') }}">Create a new affectation</a>
+        </li>
+    </ul>
+{% endblock %}

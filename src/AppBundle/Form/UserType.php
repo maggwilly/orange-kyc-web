@@ -15,7 +15,14 @@ class UserType extends AbstractType
     {
         $builder
         ->add('nom', 'text', array('required' => true,'label'=>'Nom'))
-        ->add('ville', 'choice', array('required' => true,'choices'=>array('DOUALA'=>'DOUALA','YAOUNDE'=>'YAOUNDE',)))
+        ->add('ville', 'choice', array('required' => true,
+          'choices'=>array(
+            'Douala'=>'Douala',
+            'Yaounde'=>'Yaounde',
+            'Bafoussam'=>'Bafoussam',
+            'Dschang'=>'Dschang',
+            'Garoua'=>'Garoua'
+            'Maroua'=>'Maroua')))
         ->add('username', 'text', array('required' => true,'label'=>'Identifiant'))
         ->add('email', 'text', array('required' => true,'label'=>'Email'))
         ->add('type', ChoiceType::class, array(

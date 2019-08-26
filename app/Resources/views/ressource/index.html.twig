@@ -1,0 +1,45 @@
+  {% extends "AppBundle::layout.html.twig" %}
+
+{% block main_content %}
+      <div class="main-content">
+    <h1>Ressources list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Telephone</th>
+                <th>Sexe</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ressource in ressources %}
+            <tr>
+                <td><a href="{{ path('ressource_show', { 'id': ressource.id }) }}">{{ ressource.id }}</a></td>
+                <td>{{ ressource.nom }}</td>
+                <td>{{ ressource.telephone }}</td>
+                <td>{{ ressource.sexe }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('ressource_show', { 'id': ressource.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('ressource_edit', { 'id': ressource.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('ressource_new') }}">Create a new ressource</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}

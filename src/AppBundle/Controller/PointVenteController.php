@@ -18,10 +18,10 @@ class PointVenteController extends Controller
      * Lists all pointVente entities.
      *
      */
-    public function indexAction(User $user=null )
+    public function indexAction( )
     {
         $em = $this->getDoctrine()->getManager();
-        $pointVentes =is_null($user)?$em->getRepository('AppBundle:PointVente')->findAll():$em->getRepository('AppBundle:PointVente')->findByUser($user);
+        $pointVentes=$em->getRepository('AppBundle:PointVente')->findAll();
         return $this->render('pointvente/index.html.twig', array(
             'pointVentes' => $pointVentes,
         ));

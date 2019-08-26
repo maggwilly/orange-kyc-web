@@ -1,11 +1,10 @@
 
-   {% extends "AppBundle::layout.html.twig" %}
-   {% block title %}Overview {% endblock %} 
-   {% block main_content %}
+  {% extends "AppBundle::layout.html.twig" %}
+  {% block title %} Overview {% endblock %} 
+  {% block main_content %}
   <!-- Main content -->
   <div class="main-content">
-  {% include 'AppBundle:part:navbar.html.twig' %}
-
+  {% include 'AppBundle:part:navbar.html.twig' ignore missing with {'title': block('title')} %}
     <!-- Header -->
     <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
       <div class="container-fluid">
@@ -25,10 +24,10 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Aperçu des performances des field soldiers</h3>
+                  <h3 class="mb-0">Performances individuelles (Apperçu)</h3>
                 </div>
                 <div class="col text-right">
-                  <a href="{{ path("export_excel") }}" class="btn btn-sm btn-primary">Exporter les performances</a>
+                  <a href="#" class="btn btn-sm btn-primary">Exporter les performances</a>
                 </div>
               </div>
             </div>
@@ -38,52 +37,39 @@
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">SUP.</th>
-                    <th scope="col">NOM</th>
-                    <th scope="col">NB jours</th>
-                    <th scope="col">Stions</th>
-                    <th scope="col">Rments</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">%</th>
+                    <th scope="col">BA</th>
+                    <th scope="col">PDV</th>
+                    <th scope="col">JOURS</th>
+                    {% for produit in produits|slice(0,4) %}
+                    <th scope="col">{{produit.nom}}</th>
+                    {% endfor %}
                   </tr>
                 </thead>
-                {% set dayTarget=6 %}
                 <tbody>
-                  {% for user in workedDays %}
+                  {% for performance in performances|slice(0,4) %}
                   <tr>
                     <th scope="row">
-                      <a href="{{ path('commendes_list',{'user':user.idsup}) }}">
-                     {{ user.supernom|e }}
+                      <a href="{{ path('commendes_list',{'user':performance.supid}) }}">
+                     {{ performance.supnom|e }}
                    </a>
                     </th>
                     <th scope="row">
-                      <a href="{{ path('commendes_list',{'pointVente':user.id}) }}">
-                     {{ user.fsnom|e }}
+                      <a href="{{ path('commendes_list',{'ba':performance.baid}) }}">
+                     {{ performance.banom|e }}
                      </a>
                     </th>
-                    <td>
-                      {% if is_granted('ROLE_SUPERVISEUR') %}
-                      {{ user.nbjours }}
-                      {% else %}
-                        info restreinte
-                      {% endif %}
-                    </td>
-                    <td>
-                      {{ user.souscription }}
-                    </td>
-                    <td>
-                      {{ user.renouvellement }}
-                    </td>                                        
-                    <td>
-                      {{ user.total }}
-                    </td>
-                    <td>
-                      {% if (user.total*100/(user.nbjours*dayTarget))<100 %}
-                      <i class="fas fa-arrow-down text-danger mr-3"></i>
-                    {% else %}
-                      <i class="fas fa-arrow-up text-success mr-3"></i>
-                    {% endif %}
-                      {{ (user.total*100/(user.nbjours*dayTarget))|number_format(0, ',', '.') }}%
-                    </td>                    
+                    <th scope="row">
+                      <a href="{{ path('commendes_list',{'pointVente':performance.pdvid}) }}">
+                     {{ performance.pdvnom|e }}
+                     </a>
+                    </th> 
+                    <th scope="row">
+                       {{ performance.nombrejours }}
+                    </th> 
+                    {% for vente in performance.ventes|slice(0,20) %}
+
+                    <th scope="col">{% if vente.nombre is defined %}{{vente.nombre}}{% else %}0{% endif %}</th>
+                    {% endfor %}
                   </tr
                    {% endfor %}
                 </tbody>
@@ -99,7 +85,7 @@
                   <h2 class="mb-0">Superviseurs</h2>
                 </div>
                 <div class="col text-right">
-                  <a href="{{ path("export_excel_pointages") }}" class="btn btn-sm btn-primary">Pointages</a>
+                  <a href="#" class="btn btn-sm btn-primary">Exporter les pointages</a>
                 </div>                
               </div>
             </div>
@@ -109,15 +95,10 @@
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">Nom</th>
-                    <th scope="col">FS</th>
-                    <th scope="col">Total</th>
-
+                    <th scope="col">BA</th>
+                    <th scope="col">PDV</th>
                   </tr>
                 </thead>
-                {% set total=0 %}
-                  {% for item in workedSuperviseur %}
-                     {% set total=total+item.nombre %}
-                  {% endfor %}
                 <tbody>
                    {% for item in workedSuperviseur %}
                   <tr>
@@ -126,14 +107,10 @@
                        {{ item.nom|e }}</a>
                     </th>
                     <td>
-                      {% if is_granted('ROLE_SUPERVISEUR') %}
-                         {{ item.nombrefs }}
-                      {% else %}
-                        info restreinte
-                      {% endif %}
+                    {{ item.banumber }}
                     </td>
                     <td>
-                      {{ item.nombre }}
+                      {{ item.pdvnumber}}
                     </td>                    
                   </tr>
                 {% endfor %}
@@ -141,55 +118,15 @@
               </table>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="row mt-5">
-        <div class="col-xl-8 mb-5 mb-xl-0">
-          <div class="card bg-gradient-default shadow">
-            <div class="card-header bg-transparent">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h6 class="text-uppercase text-light ls-1 mb-1">Evolution</h6>
-                  <h2 class="text-white mb-0">Souscriptions et du chiffre d'affaire</h2>
-                </div>
-                <div class="col">
-                  <ul class="nav nav-pills justify-content-end">
-                    <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-sales" data-update='{"data":{"datasets":[{"data":[{% for item in countAndCashByMonth %} {{item.nombre}}{% if not loop.last %},{% endif %} {% endfor %}]}],"labels": [{% for item in countAndCashByMonth %} "{{item.month}}" {% if not loop.last %},{% endif %}{% endfor %}]}}' data-prefix="" data-suffix="">
-                      <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
-                        <span class="d-none d-md-block">Mois</span>
-                        <span class="d-md-none">M</span>
-                      </a>
-                    </li>
-                    <li class="nav-item" data-toggle="chart" data-target="#chart-sales" data-update='{"data":{"datasets":[{"data":[{% for item in countAndCashByWeek %} {{item.nombre}} {% if not loop.last %},{% endif %}{% endfor %}]}],"labels": [{% for item in countAndCashByWeek %} "{{item.weekText}}" {% if not loop.last %},{% endif %}{% endfor %}]}}' data-prefix="" data-suffix="">
-                      <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
-                        <span class="d-none d-md-block">Semaine</span>
-                        <span class="d-md-none">W</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="card-body">
-              <!-- Chart -->
-              <div class="chart">
-                <!-- Chart wrapper -->
-                <canvas id="chart-sales" class="chart-canvas"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
 
-
-        <div class="col-xl-4">
-          <div class="card shadow">
+          <div class="card shadow mt-3">
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Déroulement</h3>
+                  <h3 class="mb-0">Comptes rendus</h3>
                 </div>
                   <div class="col text-right">
-                  <a href="{{ path("commendes_list") }}" class="btn btn-sm btn-primary">Rapports</a>
+                  <a href="{{ path("commendes_list") }}" class="btn btn-sm btn-primary">Consulter les rapports</a>
                 </div>
               </div>
             </div>
@@ -217,8 +154,8 @@
               </table>
             </div>            
           </div>
-         <br><br>
-          <div class="card shadow">
+
+          <div class="card shadow mt-3">
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
@@ -253,36 +190,17 @@
               </table>
             </div>            
           </div>
-
         </div>
       </div>
+
     {% endblock %}
 
-      <br><br>
-      <!-- Footer -->
-      <footer class="footer">
-        <div class="row align-items-center justify-content-xl-between">
-          <div class="col-xl-6">
-            <div class="copyright text-center text-xl-left text-muted">
-              &copy; 2018 <a href="#" class="font-weight-bold ml-1" target="_blank">LPM Consulting</a>
-            </div>
-          </div>
-          <div class="col-xl-6">
-            <ul class="nav nav-footer justify-content-center justify-content-xl-end">
-              <li class="nav-item">
-                <a href="#" class="nav-link" target="_blank">Digital reporting tools</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </footer>
+
     </div>
   </div>
   <!-- Argon Scripts -->
   {% endblock %}
   {% block javascripts %}
  {{parent()}}
-  {% block chart %}
-   {% include 'AppBundle::charts.js.twig' %}  
-   {% endblock %}           
+          
   {% endblock %}

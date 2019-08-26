@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PointVente
+ * Ressource
  *
- * @ORM\Table(name="point_vente")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PointVenteRepository")
+ * @ORM\Table(name="ressource")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\RessourceRepository")
  */
-class PointVente
+class Ressource
 {
     /**
      * @var int
@@ -31,27 +31,28 @@ class PointVente
     /**
      * @var string
      *
-     * @ORM\Column(name="telephone", type="string", length=255)
+     * @ORM\Column(name="telephone", type="string", length=255, unique=true)
      */
     private $telephone;
 
-
     /**
+     * @var string
+     *
+     * @ORM\Column(name="sexe", type="string", length=255)
+     */
+    private $sexe;
+
+        /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",inversedBy="pointVentes")
      * @var User
      */
     private $user;
 
-    /**
-   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Affectation", mappedBy="pointVente", cascade={"persist","remove"})
+        /**
+   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Affectation", mappedBy="ressource", cascade={"persist","remove"})
    */
     private $affectations;
 
-
-    public function __construct(\AppBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-    }
     /**
      * Get id
      *
@@ -67,7 +68,7 @@ class PointVente
      *
      * @param string $nom
      *
-     * @return PointVente
+     * @return Ressource
      */
     public function setNom($nom)
     {
@@ -91,7 +92,7 @@ class PointVente
      *
      * @param string $telephone
      *
-     * @return PointVente
+     * @return Ressource
      */
     public function setTelephone($telephone)
     {
@@ -111,27 +112,27 @@ class PointVente
     }
 
     /**
-     * Set user
+     * Set sexe
      *
-     * @param \AppBundle\Entity\User $user
+     * @param string $sexe
      *
-     * @return PointVente
+     * @return Ressource
      */
-    public function setUser(\AppBundle\Entity\User $user = null)
+    public function setSexe($sexe)
     {
-        $this->user = $user;
+        $this->sexe = $sexe;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get sexe
      *
-     * @return \AppBundle\Entity\User
+     * @return string
      */
-    public function getUser()
+    public function getSexe()
     {
-        return $this->user;
+        return $this->sexe;
     }
-
 }
+

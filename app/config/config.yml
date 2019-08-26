@@ -128,7 +128,7 @@ fos_rest:
     param_fetcher_listener:
         enabled: true
     serializer:
-        serialize_null:  false
+        serialize_null:  true
 
 
 nelmio_cors:
