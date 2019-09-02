@@ -21,7 +21,7 @@ class UserType extends AbstractType
             'Yaounde'=>'Yaounde',
             'Bafoussam'=>'Bafoussam',
             'Dschang'=>'Dschang',
-            'Garoua'=>'Garoua'
+            'Garoua'=>'Garoua',
             'Maroua'=>'Maroua')))
         ->add('username', 'text', array('required' => true,'label'=>'Identifiant'))
         ->add('email', 'text', array('required' => true,'label'=>'Email'))

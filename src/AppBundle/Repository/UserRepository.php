@@ -15,7 +15,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('u')
         ->leftJoin('u.pointVentes','p')
         ->leftJoin('u.ressources','ba')
-        //->andWhere('u.type=:type')->setParameter('type','superviseur')
+        ->andWhere('u.type=:type')->setParameter('type','superviseur')
          ->select('u.id')
          ->addSelect('u.username')
          ->addSelect('u.nom')
