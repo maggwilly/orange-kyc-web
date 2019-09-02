@@ -13,9 +13,9 @@ class AffectationRepository extends \Doctrine\ORM\EntityRepository
 
 public  function recapPeriode($startDate=null, $endDate=null,$region=null){
  $qb = $this->createQueryBuilder('a')->leftJoin('a.user', 'u')->join('l.commende', 'c')
- ->join('l.produit', 'p')->leftJoin('c.user', 'u');
+ ->join('l.produit', 'p')->leftJoin('a.pointVente','pdv');
   if($region!=null){
-        $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
+        $qb->andWhere('pdv.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
       } 
   if($startDate!=null){
          $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
@@ -32,7 +32,7 @@ public  function recapPeriode($startDate=null, $endDate=null,$region=null){
         $qb = $this->createQueryBuilder('a')->join('a.user', 'u')->join('a.pointVente','pdv')->join('a.ressource','ba')
         ->leftJoin('a.commendes','c');
         if($region!=null){
-              $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
+              $qb->andWhere('pdv.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
           }
      
          $qb

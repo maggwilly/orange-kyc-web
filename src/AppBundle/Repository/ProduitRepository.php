@@ -11,9 +11,13 @@ namespace AppBundle\Repository;
 class ProduitRepository extends \Doctrine\ORM\EntityRepository
 {
 	    public  function countByProduit($affectation=null,$startDate=null, $endDate=null,$region=null){
-        $qb = $this->createQueryBuilder('p')->leftJoin('p.lignes', 'l')->leftJoin('l.commende', 'c')->leftJoin('c.user', 'u');
+        $qb = $this->createQueryBuilder('p')
+        ->leftJoin('p.lignes', 'l')
+        ->leftJoin('l.commende', 'c')
+        ->leftJoin('c.affectation', 'a')
+        ->leftJoin('a.pointVente', 'pdv');
           if($region!=null){
-              $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
+              $qb->andWhere('pdv.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
           }
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));

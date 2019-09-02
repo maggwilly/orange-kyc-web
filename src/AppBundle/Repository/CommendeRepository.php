@@ -33,9 +33,9 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
            $endDate=null,
            $region=null
          ){
-           $qb = $this->createQueryBuilder('c')->join('c.affectation','p')->leftJoin('c.user', 'u');
+           $qb = $this->createQueryBuilder('c')->join('c.affectation','p')->leftJoin('p.pointVente', 'pdv');
           if($region!=null){
-              $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
+              $qb->andWhere('pdv.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
           }           
            if($pointVente!=null){
            $qb ->andWhere('p.pointVente=:pointVente')->setParameter('pointVente', $pointVente);
@@ -62,9 +62,9 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
  
 
       public  function rapports($startDate=null, $endDate=null,$region=null){
-        $qb = $this->createQueryBuilder('c')->leftJoin('c.user', 'u');
+        $qb = $this->createQueryBuilder('c')->leftJoin('p.pointVente', 'pdv');
           if($region!=null){
-              $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
+              $qb->andWhere('pdv.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
           }
 
          if($startDate!=null){
@@ -87,9 +87,10 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('c')
         ->join('c.user', 'u')
         ->join('c.affectation','a')
+        ->leftJoin('a.pointVente', 'pdv')
         ->join('c.lignes','l');
         if($region!=null){
-              $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
+              $qb->andWhere('pdv.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
           }
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
@@ -116,9 +117,12 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
 
     public   function totalWorkedDays($startDate=null, $endDate=null,$region=null){
 
-        $qb = $this->createQueryBuilder('c')->leftJoin('c.user', 'u');
+        $qb = 
+        $this->createQueryBuilder('c')
+        ->leftJoin('c.affectation', 'a')
+        ->leftJoin('a.pointVente', 'pdv');
          if($region!=null){
-              $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
+              $qb->andWhere('pdv.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
           }       
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));

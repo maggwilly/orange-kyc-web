@@ -16,7 +16,7 @@ class PointVenteRepository extends \Doctrine\ORM\EntityRepository
              $qb  ->andWhere('p.user=:user')->setParameter('user', $user);
           }
         if($region!=null){
-              $qb->andWhere('u.ville=:ville')->setParameter('ville', $region);
+              $qb->andWhere('p.ville=:ville')->setParameter('ville', $region);
           }
          return $qb->getQuery()->getResult();  
        }

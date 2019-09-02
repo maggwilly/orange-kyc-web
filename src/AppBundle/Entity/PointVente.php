@@ -42,7 +42,17 @@ class PointVente
      */
     private $telephone;
 
+   /**
+     * @var string
+     * @ORM\Column(name="ville", type="string", length=120,nullable=true)
+     */
+    private $ville;
 
+   /**
+     * @var string
+     * @ORM\Column(name="type", type="string", length=120, nullable=true)
+     */
+    private $type;
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",inversedBy="pointVentes")
      * @var User
@@ -67,6 +77,53 @@ class PointVente
     public function getId()
     {
         return $this->id;
+    }
+    /**
+     * Set ville
+     *
+     * @param string $ville
+     *
+     * @return PointVente
+     */
+    public function setVille($ville)
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    /**
+     * Get ville
+     *
+     * @return string
+     */
+    public function getVille()
+    {
+        return $this->ville;
+    }
+
+        /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return User
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
