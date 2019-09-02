@@ -16,11 +16,11 @@ class AffectationType extends AbstractType
         $builder->add('user')
         ->add('pointVente', EntityType::class, array(
             'choice_label' => 'nom',
-            'class' => 'AppBundle:PointVente',
+            'class' => 'AppBundle:PointVente'
             ,'label'=>'PDV'))
         ->add('ressource', EntityType::class, array(
             'choice_label' => 'nom',
-            'class' => 'AppBundle:Ressource',
+            'class' => 'AppBundle:Ressource'
             ,'label'=>'BA'));
     }/**
      * {@inheritdoc}

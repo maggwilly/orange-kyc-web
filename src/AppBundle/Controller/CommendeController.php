@@ -88,8 +88,8 @@ class CommendeController extends Controller
     public function indexJsonAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-         $pointVente = $em->getRepository('AppBundle:PointVente')->find($request->query->get('id'));
-        $commendes = $em->getRepository('AppBundle:Commende')->findByPointVente( $pointVente);
+         $affectation = $em->getRepository('AppBundle:Affectation')->find($request->query->get('id'));
+        $commendes = $em->getRepository('AppBundle:Commende')->findByAffectaion($affectation);
 
         return $commendes;
     }
@@ -123,7 +123,7 @@ class CommendeController extends Controller
     {
         $commende = new Commende();
         $form = $this->createForm('AppBundle\Form\CommendeType', $commende);
-        $form->submit($request->request->all());
+        $form->submit($this->makeUp($request),false);
         if ($form->isValid()) {
              $em = $this->getDoctrine()->getManager();
             $user = $em->getRepository('AppBundle:User')->findOneById($request->headers->get('X-User-Id'));
@@ -144,7 +144,7 @@ class CommendeController extends Controller
     public function editJsonAction(Request $request, Commende $commende)
     {
         $editForm = $this->createForm('AppBundle\Form\CommendeType', $commende);
-        $editForm->submit($request);
+        $editForm->submit($this->makeUp($request),false);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
             return  $commende;
@@ -153,6 +153,13 @@ class CommendeController extends Controller
         return $editForm;
     }
 
+public function makeUp(Request $request){
+      $commende= $request->request->all();
+     if(array_key_exists('affectation', $commende)&&is_array($commende['affectation']))
+       $commende['affectation']=$commende['affectation']['id'];   
+        
+    return $commende;
+}
     /**
      * Finds and displays a commende entity.
      *

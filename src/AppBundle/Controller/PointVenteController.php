@@ -59,6 +59,26 @@ class PointVenteController extends Controller
         return  array(
             'status' => 'error');
     }
+
+    /**
+     * @Rest\View(serializerGroups={"pointvente"})
+     * 
+     */
+    public function editJsonAction(Request $request, PointVente $pointVente)
+    {
+
+        $editForm = $this->createForm('AppBundle\Form\PointVenteType', $pointVente);
+        $editForm->submit($request->request->all());
+        if ($form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+             return $pointVente;
+        }
+
+        return array('status' => 'error');
+    
+    }
+
+
     /**
      * Creates a new pointVente entity.
      *

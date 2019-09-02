@@ -31,6 +31,13 @@ class PointVente
     /**
      * @var string
      *
+     * @ORM\Column(name="secteur", type="string", length=255)
+     */
+    private $secteur;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="telephone", type="string", length=255)
      */
     private $telephone;
@@ -86,6 +93,29 @@ class PointVente
         return $this->nom;
     }
 
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     *
+     * @return PointVente
+     */
+    public function setSecteur($nom)
+    {
+        $this->secteur = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getSecteur()
+    {
+        return $this->secteur;
+    }
     /**
      * Set telephone
      *

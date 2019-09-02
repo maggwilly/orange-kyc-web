@@ -5,7 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Affectation;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
+use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
+use FOS\RestBundle\View\View;
 /**
  * Affectation controller.
  *
@@ -27,6 +28,64 @@ class AffectationController extends Controller
         ));
     }
 
+    /**
+     * @Rest\View(serializerGroups={"affectation"})
+     */
+    public function indexJsonAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('AppBundle:User')->findOneById($request->headers->get('X-User-Id'));
+        $affectations = $em->getRepository('AppBundle:Affectation')->findByUser($user);
+        return  $affectations ;
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"affectation"})
+     * 
+     */
+    public function newJsonAction(Request $request)
+    {
+        $affectation = new Affectation();
+        $form = $this->createForm('AppBundle\Form\AffectationType', $affectation);
+        $form->submit($this->makeUp($request),false);
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository('AppBundle:User')->findOneById($request->headers->get('X-User-Id'));
+            $affectation->setUser($user);
+            $em->persist($affectation);
+            $em->flush();
+            return $affectation;
+        }
+        return  array(
+            'status' => 'error');
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"affectation"})
+     * 
+     */
+    public function editJsonAction(Request $request, Affectation $affectation)
+    {
+
+        $editForm = $this->createForm('AppBundle\Form\AffectationType', $affectation);
+        $editForm->submit($this->makeUp($request),false);
+        if ($form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+             return $affectation;
+        }
+
+        return array('status' => 'error');
+    
+    }
+
+public function makeUp(Request $request, $setId=true){
+      $affectation= $request->request->all();
+     if(array_key_exists('pointVente', $affectation)&&is_array($affectation['pointVente']))
+       $affectation['pointVente']=$affectation['pointVente']['id'];   
+     if(array_key_exists('ressource', $affectation)&&is_array($affectation['ressource']))
+       $affectation['ressource']=$affectation['ressource']['id'];          
+    return $affectation;
+}
     /**
      * Creates a new affectation entity.
      *

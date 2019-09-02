@@ -13,11 +13,6 @@ commende_new_json:
     defaults: { _controller: "AppBundle:Commende:newJson" }
     methods:  [GET, POST]
 
-point_vente_new_json:
-    path:     /pointvente/new/json
-    defaults: { _controller: "AppBundle:PointVente:newJson" }
-    methods:  [GET, POST]
-
 commende_edit_json:
     path:      /commende/{id}/edit/json
     defaults: { _controller: "AppBundle:Commende:editJson" }
@@ -33,10 +28,55 @@ produit_index_json:
     defaults: { _controller: "AppBundle:Produit:indexJson" }
     methods:  GET
 
+
+point_vente_new_json:
+    path:     /pointvente/new/json
+    defaults: { _controller: "AppBundle:PointVente:newJson" }
+    methods:  [GET, POST]
+
+point_vente_edit_json:
+    path:      /pointvente/{id}/edit/json
+    defaults: { _controller: "AppBundle:PointVente:editJson" }
+    methods:  [GET, POST,PUT]
+
 point_vente_index_json:
     path:     /pointvente/json
     defaults: { _controller: "AppBundle:PointVente:indexJson" }
     methods:  GET
+
+
+
+ressource_new_json:
+    path:     /ressource/new/json
+    defaults: { _controller: "AppBundle:Ressource:newJson" }
+    methods:  [GET, POST]
+
+ressource_edit_json:
+    path:      /ressource/{id}/edit/json
+    defaults: { _controller: "AppBundle:Ressource:editJson" }
+    methods:  [GET, POST,PUT]
+
+ressource_index_json:
+    path:     /ressource/json
+    defaults: { _controller: "AppBundle:Ressource:indexJson" }
+    methods:  GET
+
+
+affectation_new_json:
+    path:     /affectation/new/json
+    defaults: { _controller: "AppBundle:Affectation:newJson" }
+    methods:  [GET, POST]
+
+affectation_edit_json:
+    path:      /affectation/{id}/edit/json
+    defaults: { _controller: "AppBundle:Affectation:editJson" }
+    methods:  [GET, POST,PUT]
+
+affectation_index_json:
+    path:     /affectation/json
+    defaults: { _controller: "AppBundle:Affectation:indexJson" }
+    methods:  GET
+
 
 create_token:
     path:      /token/new/json

@@ -16,6 +16,7 @@ class PointVenteType extends AbstractType
     {
         $builder
         ->add('nom', 'text', array('required' => true,'label'=>'Nom'))
+        ->add('secteur')
         ->add('telephone', 'text', array('required' => true,'label'=>'Numero de telephone FS'))       
         ->add('user', EntityType::class, array(
             'choice_label' => 'username',

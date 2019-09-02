@@ -1,0 +1,12 @@
+AppBundle\Entity\Ressource:
+    exclusion_policy: none
+    properties:
+        id:
+            groups: ['ressource','affectation']
+        nom:
+            groups: ['ressource','affectation']
+        telephone:
+            groups: ['ressource','affectation']  
+        sexe:
+            groups: ['ressource','affectation']             
+              

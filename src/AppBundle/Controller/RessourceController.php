@@ -5,7 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Ressource;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
+use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
+use FOS\RestBundle\View\View;
 /**
  * Ressource controller.
  *
@@ -26,6 +27,56 @@ class RessourceController extends Controller
             'ressources' => $ressources,
         ));
     }
+
+  /**
+     * @Rest\View(serializerGroups={"ressource"})
+     */
+    public function indexJsonAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('AppBundle:User')->findOneById($request->headers->get('X-User-Id'));
+        $ressources = $em->getRepository('AppBundle:Ressource')->findByUser($user);
+        return  $ressources ;
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"ressource"})
+     * 
+     */
+    public function newJsonAction(Request $request)
+    {
+        $ressource = new Ressource();
+        $form = $this->createForm('AppBundle\Form\RessourceType', $ressource);
+        $form->submit($request->request->all());
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository('AppBundle:User')->findOneById($request->headers->get('X-User-Id'));
+            $ressource->setUser($user);
+            $em->persist($ressource);
+            $em->flush();
+            return $ressource;
+        }
+        return  array( 'status' => 'error');
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"ressource"})
+     * 
+     */
+    public function editJsonAction(Request $request, Ressource $ressource)
+    {
+
+        $editForm = $this->createForm('AppBundle\Form\RessourceType', $ressource);
+        $editForm->submit($request->request->all());
+        if ($form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+             return $ressource;
+        }
+
+        return array('status' => 'error');
+    
+    }
+
 
     /**
      * Creates a new ressource entity.

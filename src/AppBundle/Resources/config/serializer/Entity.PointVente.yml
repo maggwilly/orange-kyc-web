@@ -2,12 +2,12 @@ AppBundle\Entity\PointVente:
     exclusion_policy: none
     properties:
         id:
-            groups: ['pointvente','commende']
+            groups: ['pointvente','commende','affectation']
         nom:
-            groups: ['pointvente','commende']
+            groups: ['pointvente','commende','affectation']
         telephone:
-            groups: ['pointvente']
+            groups: ['pointvente','affectation']
         secteur:
-            groups: ['pointvente']
+            groups: ['pointvente','affectation']
 
               

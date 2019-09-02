@@ -1,0 +1,12 @@
+AppBundle\Entity\Affectation:
+    exclusion_policy: none
+    properties:
+        id:
+            groups: ['affectation']
+        pointVente:
+            groups: ['affectation']
+        ressource:
+            groups: ['affectation']  
+        date:
+            groups: ['affectation']             
+              
