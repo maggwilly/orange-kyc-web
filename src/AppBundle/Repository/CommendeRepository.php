@@ -62,7 +62,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
  
 
       public  function rapports($startDate=null, $endDate=null,$region=null){
-        $qb = $this->createQueryBuilder('c')->leftJoin('p.pointVente', 'pdv');
+        $qb = $this->createQueryBuilder('c')->join('c.affectation','p')->leftJoin('p.pointVente', 'pdv');
           if($region!=null){
               $qb->andWhere('pdv.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
           }
@@ -139,8 +139,8 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
   } 
   
   public   function isThere($id, $startDate){
-        $qb = $this->createQueryBuilder('c')->join('c.pointVente','p')
-        ->andWhere('p.id=:id')->setParameter('id', $id)
+        $qb = $this->createQueryBuilder('c')->join('c.affectation','p')->leftJoin('p.pointVente', 'pdv')
+        ->andWhere('pdv.id=:id')->setParameter('id', $id)
         ->andWhere('c.date=:startDate')->setParameter('startDate', new \DateTime($startDate));     
    try {
     $qb->select('count(DISTINCT c.date) as nombre');
