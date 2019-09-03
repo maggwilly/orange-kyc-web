@@ -19,8 +19,8 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
          ->select('u.id')
          ->addSelect('u.username')
          ->addSelect('u.nom')
-         ->addSelect('count(p.id) as pdvnumber')
-         ->addSelect('count(ba.id) as banumber')
+         ->addSelect('count(DISTINCT p.id) as pdvnumber')
+         ->addSelect('count(DISTINCT ba.id) as banumber')
          ->addGroupBy('u.id')
          ->addGroupBy('u.username')
          ->addGroupBy('u.nom');
