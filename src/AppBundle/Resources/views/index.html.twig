@@ -46,7 +46,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% for performance in performances|slice(0,4) %}
+                  {% for performance in performances|slice(0,20) %}
                   <tr>
                     <th scope="row">
                       <a href="{{ path('commendes_list',{'user':performance.supid}) }}">
@@ -66,7 +66,7 @@
                     <th scope="row">
                        {{ performance.nombrejours }}
                     </th> 
-                    {% for vente in performance.ventes|slice(0,20) %}
+                    {% for vente in performance.ventes|slice(0,4) %}
 
                     <th scope="col">{% if vente.nombre is defined %}{{vente.nombre}}{% else %}0{% endif %}</th>
                     {% endfor %}
