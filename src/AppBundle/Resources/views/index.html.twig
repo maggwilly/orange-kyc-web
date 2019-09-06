@@ -11,7 +11,6 @@
         <div class="header-body">
           <!-- Card stats -->
 {{ render(controller( 'AppBundle:App:kpi')) }}
-
         </div>
       </div>
     </div>
@@ -27,13 +26,13 @@
                   <h3 class="mb-0">Performances individuelles (Apperçu)</h3>
                 </div>
                 <div class="col text-right">
-                  <a href="#" class="btn btn-sm btn-primary">Exporter les performances</a>
+                <button onclick="exportTableToExcel('summerTable', 'members-data')" class="btn btn-sm btn-primary">Exporter les performances</button>
                 </div>
               </div>
             </div>
             <div class="table-responsive">
               <!-- Projects table -->
-              <table class="table align-items-center table-flush">
+              <table class="table align-items-center table-flush" id="summerTable">
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">SUP.</th>
@@ -46,7 +45,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% for performance in performances|slice(0,20) %}
+                  {% for performance in performances|slice(0,25) %}
                   <tr>
                     <th scope="row">
                       <a href="{{ path('commendes_list',{'user':performance.supid}) }}">
@@ -67,7 +66,6 @@
                        {{ performance.nombrejours }}
                     </th> 
                     {% for vente in performance.ventes|slice(0,4) %}
-
                     <th scope="col">{% if vente.nombre is defined %}{{vente.nombre}}{% else %}0{% endif %}</th>
                     {% endfor %}
                   </tr
@@ -201,6 +199,38 @@
   <!-- Argon Scripts -->
   {% endblock %}
   {% block javascripts %}
- {{parent()}}
-          
-  {% endblock %}
+  {{parent()}}
+<script type="text/javascript">
+'use strict';
+function exportTableToExcel(tableID, filename = ''){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+    // Specify file name
+    filename = filename?filename+'.xls':'excel_data.xls';
+    
+    // Create download link element
+    downloadLink = document.createElement("a");
+    
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+        // Setting the file name
+        downloadLink.download = filename;
+        
+        //triggering the function
+        downloadLink.click();
+    }
+}
+</script>        
+{% endblock %}
