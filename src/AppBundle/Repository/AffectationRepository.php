@@ -39,6 +39,7 @@ public  function recapPeriode($startDate=null, $endDate=null,$region=null){
          ->select('pdv.id as pdvid')
          ->addSelect('a.id')
          ->addSelect('pdv.nom as pdvnom')
+         ->addSelect('pdv.type as type'
          ->addSelect('pdv.telephone pdvtelephone')
          ->addSelect('u.id as supid')
          ->addSelect('u.nom as supnom')
@@ -50,6 +51,7 @@ public  function recapPeriode($startDate=null, $endDate=null,$region=null){
          ->addGroupBy('a.id')
          ->addGroupBy('pdv.id')
          ->addGroupBy('pdv.nom')
+          ->addGroupBy('pdv.type')
          ->addGroupBy('pdv.telephone')
 
          ->addGroupBy('ba.id')

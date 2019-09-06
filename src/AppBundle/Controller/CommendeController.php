@@ -111,8 +111,7 @@ class CommendeController extends Controller
                  }
                }
 
-         foreach ($days as $shiet => $day) {
-         $produits=$em->getRepository('AppBundle:Produit')->findOrderedList();
+         foreach ($days as $day) {
          $performances=(new ArrayCollection($em->getRepository('AppBundle:Affectation')->findPerformances($day,$day,$region)))->map(function ($affectation) use ($em,$region,$startDate,$endDate){
             $affectation['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($affectation['id'], $day,$day,$region);
                  if(empty($affectation['ventes']))   
@@ -120,23 +119,23 @@ class CommendeController extends Controller
              return $affectation;
             }); 
             }
-            
-             foreach ($ventes as $key => $value) {
+        foreach ($performances as $key => $value) {
                $phpExcelObject->getActiveSheet()//->setActiveSheetIndex($shiet)
-               ->setCellValue('A'.($key+2), $value['supernom'])
-               ->setCellValue('B'.($key+2), $value['fsnom'])
-               ->setCellValue('C'.($key+2), NULL)
-               ->setCellValue('D'.($key+2),  $value['fsserietablette'])
-               ->setCellValue('E'.($key+2), $value['fstelephone'])
-               ->setCellValue('F'.($key+2), $value['fsorange'])
-               ->setCellValue('G'.($key+2), $value['souscription'])
-               ->setCellValue('H'.($key+2), $value['renouvellement'])
-               ->setCellValue('I'.($key+2), $value['snom'].' '.$value['snom'])
-               ->setCellValue('J'.($key+2), $value['stelephone'])
-               ->setCellValue('K'.($key+2), $value['contrat']) 
-               ->setCellValue('L'.($key+2), $value['montant'])
-               ->setCellValue('M'.($key+2), $value['mode']);              
-           };
+               ->setCellValue('A'.($key+2), $value['supnom'])
+               ->setCellValue('B'.($key+2), $value['banom'])
+               ->setCellValue('C'.($key+2), $value['telephone'])
+               ->setCellValue('D'.($key+2),  $value['pdvnom'])
+               ->setCellValue('E'.($key+2), $value['type']); 
+                 $ofset+=5;
+                foreach ($performances['ventes'] as $key => $produit) {
+                    $column= $phpExcelObject->getActiveSheet()
+                     ->getCellByColumnAndRow($key+$ofset,1)
+                     ->setValue($produit['nombre'])
+                     ->getColumn();
+                      $phpExcelObject->getActiveSheet()->getColumnDimension($column)->setAutoSize(false);
+                      $phpExcelObject->getActiveSheet()->getColumnDimension($column)->setWidth(7.2);;
+                 }              
+           }
         $phpExcelObject->getActiveSheet()->setTitle('perf '.$day);
        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         // create the writer
