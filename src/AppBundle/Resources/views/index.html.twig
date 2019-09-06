@@ -204,7 +204,7 @@
 'use strict';
 function exportTableToExcel(tableID, filename = ''){
     var downloadLink;
-    var dataType = 'application/vnd.ms-excel';
+    var dataType = "type:application/csv;charset=UTF-8";
     var tableSelect = document.getElementById(tableID);
     var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
     
