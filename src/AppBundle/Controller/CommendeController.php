@@ -11,6 +11,8 @@ use AppBundle\Entity\PointVente;
 use AppBundle\Entity\Ressource; 
 use AppBundle\Entity\User; 
 use \Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
 /**
  * Commende controller.
  *
@@ -23,7 +25,7 @@ class CommendeController extends Controller
      */
     public function indexAction()
     {
- $em = $this->getDoctrine()->getManager();
+       $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $region=$session->get('region');
         $startDate=$session->get('startDate','first day of this month');
@@ -65,22 +67,22 @@ class CommendeController extends Controller
         $startDate=$session->get('startDate','first day of this month');
         $endDate=$session->get('endDate', 'last day of this month');
         $commendes=$em->getRepository('AppBundle:Commende')->findList(null,null,null,$insident,$startDate,$endDate,$region);
-
         return $this->render('commende/index.html.twig',
          array('commendes' => $commendes));
     }
+
 
     public function performancesExcelAction()
     {
       $em = $this->getDoctrine()->getManager();
       $session = $this->getRequest()->getSession();
-      $region=$session->get('region','Douala');
+      $produits=$em->getRepository('AppBundle:Produit')->findOrderedList();
+      $regions=['Douala','Yaounde','Bafoussam','Dschang','Garoua','Maroua'];
       $startDate=$session->get('startDate','first day of this month');
       $endDate=$session->get('endDate', 'last day of this month');
       $periode= $session->get('periode',' 01/01 - 31/12/'.date('Y'));
-      $days=$this->getWorkingDays($startDate, $endDate);
-       $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
-       $phpExcelObject->getProperties()->setCreator("LPM C")
+      $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+      $phpExcelObject->getProperties()->setCreator("LPM C")
            ->setLastModifiedBy("LPM C")
            ->setTitle("PERFORMANCES  ".$periode)
            ->setSubject("PERFORMANCES  de ".$periode)
@@ -88,85 +90,79 @@ class CommendeController extends Controller
            ->setKeywords("PERFORMANCE".$periode)
            ->setCategory("Rapports Orange");
            $ativeshiet=0;
-        foreach ($days as $shiet => $day) {
-
+        foreach ($regions as $key => $region) {
                 $phpExcelObject->createSheet($ativeshiet);
                 $phpExcelObject->setActiveSheetIndex($ativeshiet)
                ->setCellValue('A1', 'SUPERVISEURS')
                ->setCellValue('B1', 'NOM & PRENOM')
                ->setCellValue('C1', 'TELEPHONE')
                ->setCellValue('D1', 'PDV')
-               ->setCellValue('E1', 'TYPE');
-               $ofset=0;
-                foreach ($days as $shiet => $day) {
-                     $ofset+=5;
-                  foreach ($produits as $key => $produit) {
+               ->setCellValue('E1', 'TYPE')
+               ->setCellValue('F1', 'JOURS');
+                 $ofset=6;
+                  foreach ($produits as $i => $produit) {
                     $column= $phpExcelObject->getActiveSheet()
-                     ->getCellByColumnAndRow($key+$ofset,1)
+                     ->getCellByColumnAndRow($i+$ofset,1)
                      ->setValue($produit['nom'])
                      ->getColumn();
                       $phpExcelObject->getActiveSheet()->getColumnDimension($column)->setAutoSize(false);
                       $phpExcelObject->getActiveSheet()->getColumnDimension($column)->setWidth(7.2);  
                       $phpExcelObject->getActiveSheet()->getStyle($column.'1')->getAlignment()->setTextRotation(90);
                  }
-               }
-
-         foreach ($days as $day) {
-         $performances=(new ArrayCollection($em->getRepository('AppBundle:Affectation')->findPerformances($day,$day,$region)))->map(function ($affectation) use ($em,$region,$startDate,$endDate){
-            $affectation['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($affectation['id'], $day,$day,$region);
+            $performances=(new ArrayCollection($em->getRepository('AppBundle:Affectation')->findPerformances($startDate, $endDate,$region)))->map(function ($affectation) use ($em,$region,$startDate,$endDate){
+             $affectation['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($affectation['id'], $startDate,$endDate,$region);
                  if(empty($affectation['ventes']))   
                  $affectation['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
              return $affectation;
             }); 
-            }
+            
         foreach ($performances as $key => $value) {
-               $phpExcelObject->getActiveSheet()//->setActiveSheetIndex($shiet)
+               $phpExcelObject->getActiveSheet()
                ->setCellValue('A'.($key+2), $value['supnom'])
                ->setCellValue('B'.($key+2), $value['banom'])
                ->setCellValue('C'.($key+2), $value['telephone'])
                ->setCellValue('D'.($key+2),  $value['pdvnom'])
-               ->setCellValue('E'.($key+2), $value['type']); 
-                 $ofset+=5;
-                foreach ($performances['ventes'] as $key => $produit) {
+               ->setCellValue('E'.($key+2), $value['type'])
+               ->setCellValue('F'.($key+2), $value['nombrejours']); 
+                foreach ($value['ventes'] as $i => $produit) {
                     $column= $phpExcelObject->getActiveSheet()
-                     ->getCellByColumnAndRow($key+$ofset,1)
-                     ->setValue($produit['nombre'])
+                     ->getCellByColumnAndRow($i+$ofset,($key+2))
+                     ->setValue(array_key_exists('nombre', $produit)?$produit['nombre']:0)
                      ->getColumn();
                       $phpExcelObject->getActiveSheet()->getColumnDimension($column)->setAutoSize(false);
                       $phpExcelObject->getActiveSheet()->getColumnDimension($column)->setWidth(7.2);;
                  }              
            }
-        $phpExcelObject->getActiveSheet()->setTitle('perf '.$day);
-       // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-        // create the writer
-         $ativeshiet++;
+        $phpExcelObject->getActiveSheet()->setTitle($region);
+        $ativeshiet++;
         }
-         
-        {    // $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
-               $workedDays = $em->getRepository('AppBundle:PointVente')->recapPeriode($startDate,$endDate);
-               $phpExcelObject->createSheet($ativeshiet);
-                $phpExcelObject->setActiveSheetIndex($ativeshiet)
-               ->setCellValue('A1', 'SUPERVISEURS')
-               ->setCellValue('B1', 'NOM & PRENOM')
-               ->setCellValue('C1', 'TELE PERSONNEL')
-               ->setCellValue('D1', 'N° TABLETTE')
-               ->setCellValue('E1', 'SOUSCRIPTION')
-               ->setCellValue('F1', 'RENOUVELLEMENT')
-               ->setCellValue('G1', 'TOTAL VENTE')
-               ->setCellValue('H1', 'NOMBRE DE JOURS');
-             foreach ($workedDays as $key => $value) {
-               $phpExcelObject->getActiveSheet()
-               ->setCellValue('A'.($key+2), $value['supernom'])
-               ->setCellValue('B'.($key+2), $value['fsnom'])
-               ->setCellValue('C'.($key+2), $value['fstelephone'])
-               ->setCellValue('D'.($key+2), $value['fsserietablette'])
-               ->setCellValue('E'.($key+2), $value['souscription'])
-               ->setCellValue('F'.($key+2), $value['renouvellement'])
-               ->setCellValue('G'.($key+2), $value['total'])
-               ->setCellValue('H'.($key+2), $value['nbjours']);              
+               
+       /* $phpExcelObject->createSheet($ativeshiet);*/
+        $phpExcelObject->setActiveSheetIndex($ativeshiet);
+        $ofset=1;
+        foreach ($produits as $key => $produit){
+            $column= $phpExcelObject->getActiveSheet()
+                ->getCellByColumnAndRow($key+$ofset,1)
+                ->setValue($produit['nom'])
+                ->getColumn();
+                      $phpExcelObject->getActiveSheet()->getColumnDimension($column)->setAutoSize(false);
+                      $phpExcelObject->getActiveSheet()->getColumnDimension($column)->setWidth(7.2);  
+                      $phpExcelObject->getActiveSheet()->getStyle($column.'1')->getAlignment()->setTextRotation(90);
+                 }                
+          foreach ($regions as $key => $region){
+                 $produits=$em->getRepository('AppBundle:Produit')->countByProduit(null, $startDate,$endDate,$region);
+                 $phpExcelObject->getActiveSheet()
+                 ->setCellValue('A'.($key+2), $region);
+                 foreach ( $produits as $i => $produit) {
+                      $column= $phpExcelObject->getActiveSheet()
+                     ->getCellByColumnAndRow($i+$ofset,($key+2))
+                     ->setValue($produit['nombre'])
+                     ->getColumn();
+                      $phpExcelObject->getActiveSheet()->getColumnDimension($column)->setAutoSize(false);
+                      $phpExcelObject->getActiveSheet()->getColumnDimension($column)->setWidth(7.2);;
+                 }
            };
-        $phpExcelObject->getActiveSheet()->setTitle('RECAP');   
-        }
+        $phpExcelObject->getActiveSheet()->setTitle('RECAPITULATIF');  
         $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
         // create the response
         $response = $this->get('phpexcel')->createStreamedResponse($writer);
@@ -187,6 +183,7 @@ class CommendeController extends Controller
 
 
 
+
     public function listAction(Request $request,User $user=null, Pointvente $pointVente=null,Ressource $ressource=null)
     {
         $em = $this->getDoctrine()->getManager();
@@ -194,7 +191,7 @@ class CommendeController extends Controller
         $region=$session->get('region');
         $startDate=$session->get('startDate','first day of this month');
         $endDate=$session->get('endDate', 'last day of this month');
-    $commendes = $em->getRepository('AppBundle:Commende')->findList($user,$pointVente,$ressource,null,$startDate,$endDate,$region);
+        $commendes = $em->getRepository('AppBundle:Commende')->findList($user,$pointVente,$ressource,null,$startDate,$endDate,$region);
         return $this->render('commende/index.html.twig', array('commendes' => $commendes  ));
     }
 
@@ -207,9 +204,9 @@ class CommendeController extends Controller
         $em = $this->getDoctrine()->getManager();
          $affectation = $em->getRepository('AppBundle:Affectation')->find($request->query->get('id'));
         $commendes = $em->getRepository('AppBundle:Commende')->findByAffectaion($affectation);
-
         return $commendes;
     }
+    
     /**
      * Creates a new commende entity.
      *

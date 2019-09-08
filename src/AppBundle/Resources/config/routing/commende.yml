@@ -8,6 +8,12 @@ commende_performances:
     defaults: { _controller: "AppBundle:Commende:performances"}
     methods:  GET
 
+commende_performances_excel:
+    path:     /performances/list/excel
+    defaults: { _controller: "AppBundle:Commende:performancesExcel"}
+    methods:  GET
+
+
 commendes_list_insident:
     path:     /{insident}/list/insident
     defaults: { _controller: "AppBundle:Commende:listByInsident" }
