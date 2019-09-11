@@ -18,7 +18,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
            $qb = $this->createQueryBuilder('c')
            ->where('c.affectation=:affectation')
            ->andWhere('c.date is null or c.date>=:startDate')
-           ->setParameter('startDate', new \DateTime('first day of last month'))
+           //->setParameter('startDate', new \DateTime('first day of last month'))
            ->setParameter('affectation', $affectation)
            ->orderby('c.date','asc');
          return $qb->getQuery()->getResult();  

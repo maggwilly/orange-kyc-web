@@ -21,9 +21,9 @@ app_point_vente:
 app_formated:
     resource: "@AppBundle/Resources/config/routing/formated.yml"
 
-test_json:
-    path:     /test/json
-    defaults: { _controller: "AppBundle:App:testJson" }
+docs_photos:
+    path:     /docs/photos
+    defaults: { _controller: "AppBundle:App:docs" }
     methods:  GET
    
 kpi:

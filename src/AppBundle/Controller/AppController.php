@@ -54,25 +54,13 @@ class AppController extends Controller
           ));
     }
     
-    /**
-     * @Rest\View()
-     */
-    public function testJsonAction()
-    {   
-        $session = $this->getRequest()->getSession();
-        $em = $this->getDoctrine()->getManager();
-        $region=$session->get('region');
-        $startDate=$session->get('startDate','first day of this month');
-        $endDate=$session->get('endDate', 'last day of this month');
-        $performances=(new ArrayCollection($em->getRepository('AppBundle:Affectation')->findPerformances($startDate,$endDate,$region)))->map(function ($affectation) use ($em,$region,$startDate,$endDate){
-                 $affectation['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($affectation['id'], $startDate,$endDate,$region);
-                 if(empty($affectation['ventes']))   
-                 $affectation['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
 
-             return $affectation;
-        });
-        return  $performances;
+
+    public function docsAction()
+    {   
+        return $this->render('commende/docs.html.twig');
     }
+
 
 
     public function kpiAction()
