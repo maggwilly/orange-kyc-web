@@ -17,8 +17,8 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
 	  	 public function findByAffectaion(Affectation $affectation=null){
            $qb = $this->createQueryBuilder('c')
            ->where('c.affectation=:affectation')
-           ->andWhere('c.date is null or c.date>=:startDate')
-           //->setParameter('startDate', new \DateTime('first day of last month'))
+          /* ->andWhere('c.date is null or c.date>=:startDate')
+           ->setParameter('startDate', new \DateTime('first day of last month'))*/
            ->setParameter('affectation', $affectation)
            ->orderby('c.date','asc');
          return $qb->getQuery()->getResult();  
