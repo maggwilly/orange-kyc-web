@@ -71,6 +71,15 @@ class Affectation
     }
 
     /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getNom()
+    {
+        return $this->pointVente->getNom();
+    }
+    /**
      * Set date
      *
      * @param string $date

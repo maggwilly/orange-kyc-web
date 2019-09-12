@@ -34,6 +34,11 @@ commende_new:
     defaults: { _controller: "AppBundle:Commende:new" }
     methods:  [GET, POST]
 
+commendes_news:
+    path:     /news
+    defaults: { _controller: "AppBundle:Commende:news" }
+    methods:  [GET, POST]
+
 commende_edit:
     path:     /{id}/edit
     defaults: { _controller: "AppBundle:Commende:edit" }

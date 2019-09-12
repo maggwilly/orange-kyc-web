@@ -92,9 +92,14 @@ class Commende
     /**
      * Constructor
      */
-    public function __construct()
+ public function __construct($produits = null, \AppBundle\Entity\Affectation $affectation = null)
     {
-        $this->lignes = new \Doctrine\Common\Collections\ArrayCollection();
+         $this->date= new \DateTime();
+         $this->lignes = new \Doctrine\Common\Collections\ArrayCollection();
+         $this->affectation = $affectation;
+        foreach ($produits as $key => $produit) {
+            $this->addLigne(new Ligne($produit));
+        }
     }
     /**
      * Get id

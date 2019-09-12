@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h3 class="mb-0">Rapports de {{user.nom}}</h3>
+    {{ form_start(form) }}
+     <table>
+        <tbody>
+         <tr>
+        <th> {{ form_label(form.date, 'Date du rapport')}}</th>
+         <td>{{ form_widget(form.date)}}</td>
+        </tr>
+    {% for commendeField in form.commendes %}
+        <tr>
+             <th>{{ form_label(commendeField, commendeField.vars.value.affectation.pointVente.nom)}}</th>
+             <td>
+                  <table>
+                     <tbody>
+                    {% for ligneField in commendeField.lignes %}
+                       <tr>
+                         <th>{{ form_label(ligneField, ligneField.vars.value.produit.nom)}}</th>
+                         <td>{{ form_widget(ligneField) }}</td>
+                       </tr>
+                    {% endfor %}
+                    </tbody>
+                   </table>
+           </td>
+           <td>{{ form_widget(commendeField.typeInsident)}}</td>
+        </tr>
+    {% endfor %}
+      </tbody>
+    </table>
+<input type="submit" value="Enregistrer" />
+    {{ form_end(form) }}
+    <ul>
+        <li>
+            <a href="{{ path('app') }}">Aller à l'accueil</a>
+        </li>
+   
+{% endblock %}

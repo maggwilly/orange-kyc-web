@@ -72,6 +72,43 @@ class CommendeController extends Controller
     }
 
 
+    public function newsAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $produits = $em->getRepository('AppBundle:Produit')->findAll();
+        $user=$this->getUser();
+        $affectations = $em->getRepository('AppBundle:Affectation')->findByUser($user);
+        $date= new \DateTime();
+        $commendes=new \Doctrine\Common\Collections\ArrayCollection();
+        foreach ($affectations as $key => $affectation) {
+            $commendes[]= new Commende($produits,$affectation);
+        }
+        $defaultData = ['date' => $date, 'commendes'=>$commendes];
+        $form = $this->createFormBuilder($defaultData)
+        ->add('date','date')
+        ->add('commendes',CollectionType::class, array(
+            'entry_type'=> CommendeWebType::class,
+            'allow_add' => true))
+        ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formData=$form->getData();
+            $data=$formData['date'];
+            foreach ($formData['commendes'] as $key => $commende) {
+                   $commende->setDate($data)->setUser($user);
+                    $em->persist($commende);
+            }
+           
+            $em->flush();
+            return $this->redirectToRoute('app', array());
+        }
+        return $this->render('commende/news.html.twig', array(
+             'user' => $fuser,
+            'form' => $form->createView(),
+        ));
+    }
+
     public function performancesExcelAction()
     {
       $em = $this->getDoctrine()->getManager();
