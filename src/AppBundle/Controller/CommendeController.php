@@ -103,7 +103,7 @@ class CommendeController extends Controller
             }
            
             $em->flush();
-            return $this->redirectToRoute('app', array());
+            return $this->redirectToRoute('homepage', array());
         }
         return $this->render('commende/news.html.twig', array(
              'user' => $user,
