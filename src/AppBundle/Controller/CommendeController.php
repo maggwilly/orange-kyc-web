@@ -13,6 +13,7 @@ use AppBundle\Entity\Ressource;
 use AppBundle\Entity\User; 
 use \Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 /**
  * Commende controller.
