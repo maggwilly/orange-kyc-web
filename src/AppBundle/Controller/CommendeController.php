@@ -106,7 +106,7 @@ class CommendeController extends Controller
             return $this->redirectToRoute('app', array());
         }
         return $this->render('commende/news.html.twig', array(
-             'user' => $fuser,
+             'user' => $user,
             'form' => $form->createView(),
         ));
     }
