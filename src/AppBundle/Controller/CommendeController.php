@@ -83,7 +83,7 @@ class CommendeController extends Controller
         $date= new \DateTime();
         $commendes=[];
         foreach ($affectations as $key => $affectation) {
-            $commendes[]= new Commende();
+            $commendes[]= new Commende($produits);
         }
         $defaultData = ['date' => $date, 'commendes'=>$commendes];
         $form = $this->createFormBuilder($defaultData)
