@@ -77,7 +77,7 @@ class CommendeController extends Controller
     public function newsAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $produits = $em->getRepository('AppBundle:Produit')->findAll();
+        $produits = $em->getRepository('AppBundle:Produit')->findOrderedList();
         $user=$this->getUser();
         $affectations = $em->getRepository('AppBundle:Affectation')->findByUser($user);
         $date= new \DateTime();
@@ -139,7 +139,7 @@ class CommendeController extends Controller
      */
     public function newAction(Request $request)
     {   $em = $this->getDoctrine()->getManager();
-        $produits = $em->getRepository('AppBundle:Produit')->findAll();
+        $produits = $em->getRepository('AppBundle:Produit')->findOrderedList();
         $commende = new Commende($produits);
         $form = $this->createForm('AppBundle\Form\CommendeType', $commende);
         $form->handleRequest($request);
