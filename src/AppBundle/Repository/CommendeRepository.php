@@ -14,7 +14,7 @@ use Doctrine\ORM\NoResultException;
  */
 class CommendeRepository extends \Doctrine\ORM\EntityRepository
 {
-	  	 public function findByAffectaion(Affectation $affectation=null,$date=null,){
+	  	 public function findByAffectaion(Affectation $affectation=null,$date=null){
            $qb = $this->createQueryBuilder('c')
            ->where('c.affectation=:affectation')
           /* ->andWhere('c.date is null or c.date>=:startDate')
