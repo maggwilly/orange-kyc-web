@@ -29,11 +29,7 @@ class CommendeWebType extends AbstractType
                                   'expanded'=>false,
                                   'attr'=>array('data-rel'=>'chosen'),
                                    ))
-        ->add('lignes',CollectionType::class, array('entry_type'=> LigneType::class,'allow_add' => true))
-        ->add('affectation', EntityType::class, array(
-           'choice_label' => 'getNom',
-           'class' => 'AppBundle:Affectation',
-            'label'=>'Affectation'));
+        ->add('lignes',CollectionType::class, array('entry_type'=> LigneType::class,'allow_add' => true));
     }/**
      * {@inheritdoc}
      */
