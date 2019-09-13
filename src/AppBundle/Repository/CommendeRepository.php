@@ -23,7 +23,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
            if ($date) {
                $qb->andWhere('c.date=:date')->setParameter('date', $date);
            }
-           ->orderby('c.date','asc');
+           $qb->orderby('c.date','asc');
          return $qb->getQuery()->getResult();  
   }
 
