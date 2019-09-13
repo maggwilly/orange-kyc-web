@@ -99,7 +99,7 @@ class Commende
          $this->affectation = $affectation;
          if($produits)
         foreach ($produits as $key => $produit) {
-            $this->addLigne(new Ligne($produit));
+            $this->addLigne(new Ligne($produit),false);
         }
     }
     /**
@@ -262,9 +262,10 @@ class Commende
      *
      * @return Commende
      */
-    public function addLigne(\AppBundle\Entity\Ligne $ligne)
+    public function addLigne(\AppBundle\Entity\Ligne $ligne, $setCmd=true)
     {
-        $ligne->setCommende($this);
+        if($setCmd)
+          $ligne->setCommende($this);
         $this->lignes[] = $ligne;
 
         return $this;
