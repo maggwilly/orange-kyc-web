@@ -17,7 +17,6 @@ class CommendeWebType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('date','date')
         ->add('typeInsident', ChoiceType::class, array(
                                   'choices'  => array(
                                    'Rien à signaler' => 'Rien à signaler',
