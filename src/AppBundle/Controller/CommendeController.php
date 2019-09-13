@@ -138,13 +138,12 @@ class CommendeController extends Controller
      *
      */
     public function newAction(Request $request)
-    {
+    {   $em = $this->getDoctrine()->getManager();
         $produits = $em->getRepository('AppBundle:Produit')->findAll();
         $commende = new Commende($produits);
         $form = $this->createForm('AppBundle\Form\CommendeWebType', $commende);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($commende);
             $em->flush();
             return $this->redirectToRoute('commende_show', array('id' => $commende->getId()));
