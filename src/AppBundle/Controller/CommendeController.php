@@ -98,7 +98,7 @@ class CommendeController extends Controller
             $formData=$form->getData();
             $data=$formData['date'];
             foreach ($formData['commendes'] as $key => $commende) {
-                   $commende->setDate($data)->setUser($user);
+                   $commende->setDate($data)->setUser($user)->setTypeInsident('Rien à signaler');
                     $em->persist($commende);
             }          
             $em->flush();
