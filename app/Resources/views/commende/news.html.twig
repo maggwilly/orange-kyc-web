@@ -2,7 +2,7 @@
 {% block body %}
 <h3 class="mb-0">Rapports de {{user.nom}}</h3>
     {{ form_start(form) }}
-     <table>
+     <table border="1">
         <tbody>
          <tr>
         <th> {{ form_label(form.date, 'Date du rapport')}}</th>
@@ -17,11 +17,11 @@
                     {% for ligneField in commendeField.lignes %}
                        <tr>
                          <th>{{ form_label(ligneField, ligneField.vars.value.produit.nom)}}</th>
-                         <td>{{ form_widget(ligneField) }}</td>
+                         <td>{{ form_widget(ligneField.quantite) }}</td>
                        </tr>
                     {% endfor %}
                     </tbody>
-                   </table>
+                  </table>
            </td>
         </tr>
     {% endfor %}
@@ -31,7 +31,6 @@
     {{ form_end(form) }}
     <ul>
         <li>
-            <a href="{{ path('homepage') }}">Aller à l'accueil</a>
+            <a href="{{ path('commende_news') }}">Aller à l'accueil</a>
         </li>
-   
 {% endblock %}
