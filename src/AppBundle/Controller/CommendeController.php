@@ -81,9 +81,9 @@ class CommendeController extends Controller
         $user=$this->getUser();
         $affectations = $em->getRepository('AppBundle:Affectation')->findByUser($user);
         $date= new \DateTime();
-        $commendes=new \Doctrine\Common\Collections\ArrayCollection();
+        $commendes=[];
         foreach ($affectations as $key => $affectation) {
-            $commendes[]= new Commende($produits,$affectation);
+            $commendes[]= new Commende();
         }
         $defaultData = ['date' => $date, 'commendes'=>$commendes];
         $form = $this->createFormBuilder($defaultData)
@@ -93,7 +93,7 @@ class CommendeController extends Controller
             'allow_add' => true))
         ->getForm();
 
-        $form->handleRequest($request);
+          $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formData=$form->getData();
             $data=$formData['date'];
