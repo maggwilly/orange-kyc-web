@@ -97,6 +97,7 @@ class Commende
          $this->date= new \DateTime();
          $this->lignes = new \Doctrine\Common\Collections\ArrayCollection();
          $this->affectation = $affectation;
+         if($produits)
         foreach ($produits as $key => $produit) {
             $this->addLigne(new Ligne($produit));
         }
