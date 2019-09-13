@@ -83,7 +83,7 @@ class CommendeController extends Controller
         $date= new \DateTime();
         $commendes=[];
         foreach ($affectations as $key => $affectation) {
-            $commendes[]= new Commende($produits);
+            $commendes[]= new Commende($produits,$affectation);
         }
         $defaultData = ['date' => $date, 'commendes'=>$commendes];
         $form = $this->createFormBuilder($defaultData)
@@ -144,6 +144,7 @@ class CommendeController extends Controller
         $form = $this->createForm('AppBundle\Form\CommendeType', $commende);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $commende->setUser($this->getUser());
             $em->persist($commende);
             $em->flush();
             return $this->redirectToRoute('commende_show', array('id' => $commende->getId()));
