@@ -36,6 +36,11 @@ homepage:
     defaults: { _controller: "AppBundle:App:index" }
     methods:  GET
 
+commendes_news:
+    path:     /saisie
+    defaults: { _controller: "AppBundle:Commende:news" }
+    methods:  [GET, POST]
+
 export_excel:
     path:     /performances
     defaults: { _controller: "AppBundle:App:ventePeriodeExcel" }

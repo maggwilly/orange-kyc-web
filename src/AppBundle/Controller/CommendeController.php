@@ -98,11 +98,13 @@ class CommendeController extends Controller
             $formData=$form->getData();
             $data=$formData['date'];
             foreach ($formData['commendes'] as $key => $commende) {
+            if (empty($em->getRepository('AppBundle:Commende')->findByAffectaion($commende->getAffectation(),$data))) {
                    $commende->setDate($data)->setUser($user)->setTypeInsident('Rien à signaler');
                     $em->persist($commende);
+                }
             }          
             $em->flush();
-            return $this->redirectToRoute('homepage', array());
+            return $this->redirectToRoute('commendes_news', array());
         }
         return $this->render('commende/news.html.twig', array(
              'user' => $user,

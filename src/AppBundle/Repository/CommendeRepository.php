@@ -14,15 +14,20 @@ use Doctrine\ORM\NoResultException;
  */
 class CommendeRepository extends \Doctrine\ORM\EntityRepository
 {
-	  	 public function findByAffectaion(Affectation $affectation=null){
+	  	 public function findByAffectaion(Affectation $affectation=null,$date=null,){
            $qb = $this->createQueryBuilder('c')
            ->where('c.affectation=:affectation')
           /* ->andWhere('c.date is null or c.date>=:startDate')
            ->setParameter('startDate', new \DateTime('first day of last month'))*/
-           ->setParameter('affectation', $affectation)
+           ->setParameter('affectation', $affectation);
+           if ($date) {
+               $qb->andWhere('c.date=:date')->setParameter('date', $date);
+           }
            ->orderby('c.date','asc');
          return $qb->getQuery()->getResult();  
   }
+
+
 
   	  	public function findList(
           User $user=null, 
