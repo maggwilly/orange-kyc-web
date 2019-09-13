@@ -17,17 +17,6 @@ class CommendeWebType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('typeInsident', ChoiceType::class, array(
-                                  'choices'  => array(
-                                   'Rien à signaler' => 'Rien à signaler',
-                                   'Problème avec le PDV' => 'Problème avec le PDV',
-                                   'Problème avec le materiel' => 'Problème avec le materiel',
-                                   'Autres insidents' => 'Autres insidents'
-                                   ), 
-                                  'multiple'=>false,
-                                  'expanded'=>false,
-                                  'attr'=>array('data-rel'=>'chosen'),
-                                   ))
         ->add('lignes',CollectionType::class, array('entry_type'=> LigneType::class,'allow_add' => true));
     }/**
      * {@inheritdoc}
