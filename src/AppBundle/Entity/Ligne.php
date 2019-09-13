@@ -37,7 +37,13 @@ class Ligne
    */
     private $commende;
 
-
+    /**
+     * Constructor
+     */
+    public function __construct(\AppBundle\Entity\Produit $produit = null)
+    {
+          $this->produit = $produit;
+    }
     /**
      * Get id
      *
