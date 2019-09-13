@@ -141,7 +141,7 @@ class CommendeController extends Controller
     {   $em = $this->getDoctrine()->getManager();
         $produits = $em->getRepository('AppBundle:Produit')->findAll();
         $commende = new Commende($produits);
-        $form = $this->createForm('AppBundle\Form\CommendeWebType', $commende);
+        $form = $this->createForm('AppBundle\Form\CommendeType', $commende);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($commende);
