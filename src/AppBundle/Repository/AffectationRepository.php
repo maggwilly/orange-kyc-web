@@ -27,6 +27,7 @@ public  function recapPeriode($startDate=null, $endDate=null,$region=null){
   }
 
 
+
     public   function findPerformances($startDate=null, $endDate=null,$region=null){
 
         $qb = $this->createQueryBuilder('a')->join('a.user', 'u')->join('a.pointVente','pdv')->join('a.ressource','ba')

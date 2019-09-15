@@ -6,27 +6,23 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-
-class CommendeWebType extends AbstractType
+class LigneWebType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-               
-                ->add('lignes',CollectionType::class, array('entry_type'=> LigneWebType::class,'allow_add' => true));
+        $builder 
+         ->add('quantite','integer', array('label'=>'', 'required'=>false));;
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Commende',
-            'csrf_protection' => false,
+            'data_class' => 'AppBundle\Entity\Ligne',
+           'csrf_protection' => false,
             'allow_extra_fields' => true
         ));
     }
@@ -36,7 +32,7 @@ class CommendeWebType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_commende';
+        return 'appbundle_ligne';
     }
 
 

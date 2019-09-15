@@ -13,8 +13,9 @@ class LigneType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-->add('quantite','integer', array('label'=>'', 'required'=>false));;
+        $builder 
+        ->add('produit', EntityType::class, array('class' => 'AppBundle:Produit'))
+         ->add('quantite','integer', array('label'=>'', 'required'=>false));;
     }/**
      * {@inheritdoc}
      */
