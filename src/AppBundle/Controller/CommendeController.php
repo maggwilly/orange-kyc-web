@@ -307,7 +307,7 @@ public function makeUp(Request $request){
       $em = $this->getDoctrine()->getManager();
       $session = $this->getRequest()->getSession();
       $produits=$em->getRepository('AppBundle:Produit')->findOrderedList();
-      $regions=['Douala','Yaounde','Bafoussam','Dschang','Garoua','Maroua'];
+      $regions=['Douala','Yaounde','Bafoussam','Dschang','Ngaoundere','Garoua','Maroua'];
       $startDate=$session->get('startDate','first day of this month');
       $endDate=$session->get('endDate', 'last day of this month');
       $periode= $session->get('periode',' 01/01 - 31/12/'.date('Y'));
