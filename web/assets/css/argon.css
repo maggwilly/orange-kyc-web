@@ -15046,12 +15046,12 @@ button.bg-lighter:focus
 
 .bg-gradient-primary
 {
-    background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%) !important;
+    background: linear-gradient(87deg, #ff4500 0, #ff4500 100%) !important;
 }
 
 .bg-gradient-secondary
 {
-    background: linear-gradient(87deg, #f7fafc 0, #f7f8fc 100%) !important;
+    background: linear-gradient(87deg, #ff4500 0, #ff6347 100%) !important;
 }
 
 .bg-gradient-success
@@ -15061,7 +15061,7 @@ button.bg-lighter:focus
 
 .bg-gradient-info
 {
-    background: linear-gradient(87deg, #11cdef 0, #1171ef 100%) !important;
+    background: linear-gradient(87deg, #11cdef 0, #ff6347 100%) !important;
 }
 
 .bg-gradient-warning
