@@ -21,7 +21,7 @@
                     <th scope="col">SUP.</th>
                     <th scope="col">BA</th>
                     <th scope="col">PDV</th>
-                    <th scope="col">JOURS</th>
+                    <!--<th scope="col">JOURS</th>-->
                     {% for produit in produits|slice(0,5) %}
                     <th scope="col">{{produit.nom}}</th>
                     {% endfor %}
@@ -45,9 +45,9 @@
                      {{ performance.pdvnom|e }}
                      </a>
                     </th> 
-                    <th scope="row">
+                   <!-- <th scope="row">
                        {{ performance.nombrejours }}
-                    </th> 
+                    </th>--> 
                     {% for vente in performance.ventes|slice(0,5) %}
 
                     <th scope="col">{% if vente.nombre is defined %}{{vente.nombre}}{% else %}0{% endif %}</th>

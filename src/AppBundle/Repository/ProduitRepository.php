@@ -28,6 +28,7 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
           if($affectation!=null){
              $qb->andWhere('c.affectation=:affectation')->setParameter('affectation',$affectation);
           }      
+          $qb->andWhere('p.id!=:id')->setParameter('id',2);
           $qb->addOrderBy('p.priority','asc')
           ->select('p.id')
          ->addSelect('p.nom')
