@@ -29,7 +29,7 @@
     --cyan: #2bffc6;
     --white: #fff;
     --gray: #8898aa;
-    --gray-dark: #32325d;
+    --gray-dark: #000000;
     --light: #ced4da;
     --lighter: #e9ecef;
     --primary: #ff4500; 
@@ -499,7 +499,7 @@ h6,
 
     margin-bottom: .5rem;
 
-    color: #32325d;
+    color: #000000;
 }
 
 h1,
@@ -7597,7 +7597,7 @@ button.close
     margin-bottom: 0;
     padding: .5rem .95rem;
 
-    color: #32325d;
+    color: #000000;
     border-bottom: 1px solid #f2f2f2;
     border-top-left-radius: calc(.4375rem - 1px);
     border-top-right-radius: calc(.4375rem - 1px); 
@@ -15007,7 +15007,7 @@ button.bg-gray:focus
 
 .bg-gray-dark
 {
-    background-color: #32325d !important;
+    background-color: #000000 !important;
 }
 
 a.bg-gray-dark:hover,
@@ -15166,7 +15166,7 @@ button.bg-lighter:focus
 
 .bg-gradient-gray-dark
 {
-    background: linear-gradient(87deg, #32325d 0, #44325d 100%) !important;
+    background: linear-gradient(87deg, #000000 0, #44325d 100%) !important;
 }
 
 .bg-gradient-light
@@ -16529,7 +16529,7 @@ a.text-gray:focus
 
 .text-gray-dark
 {
-    color: #32325d !important;
+    color: #000000 !important;
 }
 
 a.text-gray-dark:hover,
@@ -16790,7 +16790,7 @@ a.text-lighter:focus
 }
 .badge-dot strong
 {
-    color: #32325d;
+    color: #000000;
 }
 .badge-dot i
 {
@@ -16955,7 +16955,7 @@ a.btn-icon-only
     vertical-align: middle;
     text-decoration: none;
 
-    color: #32325d;
+    color: #000000;
     border: 0;
     border-radius: .375rem;
     background-color: #f6f9fc;
@@ -18514,7 +18514,7 @@ textarea[resize='horizontal']
 {
     font-size: 1rem;
 
-    color: #32325d;
+    color: #000000;
 }
 .list-group-heading > small
 {
@@ -19013,7 +19013,7 @@ textarea[resize='horizontal']
 
 .navbar-horizontal .navbar-light .navbar-brand
 {
-    color: #32325d;
+    color: #000000;
 }
 
 .navbar-horizontal .navbar-nav .nav-item .media:not(:last-child)
