@@ -17,12 +17,14 @@
         <div class="table-responsive">
               <table class="table align-items-center table-flush" id="myTable">
                 <thead class="thead-light">
-                 <tr>
+                  <tr>
                     <th scope="col">SUP.</th>
-                    <th scope="col">BA</th>
-                    <th scope="col">PDV</th>
-                    <!--<th scope="col">JOURS</th>-->
-                    {% for produit in produits|slice(0,5) %}
+                    <th scope="col">Ville</th>
+                    <th scope="col">Ressource</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Telephone</th>
+                    <th scope="col">Jours</th>
+                    {% for produit in produits|slice(0,4) %}
                     <th scope="col">{{produit.nom}}</th>
                     {% endfor %}
                   </tr>
@@ -35,24 +37,19 @@
                      {{ performance.supnom|e }}
                    </a>
                     </th>
-                    <th scope="row">
-                      <a href="{{ path('commendes_list',{'ressource':performance.baid}) }}">
-                     {{ performance.banom|e }}
-                     </a>
-                    </th>
+                    <th scope="row">{{ performance.ville }}</th>
                     <th scope="row">
                       <a href="{{ path('commendes_list',{'pointVente':performance.pdvid}) }}">
                      {{ performance.pdvnom|e }}
                      </a>
                     </th> 
-                   <!-- <th scope="row">
-                       {{ performance.nombrejours }}
-                    </th>--> 
-                    {% for vente in performance.ventes|slice(0,5) %}
-
+                    <th scope="row">{{ performance.type}}</th>    
+                    <th scope="row">{{ performance.telephone}}</th>    
+                    <th scope="row">{{ performance.nombrejours }}</th>                
+                    {% for vente in performance.ventes|slice(0,4) %}
                     <th scope="col">{% if vente.nombre is defined %}{{vente.nombre}}{% else %}0{% endif %}</th>
                     {% endfor %}
-                  </tr
+                  </tr>
                    {% endfor %}
                 </tbody>
               </table>
@@ -60,41 +57,7 @@
           </div>
         </div>
       </div>
-
 {% endblock %}
   {% block javascripts %}
-  {{parent()}}
-<script type="text/javascript">
-'use strict';
-function exportTableToExcel(tableID, filename = ''){
-    var downloadLink;
-    var dataType = 'application/vnd.ms-excel';
-    var tableSelect = document.getElementById(tableID);
-    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-    
-    // Specify file name
-    filename = filename?filename+'.xls':'excel_data.xls';
-    
-    // Create download link element
-    downloadLink = document.createElement("a");
-    
-    document.body.appendChild(downloadLink);
-    
-    if(navigator.msSaveOrOpenBlob){
-        var blob = new Blob(['\ufeff', tableHTML], {
-            type: dataType
-        });
-        navigator.msSaveOrOpenBlob( blob, filename);
-    }else{
-        // Create a link to the file
-        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-    
-        // Setting the file name
-        downloadLink.download = filename;
-        
-        //triggering the function
-        downloadLink.click();
-    }
-}
-</script>        
+  {{parent()}}       
 {% endblock %}

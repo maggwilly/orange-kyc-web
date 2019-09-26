@@ -10,16 +10,41 @@ use AppBundle\Entity\User;
  */
 class PointVenteRepository extends \Doctrine\ORM\EntityRepository
 {
+
 		  public function findByUserVille(User $user=null, $region=null){
-           $qb = $this->createQueryBuilder('p')->join('p.user','u');
+           $qb = $this->createQueryBuilder('pdv')->join('pdv.user','u');
         if($user!=null){
-             $qb  ->andWhere('p.user=:user')->setParameter('user', $user);
+             $qb  ->andWhere('pdv.user=:user')->setParameter('user', $user);
           }
         if($region!=null){
-              $qb->andWhere('p.ville=:ville')->setParameter('ville', $region);
+              $qb->andWhere('pdv.ville=:ville')->setParameter('ville', $region);
           }
          return $qb->getQuery()->getResult();  
        }
 
+    
+    public   function findPerformances($startDate=null, $endDate=null,$region=null){
+        $qb = $this->createQueryBuilder('pdv')->join('pdv.user', 'u')->leftJoin('pdv.commendes','c');
+        if($region!=null){
+              $qb->andWhere('pdv.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
+          }
+         $qb
+         ->select('pdv.id as pdvid')
+         ->addSelect('pdv.nom as pdvnom')
+         ->addSelect('pdv.type as type')
+         ->addSelect('pdv.ville as ville')
+         ->addSelect('pdv.telephone pdvtelephone')
+         ->addSelect('u.id as supid')
+         ->addSelect('u.nom as supnom')  
+         ->addSelect('count(DISTINCT c.date) as nombrejours')
+         ->addGroupBy('pdv.id')
+         ->addGroupBy('pdv.nom')
+         ->addGroupBy('pdv.type')
+         ->addGroupBy('pdv.ville')
+         ->addGroupBy('pdv.telephone')
+         ->addGroupBy('u.nom')
+         ->addGroupBy('u.id');
+        return $qb->getQuery()->getArrayResult(); 
+  } 
 	
 }

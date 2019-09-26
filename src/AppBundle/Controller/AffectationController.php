@@ -20,9 +20,7 @@ class AffectationController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $affectations = $em->getRepository('AppBundle:Affectation')->findAll();
-
         return $this->render('affectation/index.html.twig', array(
             'affectations' => $affectations,
         ));
@@ -66,16 +64,13 @@ class AffectationController extends Controller
      */
     public function editJsonAction(Request $request, Affectation $affectation)
     {
-
         $editForm = $this->createForm('AppBundle\Form\AffectationType', $affectation);
         $editForm->submit($this->makeUp($request),false);
         if ($form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
              return $affectation;
         }
-
         return array('status' => 'error');
-    
     }
 
 public function makeUp(Request $request, $setId=true){

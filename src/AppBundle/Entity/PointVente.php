@@ -59,10 +59,10 @@ class PointVente
      */
     private $user;
 
-    /**
-   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Affectation", mappedBy="pointVente", cascade={"persist","remove"})
+        /**
+   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Commende", mappedBy="pointVente", cascade={"persist","remove"})
    */
-    private $affectations;
+    private $commendes;
 
 
     public function __construct(\AppBundle\Entity\User $user = null)
@@ -220,5 +220,37 @@ class PointVente
     {
         return $this->user;
     }
+    /**
+     * Add commende
+     *
+     * @param \AppBundle\Entity\Commende $commende
+     *
+     * @return PointVente
+     */
+    public function addCommende(\AppBundle\Entity\Commende $commende)
+    {
+        $this->commendes[] = $commende;
 
+        return $this;
+    }
+
+    /**
+     * Remove commende
+     *
+     * @param \AppBundle\Entity\Commende $commende
+     */
+    public function removeCommende(\AppBundle\Entity\Commende $commende)
+    {
+        $this->commendes->removeElement($commende);
+    }
+
+    /**
+     * Get commendes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCommendes()
+    {
+        return $this->commendes;
+    }  
 }

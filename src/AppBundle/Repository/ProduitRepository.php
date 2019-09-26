@@ -10,14 +10,13 @@ namespace AppBundle\Repository;
  */
 class ProduitRepository extends \Doctrine\ORM\EntityRepository
 {
-	    public  function countByProduit($affectation=null,$startDate=null, $endDate=null,$region=null){
+	    public  function countByProduit($pointVente=null,$startDate=null, $endDate=null,$region=null){
         $qb = $this->createQueryBuilder('p')
         ->leftJoin('p.lignes', 'l')
         ->leftJoin('l.commende', 'c')
-        ->leftJoin('c.affectation', 'a')
-        ->leftJoin('a.pointVente', 'pdv');
+        ->leftJoin('c.pointVente', 'pv');
           if($region!=null){
-              $qb->andWhere('pdv.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
+              $qb->andWhere('pv.ville=:ville or pv.ville is NULL')->setParameter('ville', $region);
           }
          if($startDate!=null){
               $qb->andWhere('c.date is null or c.date>=:startDate')->setParameter('startDate', new \DateTime($startDate));
@@ -25,8 +24,8 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
           if($endDate!=null){
              $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
           } 
-          if($affectation!=null){
-             $qb->andWhere('c.affectation=:affectation')->setParameter('affectation',$affectation);
+          if($pointVente!=null){
+             $qb->andWhere('c.pointVente=:pointVente')->setParameter('pointVente',$pointVente);
           }      
           $qb->andWhere('p.id!=:id')->setParameter('id',2);
           $qb->addOrderBy('p.priority','asc')

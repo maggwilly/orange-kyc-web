@@ -47,12 +47,12 @@ class CommendeController extends Controller
         $startDate=$session->get('startDate','first day of this month');
         $endDate=$session->get('endDate', 'last day of this month');
         $produits=$em->getRepository('AppBundle:Produit')->findOrderedList();
-        $performances=(new ArrayCollection($em->getRepository('AppBundle:Affectation')->findPerformances($startDate,$endDate,$region)))->map(function ($affectation) use ($em,$region,$startDate,$endDate){
-                 $affectation['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($affectation['id'], $startDate,$endDate,$region);
-                 if(empty($affectation['ventes']))   
-                 $affectation['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
+        $performances=(new ArrayCollection($em->getRepository('AppBundle:PointVente')->findPerformances($startDate,$endDate,$region)))->map(function ($pointVente) use ($em,$region,$startDate,$endDate){
+                 $pointVente['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($pointVente['id'], $startDate,$endDate,$region);
+                 if(empty($pointVente['ventes']))   
+                 $pointVente['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
 
-             return $affectation;
+             return $pointVente;
         });        
         return $this->render('AppBundle::performances.html.twig',
          array(
@@ -60,6 +60,7 @@ class CommendeController extends Controller
             'produits'=>$produits,
          ));
     }
+
 
     public function listByInsidentAction(Request $request,$insident)
     {
@@ -98,7 +99,7 @@ class CommendeController extends Controller
             $formData=$form->getData();
             $data=$formData['date'];
             foreach ($formData['commendes'] as $key => $commende) {
-            if (empty($em->getRepository('AppBundle:Commende')->findByAffectaion($commende->getAffectation(),$data))) {
+            if (empty($em->getRepository('AppBundle:Commende')->findByPointVente($commende->getPointVente(),$data))) {
                    $commende->setDate($data)->setUser($user)->setTypeInsident('Rien à signaler');
                     $em->persist($commende);
                 }
@@ -130,8 +131,8 @@ class CommendeController extends Controller
     public function indexJsonAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-         $affectation = $em->getRepository('AppBundle:Affectation')->find($request->query->get('id'));
-        $commendes = $em->getRepository('AppBundle:Commende')->findByAffectaion($affectation);
+         $pointVente = $em->getRepository('AppBundle:PointVente')->find($request->query->get('id'));
+        $commendes = $em->getRepository('AppBundle:Commende')->findByPointVente($pointVente);
         return $commendes;
     }
     
@@ -196,13 +197,15 @@ class CommendeController extends Controller
         return $editForm;
     }
 
+
 public function makeUp(Request $request){
       $commende= $request->request->all();
-     if(array_key_exists('affectation', $commende)&&is_array($commende['affectation']))
-       $commende['affectation']=$commende['affectation']['id'];   
+     if(array_key_exists('pointVente', $commende)&&is_array($commende['pointVente']))
+       $commende['pointVente']=$commende['pointVente']['id'];   
         
     return $commende;
 }
+
     /**
      * Finds and displays a commende entity.
      *
@@ -235,13 +238,10 @@ public function makeUp(Request $request){
         $deleteForm = $this->createDeleteForm($commende);
         $editForm = $this->createForm('AppBundle\Form\CommendeType', $commende);
         $editForm->handleRequest($request);
-
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
             return $this->redirectToRoute('commende_edit', array('id' => $commende->getId()));
         }
-
         return $this->render('commende/edit.html.twig', array(
             'commende' => $commende,
             'edit_form' => $editForm->createView(),
@@ -330,7 +330,7 @@ public function makeUp(Request $request){
                ->setCellValue('E1', 'TYPE')
                ->setCellValue('F1', 'JOURS');
                  $ofset=6;
-                  foreach ($produits as $i => $produit) {
+                  foreach ($produits as $i => $produit){
                     $column= $phpExcelObject->getActiveSheet()
                      ->getCellByColumnAndRow($i+$ofset,1)
                      ->setValue($produit['nom'])
@@ -338,15 +338,15 @@ public function makeUp(Request $request){
                       $phpExcelObject->getActiveSheet()->getColumnDimension($column)->setAutoSize(false);
                       $phpExcelObject->getActiveSheet()->getColumnDimension($column)->setWidth(7.2);  
                       $phpExcelObject->getActiveSheet()->getStyle($column.'1')->getAlignment()->setTextRotation(90);
-                 }
-            $performances=(new ArrayCollection($em->getRepository('AppBundle:Affectation')->findPerformances($startDate, $endDate,$region)))->map(function ($affectation) use ($em,$region,$startDate,$endDate){
-             $affectation['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($affectation['id'], $startDate,$endDate,$region);
-                 if(empty($affectation['ventes']))   
-                 $affectation['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
-             return $affectation;
-            }); 
-            
-        foreach ($performances as $key => $value) {
+                 }                
+              $performances=(new ArrayCollection($em->getRepository('AppBundle:PointVente')->findPerformances($startDate, $endDate,$region)))->map(function ($pointVente) use ($em,$region,$startDate,$endDate){
+              $pointVente['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($pointVente['id'], $startDate,$endDate,$region);
+                 if(empty($pointVente['ventes']))   
+                 $pointVente['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
+             return $pointVente;
+            });
+
+        foreach ($performances as $key => $value){
                $phpExcelObject->getActiveSheet()
                ->setCellValue('A'.($key+2), $value['supnom'])
                ->setCellValue('B'.($key+2), $value['banom'])
@@ -409,10 +409,4 @@ public function makeUp(Request $request){
         $response->headers->set('Content-Disposition', $dispositionHeader);
         return $response;        
     }
-
-
-
-
-
-   
 }

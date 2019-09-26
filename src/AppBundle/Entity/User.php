@@ -183,10 +183,6 @@ class User extends BaseUser
    */
     private $pointVentes;
 
-    /**
-   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ressource", mappedBy="user", cascade={"persist","remove"})
-   */
-    private $ressources;
 
     /**
      * Constructor

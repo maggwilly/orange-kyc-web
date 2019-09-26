@@ -79,9 +79,9 @@ class Commende
     protected $user;
 
         /**
-   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Affectation",inversedBy="commendes")
+   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PointVente",inversedBy="commendes")
    */
-    private $affectation;
+    private $pointVente;
 
     /**
    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ligne", mappedBy="commende", cascade={"persist","remove"})
@@ -92,11 +92,11 @@ class Commende
     /**
      * Constructor
      */
- public function __construct($produits = null, \AppBundle\Entity\Affectation $affectation = null)
+ public function __construct($produits = null, \AppBundle\Entity\PointVente $pointVente = null)
     {
          $this->date= new \DateTime();
          $this->lignes = new \Doctrine\Common\Collections\ArrayCollection();
-         $this->affectation = $affectation;
+         $this->pointVente = $pointVente;
          if($produits)
         foreach ($produits as $key => $produit) {
             $this->addLigne(new Ligne($produit),false);
@@ -158,7 +158,6 @@ class Commende
 
     /**
      * Set week
-     *
      * @param integer $week
      *
      * @return Commende
@@ -364,26 +363,27 @@ class Commende
     }
 
     /**
-     * Set affectation
+     * Set pointVente
      *
-     * @param \AppBundle\Entity\Affectation $affectation
+     * @param \AppBundle\Entity\PointVente $pointVente
      *
      * @return Commende
      */
-    public function setAffectation(\AppBundle\Entity\Affectation $affectation = null)
+    public function setPointVente(\AppBundle\Entity\PointVente $pointVente = null)
     {
-        $this->affectation = $affectation;
+        $this->pointVente = $pointVente;
 
         return $this;
     }
 
     /**
-     * Get affectation
+     * Get pointVente
      *
-     * @return \AppBundle\Entity\Affectation
+     * @return \AppBundle\Entity\PointVente
      */
-    public function getAffectation()
+    public function getPointVente()
     {
-        return $this->affectation;
+        return $this->pointVente;
     }
+
 }

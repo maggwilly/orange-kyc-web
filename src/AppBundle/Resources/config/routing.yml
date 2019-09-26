@@ -25,7 +25,13 @@ docs_photos:
     path:     /docs/photos
     defaults: { _controller: "AppBundle:App:docs" }
     methods:  GET
-   
+ 
+courbe_rapports:
+    path:     /courbes
+    defaults: { _controller: "AppBundle:App:courbes" }
+    methods:  GET
+  
+
 kpi:
     path:     /kpi
     defaults: { _controller: "AppBundle:App:kpi" }
@@ -46,12 +52,6 @@ export_excel:
     defaults: { _controller: "AppBundle:App:ventePeriodeExcel" }
     methods:  GET
 
-export_excel_pointages:
-    path:     /pointages
-    defaults: { _controller: "AppBundle:App:pointagesPeriodeExcel" }
-    methods:  GET
-
-
 set_periode:
     path:     /set/periode
     defaults: { _controller: "AppBundle:App:setPeriode" }
@@ -60,4 +60,14 @@ set_periode:
 set_region:
     path:     /set/region
     defaults: { _controller: "AppBundle:App:setRegion" }
+    methods:  GET
+
+sms_token:
+    path:     /sms/token/json
+    defaults: { _controller: "AppBundle:App:getToken" }
+    methods:  GET
+
+sms_send:
+    path:     /sms/send/json
+    defaults: { _controller: "AppBundle:App:sendSms" }
     methods:  GET

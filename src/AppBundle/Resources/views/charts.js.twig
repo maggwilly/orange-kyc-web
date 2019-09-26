@@ -405,54 +405,7 @@ var Charts = (function() {
 
 })();
 
-//
-// Orders chart
-//
 
-var OrdersChart = (function() {
-
-	//
-	// Variables
-	//
-
-	var $chart = $('#chart-orders');
-	var $ordersSelect = $('[name="ordersSelect"]');
-
-
-	//
-	// Methods
-	//
-
-	// Init chart
-	function initChart($chart) {
-
-		// Create chart
-		var ordersChart = new Chart($chart, {
-			type: 'pie',
-			data: {
-			labels: [{% for item in produits %} "{{item.nom}}" {% if not loop.last %},{% endif %}{% endfor %}],
-			datasets: [{
-					label: 'Type de contrat',
-					data: [{% for item in produits %} {{item.nombre}}{% if not loop.last %},{% endif %} {% endfor %}],
-               backgroundColor: [{% for color in colors  %}"{{ color}}",{%endfor%}],
-               hoverBackgroundColor: [{% for color in colors  %}"{{ color}}",{%endfor%}]
-				}]
-			}
-		});
-
-		// Save to jQuery object
-		$chart.data('chart', ordersChart);
-	}
-
-
-	// Init chart
-	if ($chart.length) {
-		initChart($chart);
-	}
-
-})();
-
-//
 
 'use strict';
 
@@ -461,14 +414,10 @@ var OrdersChart = (function() {
 //
 
 var SalesChart = (function() {
-
 	// Variables
-
 	var $chart = $('#chart-sales');
 
-
 	// Methods
-
 	function init($chart) {
 
 		var salesChart = new Chart($chart, {
@@ -500,7 +449,6 @@ var SalesChart = (function() {
 							if (data.datasets.length > 1) {
 								content += '<span class="popover-body-label mr-auto">' + label + '</span>';
 							}
-
 							content += '<span class="popover-body-value">' + yLabel + '</span>';
 							return content;
 						}
@@ -508,26 +456,19 @@ var SalesChart = (function() {
 				}
 			},
 			data: {
-				labels: [{% for item in countAndCashByMonth %} "{{item.month}}" {% if not loop.last %},{% endif %}{% endfor %}],
+				labels: [{% for item in kpiByWeek %} "{{item.weekText}}" {% if not loop.last %},{% endif %}{% endfor %}],
 				datasets: [{
 					label: 'Performance',
-					data: [{% for item in countAndCashByMonth %} {{item.nombre}}{% if not loop.last %},{% endif %} {% endfor %}]
+					data: [{% for item in kpiByWeek %} {{item.nombre}}{% if not loop.last %},{% endif %} {% endfor %}]
 				}]
 			}
 		});
-
 		// Save to jQuery object
-
 		$chart.data('chart', salesChart);
-
 	};
-
-
 	// Events
-
 	if ($chart.length) {
 		init($chart);
 	}
-
 })();
 </script>

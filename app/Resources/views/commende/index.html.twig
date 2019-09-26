@@ -13,9 +13,11 @@
             <tr>
                 <th>Date</th>
                 <th>Superviseur</th>
-                <th>BA</th>
-                <th>PDV</th>
-                <th>C. Rendu</th>
+                <th>Ville</th>
+                <th>Ressource</th>
+                <th>Telephone</th>
+                <th>Type</th>
+                <th>Compte rendu</th>
                 <th>Insident</th>
             </tr>
         </thead>
@@ -27,15 +29,13 @@
                      {% if commende.date %}{{ commende.date|date('d/m/Y') }}{% endif %}
                     </a>
                 </td>
-                <td>
-                    {{ commende.user.nom }}
-                </td>
-                 <td>{{ commende.affectation.ressource.nom }}</td>
-                 <td>{{ commende.affectation.pointVente.nom }}</td>
-                 <td>{{ commende.description }}</td>
-                <td>
-                    {{ commende.typeInsident }}
-                </td>
+                <td>{{ commende.user.nom }}</td>
+                 <td>{{ commende.pointVente.ville }}</td>
+                <td>{{ commende.pointVente.nom }}</td>
+                <td>{{ commende.pointVente.telephone }}</td>
+                <td>{{ commende.pointVente.type }}</td>
+                <td>{{ commende.description }}</td>
+                <td>{{ commende.typeInsident }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -44,7 +44,6 @@
           </div>
         </div>
       </div>
-
 {% endblock %}
   {% block chart %}            
   {% endblock %}

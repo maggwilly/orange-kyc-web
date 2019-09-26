@@ -26,9 +26,9 @@ class CommendeType extends AbstractType
                 'input' => 'datetime' 
             ))
         ->add('lignes',CollectionType::class, array('entry_type'=> LigneType::class,'allow_add' => true))
-        ->add('affectation', EntityType::class, array(
+        ->add('pointVente', EntityType::class, array(
            'choice_label' => 'getId',
-          'class' => 'AppBundle:affectation',
+          'class' => 'AppBundle:PointVente',
             'label'=>'Affectation'))
         ->add('user', EntityType::class, array('class' => 'AppBundle:User'));
     }/**

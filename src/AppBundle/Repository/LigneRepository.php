@@ -11,9 +11,8 @@ use Doctrine\ORM\NoResultException;
 class LigneRepository extends \Doctrine\ORM\EntityRepository
 {
 
-   public function kpiByWeek( $startDate=null, $endDate=null,$region=null){
-        $qb = $this->createQueryBuilder('l')->join('l.commende', 'c')->join('l.produit', 'p')->leftJoin('c.user', 'u');
-          
+   public function kpiByWeek( $startDate=null, $endDate=null,$region=null, $produit=null){
+        $qb = $this->createQueryBuilder('l')->join('l.commende', 'c')->leftJoin('c.user', 'u');
           if($region!=null){
               $qb->andWhere('u.ville=:ville or u.ville is NULL')->setParameter('ville', $region);
           }
@@ -23,11 +22,12 @@ class LigneRepository extends \Doctrine\ORM\EntityRepository
           if($endDate!=null){
            $qb->andWhere('c.date is null or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
           } 
+        if($produit!=null){
+           $qb->andWhere('l.produit=:produit')->setParameter('produit',$produit);
+          }           
        $qb->addOrderBy('c.week','asc')
        ->select('c.weekText')
-        ->addSelect('p.nom as produit')
        ->addSelect('sum(l.quantite) as nombre')
-       ->addGroupBy('p.nom')
        ->addGroupBy('c.week')
        ->addGroupBy('c.weekText');
          return $qb->getQuery()->getArrayResult();  

@@ -1,5 +1,5 @@
 {% extends "layout.html.twig" %}
-{% block title %}Orange Money Report {% endblock %} 
+{% block title %}Orange Money KYC {% endblock %} 
      {% block stylesheets %}
      {{parent()}}
     <link rel="stylesheet" type="text/css" media="all" href="{{ asset('assets/vendor/bootstrap.daterangepicker/daterangepicker-bs3.css') }}" />
@@ -16,10 +16,10 @@
   <script type="text/javascript" src="{{ asset('assets/vendor/chart.js/dist/Chart.min.js') }}"></script> 
   <script type="text/javascript" src="{{ asset('assets/vendor/chart.js/dist/Chart.extension.js') }}"></script>
   <script type="text/javascript" src="{{ asset('assets/vendor/bootstrap.daterangepicker/moment.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('assets/vendor/bootstrap.daterangepicker/daterangepicker.js') }}"></script>
-   <script type="text/javascript" src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
-  
-   <script type="text/javascript">
+  <script type="text/javascript" src="{{ asset('assets/vendor/bootstrap.daterangepicker/daterangepicker.js') }}">
+  </script>
+  <script type="text/javascript" src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+  <script type="text/javascript">
                $(document).ready(function() {
                   $('#periode').daterangepicker({
                     format: 'DD/MM/YYYY'
@@ -29,7 +29,7 @@
                });
    </script>
   <script type="text/javascript">
-   $(document).ready( function () {
+    $(document).ready( function () {
     $('#myTable').dataTable();
     } );
     </script>            

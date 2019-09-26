@@ -15,16 +15,20 @@ use FOS\RestBundle\View\View;
 use AppBundle\Entity\PointVente;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-/**
- * Etape controller.
- *
- */
+
 class AppController extends Controller
 {
-    /**
-     * Lists all etape entities.
-     *
-     */
+
+  const AUTORISATION_HEADERS=array(
+    "accept: application/json",
+    "Authorization: Bearer IPJwGGcAJ33O34Lr53Eyh0MG1xxZ",
+    "cache-control: no-cache",
+    "content-type: application/json"
+  );
+
+  const ORANGE_SMS_URLBASE="https://api.orange.com/smsmessaging/v1/outbound/";
+  const OM_TOKEN_URL = "https://api.orange.com/oauth/v2/token";
+
     public function indexAction()
     {   
         $session = $this->getRequest()->getSession();
@@ -33,13 +37,11 @@ class AppController extends Controller
         $startDate=$session->get('startDate','first day of this month');
         $endDate=$session->get('endDate', 'last day of this month');
         $produits=$em->getRepository('AppBundle:Produit')->countByProduit(null, $startDate,$endDate,$region);
-
-        $performances=(new ArrayCollection($em->getRepository('AppBundle:Affectation')->findPerformances($startDate,$endDate,$region)))->map(function ($affectation) use ($em,$region,$startDate,$endDate){
-                 $affectation['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($affectation['id'], $startDate,$endDate,$region);
-                 if(empty($affectation['ventes']))   
-                 $affectation['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
-
-             return $affectation;
+        $performances=(new ArrayCollection($em->getRepository('AppBundle:PointVente')->findPerformances($startDate,$endDate,$region)))->map(function ($poinVente) use ($em,$region,$startDate,$endDate){
+                 $poinVente['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($poinVente['id'], $startDate,$endDate,$region);
+                 if(empty($poinVente['ventes']))   
+                 $poinVente['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
+             return $poinVente;
         });
         $workedSuperviseur=$em->getRepository('AppBundle:User')->workedSuperviseur($startDate,$endDate,$region);
         $colors=array("#FF6384","#36A2EB","#FFCE56","#F7464A","#FF5A5E","#46BFBD", "#5AD3D1","#FDB45C");
@@ -61,6 +63,17 @@ class AppController extends Controller
         return $this->render('commende/docs.html.twig');
     }
 
+
+    public function courbesAction()
+    {   
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $region=$session->get('region');
+        $startDate=$session->get('startDate','first day of this month');
+        $endDate=$session->get('endDate', 'last day of this month');
+        $kpiByWork=$em->getRepository('AppBundle:Ligne')->kpiByWeek($startDate,$endDate,$region,1);
+        return $this->render('commende/courbes.html.twig', array('kpiByWeek' =>$kpiByWork ));
+    }
 
 
     public function kpiAction()
@@ -132,136 +145,100 @@ class AppController extends Controller
     }
 
 
-    
-
-
-    public function pointagesPeriodeExcelAction()
+    /**
+     * @Rest\View()
+     */
+  public function sendSmsAction(Request $request)
     {
-      $styleGreen = array(
-       'fill'  => array(
-         'type'  => 'solid',
-         'color' => array('rgb' => '088E1C'),
-       ));
-      $styleRed = array(
-       'fill'  => array(
-         'type'  => 'solid',
-         'color' => array('rgb' => 'F53B12'),
-       ));
-      $em = $this->getDoctrine()->getManager();
-      $session = $this->getRequest()->getSession();
-      $region=$session->get('region','Douala');
-        $startDate=$session->get('startDate','first day of this month');
-        $endDate=$session->get('endDate', 'last day of this month');
-      $periode= $session->get('periode',' 01/01 - 31/12/'.date('Y'));
-      $days=$this->getWorkingDays($startDate, $endDate);
-      $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
-      $phpExcelObject->getProperties()->setCreator("LPM C")
-           ->setLastModifiedBy("LPM C")
-           ->setTitle("POINTAGEs  ".$periode)
-           ->setSubject("POINTAGEs  de ".$periode)
-           ->setDescription("POINTAGEs ".$periode)
-           ->setKeywords("POINTAGEs".$periode)
-           ->setCategory("POINTAGEs DBS");
-            $workedDays=$em->getRepository('AppBundle:Commende')->workedDays($startDate,$endDate,true);
-           // $phpExcelObject->createSheet(0);
-            $phpExcelObject->setActiveSheetIndex(0)
-               ->setCellValue('A1', 'SUPERVISEURS')
-               ->setCellValue('B1', 'NOM & PRENOM')
-               ->setCellValue('C1', 'NUMERO PERSONNEL')
-               ->setCellValue('D1', 'TOTAL VENTE')
-               ->setCellValue('E1', 'TOTAL JOURS');
-                foreach ($days as $key => $day) {
-                   $date=new \DateTime($day);
-                   $column= $phpExcelObject->getActiveSheet()
-                     ->getCellByColumnAndRow($key+5,1)
-                     ->setValue($date->format('d M'))
-                     ->getColumn();  
-                 $phpExcelObject->getActiveSheet()->getStyle($column.'1')->getAlignment()->setTextRotation(90);
-                }
-             foreach ($workedDays as $key => $value){
-               $phpExcelObject->getActiveSheet()
-               ->setCellValue('A'.($key+2), $value['superviseur'])
-               ->setCellValue('B'.($key+2), $value['nom']) 
-               ->setCellValue('C'.($key+2), $value['telephone']) 
-               ->setCellValue('D'.($key+2), $value['nombre'])
-               ->setCellValue('E'.($key+2), $value['nombrejours']);
-                  foreach ($days as $shiet => $day) {
-                    $isThere=$em->getRepository('AppBundle:Commende')->isThere($value['id'],$day);
-                  $cell= $phpExcelObject->getActiveSheet()
-                     ->getCellByColumnAndRow($shiet+5,($key+2))->setValue($isThere)->getStyle();
-                     if($isThere>0)
-                        $cell->applyFromArray($styleGreen);
-                      else
-                         $cell->applyFromArray($styleRed);
-                 }            
-           };
-        $phpExcelObject->getActiveSheet()->setTitle('POINTAGES FS');   
-        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
-        // create the response
-        $response = $this->get('phpexcel')->createStreamedResponse($writer);
-        // adding headers
-        $startDate=new \DateTime($startDate);
-        $endDate= new \DateTime($endDate);
-        $dispositionHeader = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            'Pointages. '.$startDate->format('d M Y').' au '.$endDate->format('d M Y').'.xls'
-        );
-        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
-        $response->headers->set('Pragma', 'public');
-        $response->headers->set('Cache-Control', 'maxage=1');
-        $response->headers->set('Content-Disposition', $dispositionHeader);
-        return $response;        
-    }
-
-
-
-public function getWorkingDays($startDate, $endDate)
-{
-    $date1 = new \DateTime($startDate);
-    $date2 = new \DateTime($endDate);
-    if ($date1 >= $date2) {
-        return [];
-    } else {
-        $no_days  = [];
-        while ($date1 <= $date2) {
-           // $what_day = date("N", $begin);
-           // if (!in_array($what_day, [6,7]) ) // 6 and 7 are weekend
-             $no_days[]=$date1->format('Y-m-d');
-             $date1->modify('+1 day');
-        };
-
-        return $no_days;
-    }
-}
-
-   /*load secteurs from excel*/
-  public function loadrhAction()
-    {
-     $manager = $this->getDoctrine()->getManager();
-     $path = $this->get('kernel')->getRootDir(). "/../web/import/rhs.xlsx";
+     $messagepath = $this->get('kernel')->getRootDir(). "/../web/sms/message.txt";
+     $path = $this->get('kernel')->getRootDir(). "/../web/sms/centre-vague-3.xlsx";
      $objPHPExcel = $this->get('phpexcel')->createPHPExcelObject($path);
-     $rhs= $objPHPExcel->getSheet(1);
-     $highestRow  = $rhs->getHighestRow(); // e.g. 10
-    for ($row = 5; $row <= $highestRow; ++ $row) {
-            $secteur = $rhs->getCellByColumnAndRow(0, $row)->getValue();
-            $nomsecteur = $rhs->getCellByColumnAndRow(1, $row)->getValue();
-             $nom = $rhs->getCellByColumnAndRow(2, $row)->getValue();
-            $telephone = $rhs->getCellByColumnAndRow(4, $row)->getValue();
-            $username= $rhs->getCellByColumnAndRow(5, $row)->getValue();
-             $user = $manager->getRepository('AppBundle:User')->findOneByUsername($username);
-             if ($nom==null || $nom=='') 
-                     continue;
-            $pointVente=new PointVente();
-            $pointVente
-            ->setSecteur( $secteur)
-            ->setNomSecteur( $nomsecteur)
-            ->setNom($nom)
-            ->setTelephone($telephone)
-            ->setUser($user);
-            $manager->persist($pointVente);
+     $secteurs= $objPHPExcel->getSheet(0);
+     $highestRow  = $secteurs->getHighestRow(); 
+     $msg=file_get_contents($messagepath); 
+     $logPath = $this->get('kernel')->getRootDir(). "/../web/sms/centre-vague-3.txt";
+     $mode = (!file_exists($logPath)) ? 'w':'a';
+    $logfile = fopen($logPath, $mode);
+
+    for ($row = 0; $row <= $highestRow; ++$row) {
+             $numeroCell = $secteurs->getCellByColumnAndRow(0, $row)->getFormattedValue();
+             $numero='+237'.$numeroCell;
+             //$contacts=urlencode($numero);
+          $url='https://api.orange.com/smsmessaging/v1/outbound/tel%3A%2B2370000/requests';  
+          $data = array('outboundSMSMessageRequest' => 
+            array(
+            'address' => "tel:".$numero, 
+            'senderAddress' => "tel:+2370000",
+            'outboundSMSTextMessage' => array('message' => $msg ),
+            'senderName' => "NYA"
+              ));
+         $res = $this->sendOrGetData($url,$data,'POST',false, self::AUTORISATION_HEADERS); 
+         $date = date("Y-m-d H:i:s");   
+         fwrite($logfile, "\r\n". $date.' - '. $res); 
+         if ($row%5==0) {
+            sleep(5);  
+         }       
+     }
+     fclose($logfile);
+    $content = file_get_contents($logPath);
+    $response = new Response();
+    $response->headers->set('Content-Type', 'mime/type');
+    $response->headers->set('Content-Disposition', 'attachment;filename="centre-vague-3.txt"');
+    $response->setContent($content); 
+       return $response;  
     }
-     $manager->flush();
-    return $this->redirectToRoute('homepage');      
+
+
+ public function sendOrGetData($url,$data,$costum_method,$json_decode=true,$headers=array())
+    {    $content ='';
+        if(!is_null($data))
+           $content = json_encode($data);
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 120);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST , $costum_method);
+        if(!is_null($data))
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
+        $json_response = curl_exec($curl);
+        $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        if ( $status != 200 ) {}
+        curl_close($curl);
+        $response = json_decode($json_response, true);
+        return $json_decode?$response:$json_response;
     }
+
+
+    /**
+     * @Rest\View()
+     */
+    public function getTokenAction()
+    {
+  $curl = curl_init();
+  curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
+  curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+  curl_setopt_array($curl, array(
+  CURLOPT_URL => self::OM_TOKEN_URL,
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 120,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "POST",
+  CURLOPT_POSTFIELDS => "grant_type=client_credentials",
+  CURLOPT_HTTPHEADER => array(
+    "Authorization: Basic ZHlaN0Zna29qN3YyTDRFZE1WeHdMRE82TzBqU3l1NHo6Sk14a3czMng3ZVdNbFd1Wg=="
+  ),
+));
+
+$json_response = curl_exec($curl);
+$response = json_decode($json_response, true);
+  return $response;
+}
 
 }
