@@ -27,7 +27,7 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
           if($pointVente!=null){
              $qb->andWhere('c.pointVente=:pointVente')->setParameter('pointVente',$pointVente);
           }      
-          $qb->andWhere('p.id!=:id')->setParameter('id',2);
+          //$qb->andWhere('p.id!=:id')->setParameter('id',2);
           $qb->addOrderBy('p.priority','asc')
           ->select('p.id')
          ->addSelect('p.nom')
