@@ -67,7 +67,7 @@ class PointVente
     private $user;
 
         /**
-   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Commende", mappedBy="pointVente", cascade={"persist","remove"})
+   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Commende", mappedBy="pointVente", cascade={"persist"})
    */
     private $commendes;
 
