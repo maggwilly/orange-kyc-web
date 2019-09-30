@@ -33,7 +33,7 @@ class PointVenteRepository extends \Doctrine\ORM\EntityRepository
          ->addSelect('pdv.nom as pdvnom')
          ->addSelect('pdv.type as type')
          ->addSelect('pdv.ville as ville')
-         ->addSelect('pdv.telephone pdvtelephone')
+         ->addSelect('pdv.telephone telephone')
          ->addSelect('u.id as supid')
          ->addSelect('u.nom as supnom')  
          ->addSelect('count(DISTINCT c.date) as nombrejours')

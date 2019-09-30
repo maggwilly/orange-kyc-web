@@ -29,6 +29,11 @@ produit_index_json:
     methods:  GET
 
 
+point_vente_delete_json:
+    path:      /pointvente/{id}/delete/json
+    defaults: { _controller: "AppBundle:PointVente:deleteJson" }
+    methods:  DELETE
+
 point_vente_new_json:
     path:     /pointvente/new/json
     defaults: { _controller: "AppBundle:PointVente:newJson" }

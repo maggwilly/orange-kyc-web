@@ -38,7 +38,7 @@ class AppController extends Controller
         $endDate=$session->get('endDate', 'last day of this month');
         $produits=$em->getRepository('AppBundle:Produit')->countByProduit(null, $startDate,$endDate,$region);
         $performances=(new ArrayCollection($em->getRepository('AppBundle:PointVente')->findPerformances($startDate,$endDate,$region)))->map(function ($poinVente) use ($em,$region,$startDate,$endDate){
-                 $poinVente['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($poinVente['id'], $startDate,$endDate,$region);
+                 $poinVente['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($poinVente['pdvid'], $startDate,$endDate,$region);
                  if(empty($poinVente['ventes']))   
                  $poinVente['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
              return $poinVente;

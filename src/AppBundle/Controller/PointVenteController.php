@@ -44,7 +44,7 @@ class PointVenteController extends Controller
     {
         $pointVente = new Pointvente();
         $form = $this->createForm('AppBundle\Form\PointVenteType', $pointVente);
-        $form->submit($request->request->all());
+        $form->submit($request->request->all(),false);
         if ($form->isValid()){
             $em = $this->getDoctrine()->getManager();
             $user = $em->getRepository('AppBundle:User')->findOneById($request->headers->get('X-User-Id'));
@@ -63,8 +63,8 @@ class PointVenteController extends Controller
     public function editJsonAction(Request $request, PointVente $pointVente)
     {
         $editForm = $this->createForm('AppBundle\Form\PointVenteType', $pointVente);
-        $editForm->submit($request->request->all());
-        if ($form->isValid()){
+        $editForm->submit($request->request->all(),false);
+        if ($editForm->isValid()){
             $this->getDoctrine()->getManager()->flush();
              return $pointVente;
         }
@@ -151,6 +151,25 @@ class PointVenteController extends Controller
         return $this->redirectToRoute('pointvente_index');
     }
 
+    /**
+     * @Rest\View()
+     * 
+     */
+    public function deleteJsonAction(Request $request, PointVente $pointVente)
+    {
+   $em = $this->getDoctrine()->getManager();
+   try {
+    $em->remove($pointVente);
+    $em->flush();  
+    return array('status' => "ok" );
+   }   catch (Exception $e) {
+     $pointVente->setDeleted(true);
+      $em->flush();  
+        return array('status' => "no" );
+  } finally {
+     return array('status' => "ok" );
+  }
+  } 
     /**
      * @param PointVente $pointVente The pointVente entity
      * @return \Symfony\Component\Form\Form The form

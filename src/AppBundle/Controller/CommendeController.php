@@ -200,8 +200,14 @@ class CommendeController extends Controller
 
 public function makeUp(Request $request){
       $commende= $request->request->all();
+    foreach ( $commende['lignes']  as $key => &$ligne){
+        if (array_key_exists('produit', $ligne)&&is_array($ligne['produit'])) {
+             $ligne['produit']=$ligne['produit']['id'];  
+        }
+            
+      }      
      if(array_key_exists('pointVente', $commende)&&is_array($commende['pointVente']))
-       $commende['pointVente']=$commende['pointVente']['id'];   
+         $commende['pointVente']=$commende['pointVente']['id'];   
         
     return $commende;
 }

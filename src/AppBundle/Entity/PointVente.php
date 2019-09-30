@@ -35,6 +35,13 @@ class PointVente
      */
     private $secteur;
 
+        /**
+     * @var string
+     *
+     * @ORM\Column(name="deleted", type="boolean", nullable=true)
+     */
+    private $deleted;
+
     /**
      * @var string
      *
@@ -102,7 +109,20 @@ class PointVente
         return $this->ville;
     }
 
-        /**
+
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }       
+
+    /**
      * Set type
      *
      * @param string $type
