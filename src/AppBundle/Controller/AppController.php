@@ -81,8 +81,8 @@ class AppController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $region=$session->get('region');
-        $startDate=$session->get('startDate','first day of this month');
-        $endDate=$session->get('endDate', 'last day of this month');
+        $startDate=$session->get('startDate');
+        $endDate=$session->get('endDate',);
         $countByProduit= $em->getRepository('AppBundle:Produit')->countByProduit(null,$startDate,$endDate,$region);
         return $this->render('AppBundle::part/kpi.html.twig', 
           array(
