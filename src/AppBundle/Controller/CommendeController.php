@@ -346,7 +346,7 @@ public function makeUp(Request $request){
                       $phpExcelObject->getActiveSheet()->getStyle($column.'1')->getAlignment()->setTextRotation(90);
                  }                
               $performances=(new ArrayCollection($em->getRepository('AppBundle:PointVente')->findPerformances($startDate, $endDate,$region)))->map(function ($pointVente) use ($em,$region,$startDate,$endDate){
-              $pointVente['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($pointVente['id'], $startDate,$endDate,$region);
+              $pointVente['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($pointVente['pdvid'], $startDate,$endDate,$region);
                  if(empty($pointVente['ventes']))   
                  $pointVente['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
              return $pointVente;
