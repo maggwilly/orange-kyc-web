@@ -24,9 +24,9 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
           if($endDate!=null){
              $qb->andWhere('c.date is NULL or c.date<=:endDate')->setParameter('endDate',new \DateTime($endDate));
           } 
-         /* if($pointVente!=null){
+          if($pointVente!=null){
              $qb->andWhere('c.pointVente=:pointVente')->setParameter('pointVente',$pointVente);
-          }  */  
+          }    
           //$qb->andWhere('p.id!=:id')->setParameter('id',2);
           $qb->addOrderBy('p.priority','asc')
           ->select('p.id')

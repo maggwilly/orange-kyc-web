@@ -34,8 +34,8 @@ class AppController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $region=$session->get('region');
-        $startDate=$session->get('startDate','first day of this month');
-        $endDate=$session->get('endDate', 'last day of this month');
+        $startDate=$session->get('startDate');
+        $endDate=$session->get('endDate');
         $produits=$em->getRepository('AppBundle:Produit')->countByProduit(null, $startDate,$endDate,$region);
         $performances=(new ArrayCollection($em->getRepository('AppBundle:PointVente')->findPerformances($startDate,$endDate,$region)))->map(function ($poinVente) use ($em,$region,$startDate,$endDate){
                  $poinVente['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($poinVente['pdvid'], $startDate,$endDate,$region);
