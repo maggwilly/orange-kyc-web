@@ -36,7 +36,7 @@ class AppController extends Controller
         $region=$session->get('region');
         $startDate=$session->get('startDate');
         $endDate=$session->get('endDate');
-        $produits=$em->getRepository('AppBundle:Produit')->countByProduit(null, $startDate,$endDate,$region);
+        $countByProduit=$em->getRepository('AppBundle:Produit')->countByProduit(null, $startDate,$endDate,$region);
         $performances=(new ArrayCollection($em->getRepository('AppBundle:PointVente')->findPerformances($startDate,$endDate,$region)))->map(function ($poinVente) use ($em,$region,$startDate,$endDate){
                  $poinVente['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($poinVente['pdvid'], $startDate,$endDate,$region);
                  if(empty($poinVente['ventes']))   
@@ -50,7 +50,7 @@ class AppController extends Controller
           array(
             'colors'=>$colors,
             'performances'=>$performances,
-            'produits'=>$produits,
+            'produits'=>!empty($countByProduit)?$countByProduit:$this->defaultProducts(),
             'rapports'=>$rapports,
             'workedSuperviseur'=>$workedSuperviseur
           ));
@@ -82,12 +82,22 @@ class AppController extends Controller
         $em = $this->getDoctrine()->getManager();
         $region=$session->get('region');
         $startDate=$session->get('startDate');
-        $endDate=$session->get('endDate',);
+        $endDate=$session->get('endDate');
         $countByProduit= $em->getRepository('AppBundle:Produit')->countByProduit(null,$startDate,$endDate,$region);
         return $this->render('AppBundle::part/kpi.html.twig', 
           array(
-            'produits'=>$countByProduit,
+            'produits'=>!empty($countByProduit)?$countByProduit:$this->defaultProducts(),
           ));
+    }
+
+   public function defaultProducts()
+    {
+       $em = $this->getDoctrine()->getManager();
+      $produits=$em->getRepository('AppBundle:Produit')->findOrderedList();
+      foreach ($produits as $key => &$value) {
+        $value['nombre']=0;
+      }
+      return $produits;
     }
 
     public function setRegionAction(Request $request)
