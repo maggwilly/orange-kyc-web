@@ -36,7 +36,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
            $endDate=null,
            $region=null
            ){
-           $qb = $this->createQueryBuilder('c')->leftJoin('c.pointVente', 'pdv');
+           $qb = $this->createQueryBuilder('c')->join('c.pointVente', 'pdv');
           if($region!=null){
               $qb->andWhere('pdv.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
           }           
@@ -60,7 +60,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
 
 
       public  function rapports($startDate=null, $endDate=null,$region=null){
-        $qb = $this->createQueryBuilder('c')->leftJoin('c.pointVente', 'p');
+        $qb = $this->createQueryBuilder('c')->join('c.pointVente', 'p');
           if($region!=null){
               $qb->andWhere('p.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
           }
