@@ -62,7 +62,7 @@ class CommendeRepository extends \Doctrine\ORM\EntityRepository
       public  function rapports($startDate=null, $endDate=null,$region=null){
         $qb = $this->createQueryBuilder('c')->join('c.pointVente', 'p');
           if($region!=null){
-              $qb->andWhere('p.ville=:ville or pdv.ville is NULL')->setParameter('ville', $region);
+              $qb->andWhere('p.ville=:ville or p.ville is NULL')->setParameter('ville', $region);
           }
 
          if($startDate!=null){
