@@ -355,9 +355,8 @@ public function makeUp(Request $request){
         foreach ($performances as $key => $value){
                $phpExcelObject->getActiveSheet()
                ->setCellValue('A'.($key+2), $value['supnom'])
-               ->setCellValue('B'.($key+2), $value['banom'])
+                ->setCellValue('B'.($key+2),  $value['pdvnom'])
                ->setCellValue('C'.($key+2), $value['telephone'])
-               ->setCellValue('D'.($key+2),  $value['pdvnom'])
                ->setCellValue('E'.($key+2), $value['type'])
                ->setCellValue('F'.($key+2), $value['nombrejours']); 
                 foreach ($value['ventes'] as $i => $produit) {
