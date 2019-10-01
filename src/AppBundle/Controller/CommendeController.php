@@ -48,7 +48,7 @@ class CommendeController extends Controller
         $endDate=$session->get('endDate', 'last day of this month');
         $produits=$em->getRepository('AppBundle:Produit')->findOrderedList();
         $performances=(new ArrayCollection($em->getRepository('AppBundle:PointVente')->findPerformances($startDate,$endDate,$region)))->map(function ($pointVente) use ($em,$region,$startDate,$endDate){
-                 $pointVente['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($pointVente['id'], $startDate,$endDate,$region);
+                 $pointVente['ventes']=$em->getRepository('AppBundle:Produit')->countByProduit($pointVente['pdvid'], $startDate,$endDate,$region);
                  if(empty($pointVente['ventes']))   
                  $pointVente['ventes']=$em->getRepository('AppBundle:Produit')->findOrderedList();
 
