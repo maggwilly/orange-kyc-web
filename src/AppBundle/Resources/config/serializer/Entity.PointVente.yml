@@ -10,4 +10,6 @@ AppBundle\Entity\PointVente:
         secteur:
             groups: ['pointvente']
         deleted:
-            groups: ['pointvente']              
+            groups: ['pointvente']  
+        ville:
+            groups: ['pointvente']  
