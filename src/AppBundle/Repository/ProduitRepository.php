@@ -15,7 +15,7 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
         ->leftJoin('p.lignes', 'l')
         ->leftJoin('l.commende', 'c')
         ->leftJoin('c.pointVente', 'pv');
-          if($region!=null){
+         /* if($region!=null){
               $qb->andWhere('pv.ville=:ville or pv.ville is NULL')->setParameter('ville', $region);
           }
          if($startDate!=null){
@@ -26,7 +26,7 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
           } 
           if($pointVente!=null){
              $qb->andWhere('c.pointVente=:pointVente')->setParameter('pointVente',$pointVente);
-          }      
+          }   */   
           //$qb->andWhere('p.id!=:id')->setParameter('id',2);
           $qb->addOrderBy('p.priority','asc')
           ->select('p.id')
